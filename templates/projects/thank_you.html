@@ -1,0 +1,215 @@
+{% extends 'home/base.html' %}
+
+{% block content %}
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Cinzel:wght@600;700;800&display=swap');
+
+  :root {
+    --th-bg: #06080d;
+    --th-surface: #0b0f19;
+    --th-gold: #d4af37;
+    --th-gold-light: #f5e8b7;
+    --th-gold-glow: rgba(212, 175, 55, 0.25);
+    --th-border: rgba(212, 175, 55, 0.2);
+    --th-border-soft: rgba(255, 255, 255, 0.08);
+    --th-muted: #8492a6;
+  }
+
+    .th-wrapper {
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      background: var(--th-bg);
+      color: #ffffff;
+      min-height: calc(100vh - 100px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 130px 24px 70px; /* Upar 130px padding header se overlap hone se bachaegi */
+      box-sizing: border-box;
+      position: relative;
+      overflow: hidden;
+    }
+
+  .th-ambient-glow {
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(212, 175, 55, 0.12), transparent 70%);
+    border-radius: 50%;
+    filter: blur(120px);
+    pointer-events: none;
+  }
+
+  .th-card {
+    position: relative;
+    z-index: 2;
+    background: var(--th-surface);
+    border: 1px solid var(--th-border);
+    border-radius: 28px;
+    padding: 60px 45px;
+    max-width: 650px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 30px 80px -20px rgba(0, 0, 0, 0.9), 0 0 30px var(--th-gold-glow);
+  }
+
+  .th-icon-shield {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 28px;
+    border-radius: 50%;
+    background: rgba(212, 175, 55, 0.08);
+    border: 1px solid var(--th-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--th-gold);
+    box-shadow: 0 0 25px var(--th-gold-glow);
+  }
+
+  .th-badge {
+    display: inline-block;
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--th-gold-light);
+    margin-bottom: 12px;
+  }
+
+  .th-title {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(2rem, 4.5vw, 2.8rem);
+    font-weight: 700;
+    margin: 0 0 16px;
+    letter-spacing: -0.01em;
+  }
+
+  .th-title span {
+    background: linear-gradient(135deg, #ffffff 10%, var(--th-gold-light) 55%, var(--th-gold) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .th-desc {
+    color: var(--th-muted);
+    font-size: 1.02rem;
+    line-height: 1.75;
+    margin: 0 auto 34px;
+    max-width: 500px;
+    font-weight: 300;
+  }
+
+  .th-meta-box {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px dashed var(--th-border-soft);
+    border-radius: 16px;
+    padding: 18px 24px;
+    margin-bottom: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    gap: 16px;
+    font-size: 0.88rem;
+  }
+
+  .th-meta-item span {
+    display: block;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--th-muted);
+    margin-bottom: 4px;
+  }
+
+  .th-meta-item strong {
+    color: var(--th-gold-light);
+  }
+
+  .th-btn-group {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .th-primary-btn {
+    background: linear-gradient(135deg, var(--th-gold) 0%, #b89726 100%);
+    color: #06080d;
+    font-weight: 800;
+    font-size: 0.84rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 14px 30px;
+    border-radius: 9999px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 22px rgba(212, 175, 55, 0.25);
+  }
+
+  .th-primary-btn:hover {
+    filter: brightness(1.15);
+    transform: translateY(-2px);
+  }
+
+  .th-secondary-btn {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--th-border-soft);
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 0.84rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 13px 28px;
+    border-radius: 9999px;
+    text-decoration: none;
+    transition: all 0.25s ease;
+  }
+
+  .th-secondary-btn:hover {
+    background: rgba(212, 175, 55, 0.1);
+    border-color: var(--th-border);
+    color: var(--th-gold-light);
+  }
+
+  @media (max-width: 600px) {
+    .th-card { padding: 40px 24px; }
+    .th-meta-box { flex-direction: column; gap: 12px; }
+  }
+</style>
+
+<div class="th-wrapper">
+  <div class="th-ambient-glow"></div>
+
+  <div class="th-card">
+    <div class="th-icon-shield">
+      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+      </svg>
+    </div>
+
+    <span class="th-badge">Request Confirmed</span>
+    <h1 class="th-title">Privileged <span>Access Granted</span></h1>
+    <p class="th-desc">
+      Your inquiry has been allocated to our Senior Portfolio Concierge. We will review your scheduled slot and reach out with private tour details.
+    </p>
+
+    <div class="th-meta-box">
+      <div class="th-meta-item">
+        <span>Project</span>
+        <strong>{{ project_obj.project_name|default:"Signature Collection" }}</strong>
+      </div>
+    </div>
+
+    <div class="th-btn-group">
+      <a href="/" class="th-primary-btn">Return To Home</a>
+      {% if settings_obj.whatsapp %}
+      <a href="https://wa.me/{{ settings_obj.whatsapp }}?text=Hello,%20I%20just%20submitted%20an%20appointment%20request." target="_blank" class="th-secondary-btn">
+        Direct WhatsApp
+      </a>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

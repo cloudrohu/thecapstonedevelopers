@@ -1,0 +1,1116 @@
+{% extends "home/base.html" %}
+
+{% block content %}
+
+
+<!-- ================= THE SIGNATURE LOCATION SUITE ================= -->
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Cinzel:wght@600;700;800&display=swap');
+
+:root {
+  --lux-bg: #06080d;
+  --lux-surface: #0b0f19;
+  --lux-surface-hover: #121827;
+  --lux-gold: #d4af37;
+  --lux-gold-light: #f5e8b7;
+  --lux-gold-glow: rgba(212, 175, 55, 0.28);
+  --lux-cyan: #38bdf8;
+  --lux-cyan-glow: rgba(56, 189, 248, 0.3);
+  --lux-border: rgba(212, 175, 55, 0.18);
+  --lux-border-soft: rgba(255, 255, 255, 0.07);
+  --lux-muted: #8492a6;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+.loc-master-wrap {
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  background: var(--lux-bg);
+  color: #ffffff;
+  min-height: 100vh;
+  padding-bottom: 120px;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* ---------------- FLOATING SOUND & ATMOSPHERE HUD ---------------- */
+.loc-hud-bar {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(11, 15, 25, 0.85);
+  border: 1px solid var(--lux-border);
+  backdrop-filter: blur(16px);
+  padding: 8px 14px;
+  border-radius: 9999px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+}
+
+.hud-btn {
+  background: transparent;
+  border: none;
+  color: var(--lux-muted);
+  padding: 6px 12px;
+  border-radius: 9999px;
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+}
+
+.hud-btn:hover, .hud-btn.active {
+  color: var(--lux-gold-light);
+  background: rgba(212, 175, 55, 0.12);
+}
+
+.hud-sound-bars {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: 12px;
+}
+
+.hud-bar-line {
+  width: 2px;
+  height: 100%;
+  background: var(--lux-gold);
+  border-radius: 2px;
+  animation: soundWave 1.2s infinite ease-in-out;
+}
+.hud-bar-line:nth-child(2) { animation-delay: 0.2s; height: 70%; }
+.hud-bar-line:nth-child(3) { animation-delay: 0.4s; height: 40%; }
+.sound-muted .hud-bar-line { animation: none; height: 2px; background: var(--lux-muted); }
+
+@keyframes soundWave {
+  0%, 100% { height: 3px; }
+  50% { height: 14px; }
+}
+
+/* ---------------- HERO SECTION ---------------- */
+.loc-hero {
+  position: relative;
+  padding: 130px 24px 70px;
+  text-align: center;
+  border-bottom: 1px solid var(--lux-border-soft);
+  background: radial-gradient(circle at 50% 15%, rgba(212, 175, 55, 0.08), transparent 75%);
+}
+
+.hero-pre-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 24px;
+  border-radius: 9999px;
+  background: rgba(212, 175, 55, 0.06);
+  border: 1px solid var(--lux-border);
+  backdrop-filter: blur(8px);
+  margin-bottom: 24px;
+}
+
+.hero-pre-badge span {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--lux-gold-light);
+}
+
+.pulse-node {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--lux-gold);
+  box-shadow: 0 0 10px var(--lux-gold);
+  animation: nodePulse 1.8s infinite;
+}
+
+@keyframes nodePulse {
+  0%, 100% { transform: scale(1); opacity: 0.5; }
+  50% { transform: scale(1.4); opacity: 1; }
+}
+
+.loc-hero-title {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(2.2rem, 5.2vw, 4.2rem);
+  font-weight: 700;
+  line-height: 1.15;
+  margin: 0 0 18px;
+  letter-spacing: -0.02em;
+}
+
+.loc-hero-title span {
+  background: linear-gradient(135deg, #ffffff 10%, var(--lux-gold-light) 55%, var(--lux-gold) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.loc-hero-desc {
+  max-width: 660px;
+  margin: 0 auto;
+  color: var(--lux-muted);
+  font-size: 1.08rem;
+  line-height: 1.75;
+  font-weight: 300;
+}
+
+/* ---------------- MAIN CONTAINER ---------------- */
+.loc-main {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.loc-block-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin: 90px 0 35px;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.loc-block-header h2 {
+  font-family: 'Cinzel', serif;
+  font-size: 2.1rem;
+  margin: 0 0 6px;
+}
+
+.loc-block-header p {
+  color: var(--lux-muted);
+  margin: 0;
+  font-size: 0.96rem;
+}
+
+.lighting-controls {
+  display: flex;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--lux-border-soft);
+  padding: 4px;
+  border-radius: 9999px;
+}
+
+.light-shift-btn {
+  background: transparent;
+  border: none;
+  color: var(--lux-muted);
+  padding: 7px 16px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.light-shift-btn.active {
+  background: var(--lux-gold);
+  color: #000000;
+  box-shadow: 0 0 15px var(--lux-gold-glow);
+}
+
+/* ---------------- 3D TILT FRAMES & VIEWPORTS ---------------- */
+.lux-interactive-box {
+  perspective: 1200px;
+}
+
+.lux-card-inner {
+  border-radius: 26px;
+  overflow: hidden;
+  background: var(--lux-surface);
+  border: 1px solid var(--lux-border);
+  transition: transform 0.15s ease-out, border-color 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.8);
+  position: relative;
+}
+
+.lux-viewport {
+  height: 540px;
+  width: 100%;
+  position: relative;
+}
+
+.lux-viewport iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  transition: filter 0.6s ease;
+}
+
+.ambient-noon iframe { filter: contrast(1.05) brightness(1); }
+.ambient-sunset iframe { filter: contrast(1.15) brightness(0.9) sepia(0.35) hue-rotate(-15deg); }
+.ambient-night iframe { filter: invert(0.9) hue-rotate(180deg) contrast(1.2) brightness(0.85); }
+
+.lux-pill-indicator {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(6, 8, 13, 0.85);
+  border: 1px solid var(--lux-border);
+  backdrop-filter: blur(12px);
+  padding: 9px 20px;
+  border-radius: 9999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--lux-gold-light);
+  pointer-events: none;
+  z-index: 10;
+}
+
+.rotate-symbol {
+  animation: rotate360 8s linear infinite;
+}
+
+@keyframes rotate360 {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ---------------- CONNECTIVITY RADAR MATRIX (DESKTOP BASE) ---------------- */
+.lux-radar-console {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 32px;
+  background: var(--lux-surface);
+  border: 1px solid var(--lux-border);
+  border-radius: 30px;
+  padding: 36px;
+  box-shadow: 0 30px 70px -15px rgba(0, 0, 0, 0.7);
+  width: 100%;
+}
+
+.radar-hub-pane {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: radial-gradient(circle, rgba(18, 24, 39, 0.6) 0%, rgba(6, 8, 13, 0.95) 85%);
+  border: 1px solid var(--lux-border-soft);
+  border-radius: 22px;
+  padding: 24px;
+  width: 100%;
+}
+
+#dynamicRadar {
+  width: 100%;
+  max-width: 270px;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  display: block;
+}
+
+.mode-switch-bar {
+  display: flex;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 4px;
+  width: 100%;
+  max-width: 320px;
+  margin-top: 18px;
+  gap: 4px;
+}
+
+.mode-btn {
+  flex: 1;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--lux-muted);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 10px 6px;
+  min-height: 40px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.25s ease;
+}
+
+.mode-btn.active {
+  background: var(--lux-surface-hover);
+  color: var(--lux-cyan);
+  border-color: rgba(56, 189, 248, 0.3);
+  box-shadow: 0 0 10px var(--lux-cyan-glow);
+}
+
+.mode-btn:disabled,
+.mode-btn.disabled {
+  opacity: 0.28 !important;
+  cursor: not-allowed !important;
+  pointer-events: none !important;
+  filter: grayscale(1);
+}
+
+.route-readout {
+  width: 100%;
+  max-width: 320px;
+  margin-top: 16px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--lux-border-soft);
+  border-radius: 14px;
+  padding: 16px;
+}
+
+.route-readout-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 8px;
+  gap: 8px;
+}
+
+.route-dest-name {
+  font-size: 0.92rem;
+  color: #ffffff;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.route-dest-time {
+  font-family: 'Cinzel', serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--lux-gold-light);
+  white-space: nowrap;
+}
+
+.route-bar-bg {
+  height: 5px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.route-bar-fill {
+  height: 100%;
+  width: 25%;
+  background: linear-gradient(90deg, var(--lux-gold), var(--lux-cyan));
+  transition: width 0.4s ease;
+}
+
+/* ---------------- TRANSIT STREAM LIST (DESKTOP) ---------------- */
+.transit-stream-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 520px;
+  overflow-y: auto;
+  padding-right: 6px;
+  width: 100%;
+}
+
+.transit-stream-list::-webkit-scrollbar {
+  width: 4px;
+}
+.transit-stream-list::-webkit-scrollbar-thumb {
+  background: var(--lux-border);
+  border-radius: 8px;
+}
+
+.transit-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(18, 24, 39, 0.45);
+  border: 1px solid var(--lux-border-soft);
+  padding: 18px 22px;
+  border-radius: 18px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  position: relative;
+  gap: 16px;
+  width: 100%;
+}
+
+.transit-row:hover, 
+.transit-row.active {
+  background: var(--lux-surface-hover);
+  border-color: var(--lux-border);
+  transform: translateX(4px);
+  box-shadow: 0 10px 25px -8px rgba(0, 0, 0, 0.6);
+}
+
+.transit-row.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--lux-gold);
+  box-shadow: 0 0 12px var(--lux-gold);
+  border-radius: 18px 0 0 18px;
+}
+
+.transit-info-group {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.transit-bullet-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: rgba(212, 175, 55, 0.08);
+  border: 1px solid var(--lux-border);
+  color: var(--lux-gold-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.transit-row-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #ffffff;
+  margin: 0 0 4px;
+  line-height: 1.35;
+}
+
+.transit-row-sub {
+  font-size: 0.82rem;
+  color: var(--lux-muted);
+  line-height: 1.3;
+}
+
+.transit-time-tag {
+  position: static;
+  font-family: 'Cinzel', serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--lux-gold-light);
+  background: rgba(212, 175, 55, 0.08);
+  border: 1px solid var(--lux-border);
+  padding: 8px 16px;
+  border-radius: 100px;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ---------------- TABLET BREAKPOINT (<= 992px) ---------------- */
+@media (max-width: 992px) {
+  .lux-radar-console {
+    grid-template-columns: 1fr;
+    padding: 24px;
+    gap: 24px;
+  }
+  .lux-viewport {
+    height: 380px;
+  }
+  .loc-hud-bar {
+    top: auto;
+    bottom: 20px;
+    right: 50%;
+    transform: translateX(50%);
+  }
+  .transit-stream-list {
+    max-height: 440px;
+  }
+}
+
+/* ---------------- MOBILE ZERO-OVERLAP CARD VIEW (<= 680px) ---------------- */
+@media (max-width: 680px) {
+  .loc-main {
+    padding: 0 14px;
+  }
+
+  .loc-hero {
+    padding: 95px 14px 45px;
+  }
+
+  .loc-hero-title {
+    font-size: 2rem;
+  }
+
+  .loc-block-header {
+    margin: 50px 0 20px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .loc-block-header h2 {
+    font-size: 1.6rem;
+  }
+
+  .lux-radar-console {
+    padding: 14px !important;
+    gap: 16px !important;
+    border-radius: 18px !important;
+  }
+
+  .radar-hub-pane {
+    padding: 16px 12px !important;
+    border-radius: 14px !important;
+  }
+
+  #dynamicRadar {
+    max-width: 220px !important;
+  }
+
+  .transit-stream-list {
+    max-height: 480px !important;
+    gap: 10px !important;
+    padding-right: 0 !important;
+  }
+
+  /* Full Vertical Restructure */
+  .transit-row {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    justify-content: flex-start !important;
+    padding: 14px 14px 12px !important;
+    gap: 12px !important;
+    border-radius: 14px !important;
+    transform: none !important;
+  }
+
+  .transit-row:active {
+    transform: scale(0.98) !important;
+  }
+
+  /* Row 1: Icon + All Text Content */
+  .transit-info-group {
+    display: flex !important;
+    align-items: flex-start !important;
+    gap: 12px !important;
+    width: 100% !important;
+  }
+
+  .transit-bullet-icon {
+    width: 36px !important;
+    height: 36px !important;
+    border-radius: 8px !important;
+    flex-shrink: 0 !important;
+    margin-top: 1px;
+  }
+
+  .transit-bullet-icon svg {
+    width: 16px !important;
+    height: 16px !important;
+  }
+
+  .transit-row-title {
+    font-size: 0.94rem !important;
+    line-height: 1.35 !important;
+    margin: 0 0 3px 0 !important;
+    white-space: normal !important;
+    word-break: break-word !important;
+  }
+
+  .transit-row-sub {
+    font-size: 0.76rem !important;
+    line-height: 1.3 !important;
+    white-space: normal !important;
+    word-break: break-word !important;
+  }
+
+  /* Row 2: Bottom-Right Dedicated Time Pill */
+  .transit-time-tag {
+    position: static !important;
+    align-self: flex-end !important;
+    font-size: 0.78rem !important;
+    font-weight: 700 !important;
+    padding: 4px 12px !important;
+    border-radius: 20px !important;
+    letter-spacing: 0.8px !important;
+    background: rgba(212, 175, 55, 0.12) !important;
+    border: 1px solid rgba(212, 175, 55, 0.3) !important;
+    color: var(--lux-gold-light) !important;
+    margin-top: 0 !important;
+    width: fit-content !important;
+  }
+
+  .transit-row.active::before {
+    top: 6px !important;
+    bottom: 6px !important;
+    border-radius: 4px !important;
+  }
+}
+</style>
+
+<div class="loc-master-wrap">
+
+  <div class="loc-hud-bar">
+    <button class="hud-btn" id="soundToggleBtn">
+      <div class="hud-sound-bars sound-muted" id="soundBars">
+        <span class="hud-bar-line"></span>
+        <span class="hud-bar-line"></span>
+        <span class="hud-bar-line"></span>
+      </div>
+      <span id="soundLabel">Audio: Off</span>
+    </button>
+  </div>
+
+  <header class="loc-hero">
+    <div class="hero-pre-badge">
+      <span class="pulse-node"></span>
+      <span>Geo-Spatial Coordinates</span>
+    </div>
+    <h1 class="loc-hero-title">Centrally Positioned. <span>Effortlessly Linked.</span></h1>
+    <p class="loc-hero-desc">
+      Commanding an illustrious address with panoramic airspace perspectives and calculated transit telemetry across urban transit routes.
+    </p>
+  </header>
+
+  <main class="loc-main">
+
+    <!-- 2. 360° AERIAL HORIZON SPHERE (WITH 3D TILT & DAY/NIGHT FILTER) -->
+        {% if settings_obj.virtual_360_url %}
+            <div class="loc-block-header">
+                <div>
+                    <h2>{{ settings_obj.virtual_360_title|default:"360° Airspace Panorama" }}</h2>
+                    <p>Interactive drone sphere & panoramic aerial view</p>
+                </div>
+
+                <!-- Atmosphere Lighting Controller -->
+                <div class="lighting-controls">
+                    <button class="light-shift-btn active" onclick="setAtmosphere('noon', this)">Day</button>
+                    <button class="light-shift-btn" onclick="setAtmosphere('sunset', this)">Golden Hour</button>
+                    <button class="light-shift-btn" onclick="setAtmosphere('night', this)">Night Sky</button>
+                </div>
+            </div>
+
+            <div class="lux-interactive-box tilt-element">
+                <div class="lux-card-inner ambient-noon" id="aerialViewportContainer">
+                    <div class="lux-pill-indicator">
+                    <svg class="rotate-symbol" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path>
+                        <path d="M2 12h20"></path>
+                    </svg>
+                    <span>Drag 360° View</span>
+                    </div>
+
+                    <div class="lux-viewport">
+                    <iframe 
+                        src="{{ settings_obj.virtual_360_url }}"
+                        allowfullscreen="" 
+                        loading="lazy">
+                    </iframe>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+   
+        <!-- 3. CONNECTIVITY RADAR CONSOLE (WITH RADAR-TO-LIST SYNC & COMMUTE SWITCHER) -->
+        <div class="loc-block-header">
+        <div>
+            <h2>Transit Proximity Telemetry</h2>
+            <p>Live calculated transit matrix with real-time route analysis</p>
+        </div>
+        </div>
+
+        <div class="lux-radar-console">
+        
+        <!-- Left: Real-Time Canvas Radar & Mode Picker -->
+        <div class="radar-hub-pane">
+            <canvas id="dynamicRadar" width="270" height="270"></canvas>
+
+            <!-- Drive / Transit / Walk Switcher -->
+            <div class="mode-switch-bar">
+            <button class="mode-btn active" data-mode="drive">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.5 2.8C2.1 11.2 2 11.6 2 12v4c0 .6.4 1 1 1h2"></path><circle cx="7" cy="17" r="2"></circle><circle cx="17" cy="17" r="2"></circle></svg>
+                Drive
+            </button>
+            <button class="mode-btn" data-mode="metro">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="3" width="16" height="16" rx="2"></rect><path d="M4 11h16"></path><path d="M12 3v8"></path></svg>
+                Metro
+            </button>
+            <button class="mode-btn" data-mode="walk">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m13 4 2 2-3 4-2-2-4 4"></path><circle cx="14" cy="4" r="1"></circle><path d="m7 21 3-6 4 2 2 4"></path></svg>
+                Walk
+            </button>
+            </div>
+
+            <!-- Live Telemetry Readout -->
+            {% with first_item=connectivities.first %}
+            <div class="route-readout">
+            <div class="route-readout-top">
+                <span class="route-dest-name" id="routeDestName">{{ first_item.title|default:"Select Location" }}</span>
+                <span class="route-dest-time" id="routeDestTime">{{ first_item.drive_time|default:"-- Mins" }}</span>
+            </div>
+            <div class="route-bar-bg">
+                <div class="route-bar-fill" id="routeBarFill" style="width: {{ first_item.progress_percent|default:'25' }}%;"></div>
+            </div>
+            </div>
+            {% endwith %}
+        </div>
+
+        <!-- Right: Dynamic Transit Stream -->
+        <div class="transit-stream-list" id="transitStreamList">
+            {% for item in connectivities %}
+            <div class="transit-row {% if forloop.first %}active{% endif %}" 
+                data-index="{{ forloop.counter0 }}" 
+                data-name="{{ item.title }}" 
+                data-drive="{{ item.drive_time }}" 
+                data-metro="{{ item.metro_time }}" 
+                data-walk="{{ item.walk_time }}" 
+                data-pct="{{ item.progress_percent }}"
+                data-radar-r="{{ item.radar_radius|default:'50' }}"
+                data-radar-theta="{{ item.radar_angle|default:'1.5' }}">
+            <div class="transit-info-group">
+                <div class="transit-bullet-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19L8 5"></path><path d="M20 19l-4-14"></path><path d="M12 8v2"></path><path d="M12 14v2"></path></svg>
+                </div>
+                <div>
+                <div class="transit-row-title">{{ item.title }} {% if item.km %}<small style="color: var(--lux-gold); font-size: 0.8rem; margin-left: 6px;">({{ item.km }})</small>{% endif %}</div>
+                <div class="transit-row-sub">{{ item.subtitle|default:"Prime Connectivity Hub" }}</div>
+                </div>
+            </div>
+            <div class="transit-time-tag">{{ item.drive_time }}</div>
+            </div>
+            {% empty %}
+            <p style="text-align: center; color: var(--lux-muted); padding: 40px 0;">No connectivity data added yet.</p>
+            {% endfor %}
+        </div>
+
+        </div>
+
+        <!-- 4. GOOGLE MAP SECTION (WITH 3D TILT EFFECT) -->
+        <div class="loc-block-header">
+        <div>
+            <h2>Cartographic Precision</h2>
+            <p>Live GPS satellite navigation & neighborhood contours</p>
+        </div>
+        </div>
+
+        <div class="lux-interactive-box tilt-element">
+        <div class="lux-card-inner">
+            <div class="lux-viewport">
+            {{settings_obj.google_map|safe}}
+            </div>
+        </div>
+        </div>
+
+  </main>
+  
+</div>
+
+<!-- ================= EMBEDDED REAL ESTATE ENGINE ================= -->
+<script>
+  /* -------------------------------------------------------------
+     1. WEB AUDIO API: LUXURY SOUNDSCAPE SYNTHESIZER
+  ------------------------------------------------------------- */
+  let audioCtx = null;
+  let osc1 = null, osc2 = null, gainNode = null;
+  let isSoundActive = false;
+
+  const soundBtn = document.getElementById('soundToggleBtn');
+  const soundBars = document.getElementById('soundBars');
+  const soundLabel = document.getElementById('soundLabel');
+
+  function initSoundscape() {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    
+    osc1 = audioCtx.createOscillator();
+    osc2 = audioCtx.createOscillator();
+    gainNode = audioCtx.createGain();
+
+    osc1.type = 'sine';
+    osc1.frequency.setValueAtTime(108, audioCtx.currentTime);
+
+    osc2.type = 'triangle';
+    osc2.frequency.setValueAtTime(216, audioCtx.currentTime);
+
+    gainNode.gain.setValueAtTime(0.04, audioCtx.currentTime);
+
+    osc1.connect(gainNode);
+    osc2.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+
+    osc1.start();
+    osc2.start();
+  }
+
+  if (soundBtn) {
+    soundBtn.addEventListener('click', () => {
+      if (!audioCtx) initSoundscape();
+
+      if (isSoundActive) {
+        audioCtx.suspend();
+        if (soundBars) soundBars.classList.add('sound-muted');
+        if (soundLabel) soundLabel.innerText = "Audio: Off";
+        isSoundActive = false;
+      } else {
+        audioCtx.resume();
+        if (soundBars) soundBars.classList.remove('sound-muted');
+        if (soundLabel) soundLabel.innerText = "Audio: On";
+        isSoundActive = true;
+      }
+    });
+  }
+
+  /* -------------------------------------------------------------
+     2. DYNAMIC RADAR ENGINE WITH TWO-WAY DOM SYNC
+  ------------------------------------------------------------- */
+  const canvas = document.getElementById('dynamicRadar');
+  const ctx = canvas ? canvas.getContext('2d') : null;
+  let sweepAngle = 0;
+  let activeIndex = 0;
+
+  let radarNodes = [];
+  const rows = document.querySelectorAll('.transit-row');
+
+  function buildRadarNodes() {
+    radarNodes = [];
+    rows.forEach((row, i) => {
+      const rVal = parseFloat(row.getAttribute('data-radar-r')) || (30 + (i * 20) % 95);
+      const thetaVal = parseFloat(row.getAttribute('data-radar-theta')) || (0.75 + i * 1.15);
+      const name = row.getAttribute('data-name') || "Point";
+      radarNodes.push({ r: rVal, theta: thetaVal, name: name });
+    });
+  }
+
+  buildRadarNodes();
+
+  function renderRadar() {
+    if (!ctx || !canvas) return;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const cx = canvas.width / 2;
+    const cy = canvas.height / 2;
+    const maxR = 125;
+
+    // Rings
+    [30, 60, 90, maxR].forEach((r) => {
+      ctx.beginPath();
+      ctx.arc(cx, cy, r, 0, Math.PI * 2);
+      const isSelectedRing = radarNodes[activeIndex] && Math.abs(radarNodes[activeIndex].r - r) < 20;
+      ctx.strokeStyle = isSelectedRing ? "rgba(212, 175, 55, 0.45)" : "rgba(212, 175, 55, 0.12)";
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    });
+
+    // Crosshairs
+    ctx.beginPath();
+    ctx.moveTo(cx, cy - maxR); ctx.lineTo(cx, cy + maxR);
+    ctx.moveTo(cx - maxR, cy); ctx.lineTo(cx + maxR, cy);
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.05)";
+    ctx.stroke();
+
+    // Sweep Beam
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(sweepAngle);
+    const grad = ctx.createRadialGradient(0, 0, 0, 0, 0, maxR);
+    grad.addColorStop(0, "rgba(212, 175, 55, 0)");
+    grad.addColorStop(1, "rgba(212, 175, 55, 0.3)");
+    ctx.beginPath();
+    ctx.moveTo(0, 0);
+    ctx.arc(0, 0, maxR, -0.4, 0);
+    ctx.closePath();
+    ctx.fillStyle = grad;
+    ctx.fill();
+    ctx.restore();
+
+    // Render Dynamic Blips
+    radarNodes.forEach((node, i) => {
+      const bx = cx + node.r * Math.cos(node.theta);
+      const by = cy + node.r * Math.sin(node.theta);
+
+      ctx.beginPath();
+      ctx.arc(bx, by, (i === activeIndex ? 6 : 3.5), 0, Math.PI * 2);
+      ctx.fillStyle = (i === activeIndex ? "#d4af37" : "#38bdf8");
+      ctx.shadowBlur = (i === activeIndex ? 14 : 6);
+      ctx.shadowColor = ctx.fillStyle;
+      ctx.fill();
+      ctx.shadowBlur = 0;
+    });
+
+    // Center Origin
+    ctx.beginPath();
+    ctx.arc(cx, cy, 4, 0, Math.PI * 2);
+    ctx.fillStyle = "#ffffff";
+    ctx.fill();
+
+    sweepAngle += 0.025;
+    requestAnimationFrame(renderRadar);
+  }
+
+  if (canvas) renderRadar();
+
+  /* -------------------------------------------------------------
+     3. COMMUTE MODE SWITCHER & REAL-TIME ODOMETER (DYNAMIC DISABLE)
+  ------------------------------------------------------------- */
+  let currentMode = 'drive';
+  const modeBtns = document.querySelectorAll('.mode-btn');
+  const destName = document.getElementById('routeDestName');
+  const destTime = document.getElementById('routeDestTime');
+  const barFill = document.getElementById('routeBarFill');
+
+  // Blank, None, ya N/A value detector
+  function isBlankValue(val) {
+    if (!val) return true;
+    const clean = val.trim().toLowerCase();
+    return clean === '' || clean === 'none' || clean === 'null' || clean === 'n/a' || clean === '--' || clean === '-';
+  }
+
+  // Active row ke mutabiq buttons disable/enable karna
+  function updateModeButtonsState(row) {
+    const modes = ['drive', 'metro', 'walk'];
+    
+    modes.forEach(mode => {
+      const btn = document.querySelector(`.mode-btn[data-mode="${mode}"]`);
+      const val = row.getAttribute(`data-${mode}`);
+      const isBlank = isBlankValue(val);
+
+      if (btn) {
+        if (isBlank) {
+          btn.disabled = true;
+          btn.classList.add('disabled');
+        } else {
+          btn.disabled = false;
+          btn.classList.remove('disabled');
+        }
+      }
+    });
+
+    // Agar selected mode disabled ho gaya, to pehle available mode par switch ho jaye
+    const currentVal = row.getAttribute(`data-${currentMode}`);
+    if (isBlankValue(currentVal)) {
+      const fallbackMode = modes.find(m => !isBlankValue(row.getAttribute(`data-${m}`))) || 'drive';
+      setMode(fallbackMode);
+    }
+  }
+
+  function setMode(newMode) {
+    currentMode = newMode;
+    modeBtns.forEach(b => {
+      if (b.getAttribute('data-mode') === currentMode) {
+        b.classList.add('active');
+      } else {
+        b.classList.remove('active');
+      }
+    });
+
+    // Sabhi visible rows ke tag update karna
+    rows.forEach(r => {
+      const timeVal = r.getAttribute(`data-${currentMode}`);
+      const tag = r.querySelector('.transit-time-tag');
+      if (tag) {
+        if (isBlankValue(timeVal)) {
+          tag.innerText = "N/A";
+          tag.style.color = "#64748b";
+          tag.style.borderColor = "rgba(255, 255, 255, 0.08)";
+          tag.style.background = "rgba(255, 255, 255, 0.02)";
+        } else {
+          tag.innerText = timeVal;
+          tag.style.color = "var(--lux-gold-light)";
+          tag.style.borderColor = "var(--lux-border)";
+          tag.style.background = "rgba(212, 175, 55, 0.06)";
+        }
+      }
+    });
+  }
+
+  function updateActiveTelemetry(row) {
+    rows.forEach(r => r.classList.remove('active'));
+    row.classList.add('active');
+
+    activeIndex = parseInt(row.getAttribute('data-index'), 10) || 0;
+    const name = row.getAttribute('data-name') || "Location";
+    const pct = row.getAttribute('data-pct') || "25";
+
+    // Row badalte hi buttons ko validate karein
+    updateModeButtonsState(row);
+
+    const timeVal = row.getAttribute(`data-${currentMode}`);
+
+    if (destName) destName.innerText = name;
+
+    if (destTime && barFill) {
+      if (isBlankValue(timeVal)) {
+        destTime.innerText = "Route Unavailable";
+        destTime.style.color = "#64748b";
+        barFill.style.width = "0%";
+      } else {
+        destTime.innerText = timeVal;
+        destTime.style.color = "var(--lux-gold-light)";
+        barFill.style.width = pct + '%';
+      }
+    }
+  }
+
+  // Row selection bindings
+  rows.forEach(row => {
+    row.addEventListener('click', () => updateActiveTelemetry(row));
+    row.addEventListener('mouseenter', () => updateActiveTelemetry(row));
+  });
+
+  // Mode Buttons Click
+  modeBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (btn.disabled) return;
+      setMode(btn.getAttribute('data-mode'));
+
+      const activeRow = document.querySelector('.transit-row.active');
+      if (activeRow) updateActiveTelemetry(activeRow);
+    });
+  });
+
+  // Initial Check (Pehle row ke hisaab se setup)
+  const initialActive = document.querySelector('.transit-row.active') || rows[0];
+  if (initialActive) {
+    updateActiveTelemetry(initialActive);
+  }
+
+  /* -------------------------------------------------------------
+     4. 3D MAGNETIC TILT ON HOVER
+  ------------------------------------------------------------- */
+  const tiltCards = document.querySelectorAll('.tilt-element .lux-card-inner');
+
+  tiltCards.forEach(card => {
+    card.parentElement.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left - rect.width / 2;
+      const y = e.clientY - rect.top - rect.height / 2;
+
+      const rotateX = (-y / rect.height) * 9;
+      const rotateY = (x / rect.width) * 9;
+
+      card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+    });
+
+    card.parentElement.addEventListener('mouseleave', () => {
+      card.style.transform = `rotateX(0deg) rotateY(0deg)`;
+    });
+  });
+
+  /* -------------------------------------------------------------
+     5. ATMOSPHERE LIGHTING FILTER
+  ------------------------------------------------------------- */
+  function setAtmosphere(preset, btn) {
+    document.querySelectorAll('.light-shift-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    const viewport = document.getElementById('aerialViewportContainer');
+    if (viewport) {
+      viewport.className = `lux-card-inner ambient-${preset}`;
+    }
+  }
+</script>
+<!-- ================= END LOCATION SUITE ================= -->
+
+{% endblock content %}

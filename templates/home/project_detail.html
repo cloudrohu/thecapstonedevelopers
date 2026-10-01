@@ -1,0 +1,1673 @@
+{% extends "home/base.html" %}
+
+{% block content %}
+
+<meta name="referrer" content="strict-origin-when-cross-origin" />
+
+
+<div class="min-h-screen bg-[#f7f6f2]">
+    
+    <div id="galleryData" class="hidden">
+        {% if project.image %}
+        <div class="gallery-data-item" data-image="{{ project.image.url }}" data-title="{{ project.project_name }}" data-category="Cover Image"></div>
+        {% endif %}
+
+        {% for slider in project.sliders.all %}
+            {% if slider.image %}
+            <div class="gallery-data-item" data-image="{{ slider.image.url }}" data-title="{{ slider.caption|default:project.project_name }}" data-category="Slide View"></div>
+            {% endif %}
+        {% endfor %}
+
+        {% for item in project.gallery.all %}
+            {% if item.image %}
+            <div class="gallery-data-item" data-image="{{ item.image.url }}" data-title="{{ item.title|default:project.project_name }}" data-category="{{ item.get_category_display|default:'Gallery' }}"></div>
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    <div id="galleryModal" class="fixed inset-0 z-[9999] hidden bg-black/95 backdrop-blur-sm">
+        <!-- Header Controls -->
+        <div class="absolute left-0 right-0 top-0 z-30 flex items-center justify-between px-4 py-4 sm:px-7">
+            <div id="galleryCounter" class="rounded-full border border-white/15 bg-white/10 px-4 py-2 text-xs font-medium text-white backdrop-blur-md">
+                1 / 1
+            </div>
+
+            <button type="button" id="closeGalleryBtn" class="flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-white/10 text-white backdrop-blur-md transition hover:bg-white hover:text-black" aria-label="Close Gallery">
+                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 6l12 12M18 6 6 18"/>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Main Image Box -->
+        <div class="absolute inset-0 flex items-center justify-center px-4 py-20 sm:px-16">
+            <div class="flex h-[360px] w-full max-w-4xl items-center justify-center overflow-hidden rounded-xl bg-black/40 sm:h-[480px] lg:h-[580px]">
+                <img id="galleryMainImage"  src=""  alt=""  class="h-full w-full object-contain shadow-2xl transition duration-300">
+            </div>
+        </div>
+
+        <!-- Navigation Arrows -->
+        <button type="button" id="galleryPrev" class="absolute left-3 top-1/2 z-30 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/15 bg-white/10 text-white backdrop-blur-md transition hover:bg-white hover:text-black sm:left-6">
+            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15 18-6-6 6-6"/>
+            </svg>
+        </button>
+
+        <button type="button" id="galleryNext" class="absolute right-3 top-1/2 z-30 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/15 bg-white/10 text-white backdrop-blur-md transition hover:bg-white hover:text-black sm:right-6">
+            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 18 6-6-6 6"/>
+            </svg>
+        </button>
+
+        <!-- Image Info -->
+        <div class="absolute bottom-20 left-1/2 z-30 w-full max-w-xl -translate-x-1/2 px-4 text-center sm:bottom-24">
+            <h3 id="galleryImageTitle" class="text-base font-semibold text-white sm:text-lg"></h3>
+            <p id="galleryImageCategory" class="mt-1 text-xs text-white/60 sm:text-sm"></p>
+        </div>
+
+        <!-- Thumbnails -->
+        <div class="absolute bottom-3 left-0 right-0 z-30 px-3 sm:bottom-5 sm:px-6">
+            <div id="galleryThumbnails" class="mx-auto flex max-w-5xl items-center justify-center gap-2 overflow-x-auto pb-1"></div>
+        </div>
+    </div>
+
+    <section class="bg-white mt-20">
+        <div class="mx-auto max-w-7xl px-4 py-5 sm:px-6 lg:px-8">
+            <div id="projectHero" class="group relative overflow-hidden rounded-2xl bg-[#1a1a1a] shadow-xl">
+                <div class="relative h-[430px] sm:h-[500px] lg:h-[590px]">
+
+                    <!-- Slide 1: Main Project Image -->
+                    {% if project.image %}
+                    <div class="hero-slide absolute inset-0 opacity-100 transition-opacity duration-700">
+                        <img src="{{ project.image.url }}" alt="{{ project.project_name }}" data-gallery-idx="0" class="hero-trigger h-full w-full cursor-pointer object-cover">
+                    </div>
+                    {% endif %}
+
+                    <!-- Sliders Loop -->
+                    {% for slider in project.sliders.all %}
+                        {% if slider.image %}
+                        <div class="hero-slide pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-700">
+                            <img src="{{ slider.image.url }}" alt="{{ slider.caption|default:project.project_name }}" data-gallery-idx="{% if project.image %}{{ forloop.counter }}{% else %}{{ forloop.counter0 }}{% endif %}" class="hero-trigger h-full w-full cursor-pointer object-cover">
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if not project.image and not project.sliders.all %}
+                    <div class="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-gray-800 to-gray-950">
+                        <p class="text-sm text-gray-400">Project Image Coming Soon</p>
+                    </div>
+                    {% endif %}
+
+                    <!-- Dark Overlays -->
+                    <div class="pointer-events-none absolute inset-0 z-10 bg-gradient-to-t from-black/90 via-black/35 to-black/10"></div>
+
+                    <!-- Top Badges & Share Button -->
+                    <div class="absolute left-5 right-5 top-5 z-20 flex items-start justify-between sm:left-7 sm:right-7 sm:top-7">
+                        <div class="flex flex-wrap gap-2">
+                            {% if project.featured_property %}
+                            <span class="inline-flex items-center gap-2 rounded-full bg-[#b89252] px-4 py-2 text-xs font-semibold uppercase tracking-wider text-white shadow-lg">
+                                <span class="h-1.5 w-1.5 rounded-full bg-white"></span>
+                                Featured
+                            </span>
+                            {% endif %}
+
+                            {% if project.construction_status %}
+                            <span class="rounded-full border border-white/25 bg-black/30 px-4 py-2 text-xs font-medium text-white backdrop-blur-md">
+                                {{ project.construction_status }}
+                            </span>
+                            {% endif %}
+                        </div>
+
+                        <button type="button"
+                                onclick="shareProject()"
+                                class="flex h-10 w-10 items-center justify-center rounded-full border border-white/20 bg-black/30 text-white backdrop-blur-md transition hover:bg-white hover:text-gray-900"
+                                aria-label="Share project">
+                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M8.59 13.51 15.42 17.5M15.41 6.5 8.59 10.49M21 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0ZM9 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0ZM21 19a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <!-- Bottom Information -->
+                    <div class="pointer-events-none absolute bottom-0 left-0 right-0 z-20 p-5 sm:p-7 lg:p-10">
+                        <div class="pointer-events-auto max-w-4xl pb-12 sm:pb-10">
+                            <div class="mb-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-white/85">
+                                {% if project.locality %}
+                                <span class="font-medium">{{ project.locality.name }}</span>
+                                {% endif %}
+                                {% if project.locality and project.city %}
+                                <span class="text-white/40">•</span>
+                                {% endif %}
+                                {% if project.city %}
+                                <span>{{ project.city.name }}</span>
+                                {% endif %}
+                            </div>
+
+                            <h1 class="max-w-4xl text-3xl font-bold leading-tight tracking-tight text-white sm:text-4xl lg:text-5xl xl:text-6xl">
+                                {{ project.project_name }}
+                            </h1>
+
+                            {% if project.developer %}
+                            <div class="mt-3 flex items-center gap-2 text-sm text-white/80">
+                                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-5h6v5M9 10h.01M12 10h.01M15 10h.01"/>
+                                </svg>
+                                <span>By <strong class="font-semibold text-white">{{ project.developer }}</strong></span>
+                            </div>
+                            {% endif %}
+
+                            <div class="mt-6 flex flex-wrap gap-2 sm:gap-3">
+                                {% if project.bhk_type %}
+                                <div class="rounded-xl border border-white/15 bg-black/30 px-4 py-3 backdrop-blur-md">
+                                    <p class="text-[10px] uppercase tracking-wider text-white/60">Configuration</p>
+                                    <p class="mt-1 text-sm font-semibold text-white">{{ project.bhk_type|join:", " }}</p>
+                                </div>
+                                {% endif %}
+
+                                {% if project.get_carpet_area_range %}
+                                <div class="rounded-xl border border-white/15 bg-black/30 px-4 py-3 backdrop-blur-md">
+                                    <p class="text-[10px] uppercase tracking-wider text-white/60">Area</p>
+                                    <p class="mt-1 text-sm font-semibold text-white">
+                                        {{ project.get_carpet_area_range }}
+                                    </p>
+                                </div>
+                                {% endif %}
+
+                                {% if project.get_price_range %}
+                                <div class="rounded-xl border border-white/15 bg-black/30 px-4 py-3 backdrop-blur-md">
+                                    <p class="text-[10px] uppercase tracking-wider text-white/60">Price</p>
+                                    <p class="mt-1 text-sm font-semibold text-white">{{ project.get_price_range }}</p>
+                                </div>
+                                {% endif %}
+
+                                {% if project.possession_year %}
+                                <div class="rounded-xl border border-white/15 bg-black/30 px-4 py-3 backdrop-blur-md">
+                                    <p class="text-[10px] uppercase tracking-wider text-white/60">Possession</p>
+                                    <p class="mt-1 text-sm font-semibold text-white">
+                                        {% if project.possession_month %}{{ project.possession_month }} {% endif %}{{ project.possession_year }}
+                                    </p>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Hero Navigation Buttons -->
+                    <button type="button"
+                            id="heroPrev"
+                            class="absolute left-4 top-1/2 z-30 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/30 text-white opacity-0 backdrop-blur-md transition group-hover:opacity-100 hover:bg-white hover:text-black sm:left-6">
+                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15 18-6-6 6-6"/>
+                        </svg>
+                    </button>
+
+                    <button type="button"
+                            id="heroNext"
+                            class="absolute right-4 top-1/2 z-30 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/20 bg-black/30 text-white opacity-0 backdrop-blur-md transition group-hover:opacity-100 hover:bg-white hover:text-black sm:right-6">
+                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 18 6-6-6 6"/>
+                        </svg>
+                    </button>
+
+                    <div id="heroDots" class="absolute bottom-5 right-5 z-30 flex items-center gap-1.5 sm:bottom-7 sm:right-7"></div>
+
+                    <!-- Open Gallery Button -->
+                    {% if project.gallery.all.count > 0 %}
+                    <button type="button"
+                            id="openGalleryBtn"
+                            class="absolute bottom-5 left-5 z-30 inline-flex items-center gap-2 rounded-full border border-white/20 bg-black/50 px-4 py-2.5 text-xs font-semibold text-white shadow-lg backdrop-blur-md transition hover:bg-white hover:text-gray-900 sm:bottom-7 sm:left-7">
+                        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <rect x="3" y="4" width="18" height="16" rx="2" stroke-width="1.8"/>
+                            <circle cx="8.5" cy="9" r="1.3" stroke-width="1.8"/>
+                            <path stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M3 16l5-5 4 4 3-3 6 6"/>
+                        </svg>
+                        <span>More {{ project.gallery.all.count }} Images</span>
+                    </button>
+                    {% endif %}
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const galleryItems = document.querySelectorAll(".gallery-data-item");
+            const rawImages = Array.from(galleryItems).map(item => ({
+                image: item.dataset.image,
+                title: item.dataset.title || "",
+                category: item.dataset.category || ""
+            })).filter(item => Boolean(item.image));
+
+            // Unique images by image URL
+            const seenUrls = new Set();
+            const galleryImages = rawImages.filter(item => {
+                if (seenUrls.has(item.image)) {
+                    return false;
+                }
+                seenUrls.add(item.image);
+                return true;
+            });
+
+            // 2. HERO SLIDER LOGIC
+            const heroSlides = document.querySelectorAll(".hero-slide");
+            const heroPrev = document.getElementById("heroPrev");
+            const heroNext = document.getElementById("heroNext");
+            const heroDots = document.getElementById("heroDots");
+            let currentHeroIndex = 0;
+
+            function showHeroSlide(index) {
+                if (!heroSlides.length) return;
+                heroSlides.forEach((slide, idx) => {
+                    if (idx === index) {
+                        slide.classList.remove("opacity-0", "pointer-events-none");
+                        slide.classList.add("opacity-100");
+                    } else {
+                        slide.classList.remove("opacity-100");
+                        slide.classList.add("opacity-0", "pointer-events-none");
+                    }
+                });
+
+                if (heroDots) {
+                    const dots = heroDots.querySelectorAll("button");
+                    dots.forEach((dot, idx) => {
+                        dot.className = idx === index 
+                            ? "h-2 w-6 rounded-full bg-white transition-all duration-300" 
+                            : "h-2 w-2 rounded-full bg-white/50 transition-all duration-300 hover:bg-white";
+                    });
+                }
+            }
+
+            if (heroSlides.length > 1) {
+                if (heroDots) {
+                    heroDots.innerHTML = "";
+                    heroSlides.forEach((_, idx) => {
+                        const dot = document.createElement("button");
+                        dot.type = "button";
+                        dot.setAttribute("aria-label", `Slide ${idx + 1}`);
+                        dot.addEventListener("click", () => {
+                            currentHeroIndex = idx;
+                            showHeroSlide(currentHeroIndex);
+                        });
+                        heroDots.appendChild(dot);
+                    });
+                }
+
+                if (heroNext) {
+                    heroNext.addEventListener("click", () => {
+                        currentHeroIndex = (currentHeroIndex + 1) % heroSlides.length;
+                        showHeroSlide(currentHeroIndex);
+                    });
+                }
+
+                if (heroPrev) {
+                    heroPrev.addEventListener("click", () => {
+                        currentHeroIndex = (currentHeroIndex - 1 + heroSlides.length) % heroSlides.length;
+                        showHeroSlide(currentHeroIndex);
+                    });
+                }
+            } else {
+                if (heroPrev) heroPrev.style.display = "none";
+                if (heroNext) heroNext.style.display = "none";
+            }
+
+            showHeroSlide(0);
+
+            // 3. FULL MODAL GALLERY LOGIC
+            const openGalleryBtn = document.getElementById("openGalleryBtn");
+            const closeGalleryBtn = document.getElementById("closeGalleryBtn");
+            const galleryModal = document.getElementById("galleryModal");
+            const galleryMainImage = document.getElementById("galleryMainImage");
+            const galleryCounter = document.getElementById("galleryCounter");
+            const galleryPrev = document.getElementById("galleryPrev");
+            const galleryNext = document.getElementById("galleryNext");
+            const galleryThumbnails = document.getElementById("galleryThumbnails");
+            const galleryImageTitle = document.getElementById("galleryImageTitle");
+            const galleryImageCategory = document.getElementById("galleryImageCategory");
+            const heroTriggers = document.querySelectorAll(".hero-trigger");
+
+            let currentGalleryIdx = 0;
+
+            function openGallery(index) {
+                if (!galleryImages.length) return;
+                currentGalleryIdx = parseInt(index, 10) || 0;
+                galleryModal.classList.remove("hidden");
+                document.body.classList.add("overflow-hidden");
+                createThumbnails();
+                showGalleryImage(currentGalleryIdx);
+            }
+
+            function closeGallery() {
+                galleryModal.classList.add("hidden");
+                document.body.classList.remove("overflow-hidden");
+            }
+
+            function showGalleryImage(index) {
+                if (!galleryImages.length) return;
+                currentGalleryIdx = (index + galleryImages.length) % galleryImages.length;
+                const item = galleryImages[currentGalleryIdx];
+
+                galleryMainImage.src = item.image;
+                galleryMainImage.alt = item.title;
+                galleryImageTitle.textContent = item.title;
+                galleryImageCategory.textContent = item.category;
+                galleryCounter.textContent = `${currentGalleryIdx + 1} / ${galleryImages.length}`;
+
+                updateActiveThumbnail();
+            }
+
+            function createThumbnails() {
+                if (!galleryThumbnails) return;
+                galleryThumbnails.innerHTML = "";
+
+                galleryImages.forEach((item, index) => {
+                    const button = document.createElement("button");
+                    button.type = "button";
+                    button.className = "gallery-thumb shrink-0 overflow-hidden rounded-md border-2 border-transparent opacity-60 transition hover:opacity-100";
+                    button.dataset.index = index;
+
+                    const image = document.createElement("img");
+                    image.src = item.image;
+                    image.alt = item.title;
+                    image.loading = "lazy";
+                    image.className = "h-12 w-16 object-cover sm:h-14 sm:w-20";
+
+                    button.appendChild(image);
+                    button.addEventListener("click", () => showGalleryImage(index));
+                    galleryThumbnails.appendChild(button);
+                });
+
+                updateActiveThumbnail();
+            }
+
+            function updateActiveThumbnail() {
+                const thumbnails = document.querySelectorAll(".gallery-thumb");
+                thumbnails.forEach((thumb, index) => {
+                    if (index === currentGalleryIdx) {
+                        thumb.classList.remove("border-transparent", "opacity-60");
+                        thumb.classList.add("border-[#b89252]", "opacity-100");
+                        thumb.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+                    } else {
+                        thumb.classList.remove("border-[#b89252]", "opacity-100");
+                        thumb.classList.add("border-transparent", "opacity-60");
+                    }
+                });
+            }
+
+            // Hero trigger bindings
+            heroTriggers.forEach(trigger => {
+                trigger.addEventListener("click", function () {
+                    const index = this.dataset.galleryIdx || 0;
+                    openGallery(index);
+                });
+            });
+
+            if (openGalleryBtn) openGalleryBtn.addEventListener("click", () => openGallery(0));
+            if (closeGalleryBtn) closeGalleryBtn.addEventListener("click", closeGallery);
+            if (galleryPrev) galleryPrev.addEventListener("click", () => showGalleryImage(currentGalleryIdx - 1));
+            if (galleryNext) galleryNext.addEventListener("click", () => showGalleryImage(currentGalleryIdx + 1));
+
+            if (galleryModal) {
+                galleryModal.addEventListener("click", (e) => {
+                    if (e.target === galleryModal) closeGallery();
+                });
+            }
+
+            // Keyboard controls
+            document.addEventListener("keydown", function (event) {
+                if (!galleryModal || galleryModal.classList.contains("hidden")) return;
+                if (event.key === "Escape") closeGallery();
+                if (event.key === "ArrowRight") showGalleryImage(currentGalleryIdx + 1);
+                if (event.key === "ArrowLeft") showGalleryImage(currentGalleryIdx - 1);
+            });
+
+            // Touch swiping
+            let touchStartX = 0;
+            let touchEndX = 0;
+            if (galleryModal) {
+                galleryModal.addEventListener("touchstart", (e) => {
+                    touchStartX = e.changedTouches[0].screenX;
+                }, { passive: true });
+
+                galleryModal.addEventListener("touchend", (e) => {
+                    touchEndX = e.changedTouches[0].screenX;
+                    const dist = touchEndX - touchStartX;
+                    if (Math.abs(dist) > 50) {
+                        dist < 0 ? showGalleryImage(currentGalleryIdx + 1) : showGalleryImage(currentGalleryIdx - 1);
+                    }
+                }, { passive: true });
+            }
+        });
+
+        // Share action
+        function shareProject() {
+            if (navigator.share) {
+                navigator.share({
+                    title: document.title,
+                    url: window.location.href
+                }).catch(() => {});
+            } else if (navigator.clipboard) {
+                navigator.clipboard.writeText(window.location.href);
+                alert("Link copied to clipboard!");
+            }
+        }
+
+
+    </script>
+
+    <nav id="projectNav" class="sticky top-0 z-40 border-y border-[#e5e0d6] bg-white/95 shadow-sm backdrop-blur-md">
+
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center gap-1 overflow-x-auto scrollbar-hide">
+
+                <a href="#overview" class="project-nav-link shrink-0 border-b-2 border-transparent px-4 py-4 text-sm font-medium text-gray-500 hover:text-gray-900">
+                    Overview
+                </a>
+
+                <a href="#pricing" class="project-nav-link shrink-0 border-b-2 border-transparent px-4 py-4 text-sm font-medium text-gray-500 hover:text-gray-900">
+                    Pricing & Unit Plans
+                </a>
+
+                <a href="#location" class="project-nav-link shrink-0 border-b-2 border-transparent px-4 py-4 text-sm font-medium text-gray-500 hover:text-gray-900">
+                    Location
+                </a>
+
+                <a href="#video" class="project-nav-link shrink-0 border-b-2 border-transparent px-4 py-4 text-sm font-medium text-gray-500 hover:text-gray-900">
+                    Video
+                </a>
+
+                <a href="#amenities" class="project-nav-link shrink-0 border-b-2 border-transparent px-4 py-4 text-sm font-medium text-gray-500 hover:text-gray-900">
+                    Amenities
+                </a>
+
+                <a href="#floorplan" class="project-nav-link shrink-0 border-b-2 border-transparent px-4 py-4 text-sm font-medium text-gray-500 hover:text-gray-900">
+                    Floor Plan
+                </a>
+
+                <a href="#emi_calculator" class="project-nav-link shrink-0 border-b-2 border-transparent px-4 py-4 text-sm font-medium text-gray-500 hover:text-gray-900">
+                    EMI Calculator
+                </a>
+
+                <a href="#about_developer" class="project-nav-link shrink-0 border-b-2 border-transparent px-4 py-4 text-sm font-medium text-gray-500 hover:text-gray-900">
+                    About Developer
+                </a>
+
+                <a href="#faqs" class="project-nav-link shrink-0 border-b-2 border-transparent px-4 py-4 text-sm font-medium text-gray-500 hover:text-gray-900">
+                    FAQs
+                </a>
+
+            </div>
+        </div>
+    </nav>
+
+    <main class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+
+        <section id="overview" class="scroll-mt-24">
+            {% for welcome in project.welcomes.all %}
+                <div class="overflow-hidden rounded-2xl border border-[#e5e0d6] bg-white">
+                    <div class="grid lg:grid-cols-[1fr_320px]">
+                        <div class="p-7 sm:p-10 lg:p-12">
+                            <span class="text-xs font-semibold uppercase tracking-[0.22em] text-[#b89252]">Project Overview</span>
+
+                            <h2 class="mt-3 max-w-3xl text-3xl font-bold leading-tight tracking-tight text-gray-900 sm:text-4xl">
+                                {{ project.project_name }}
+                            </h2>
+
+                            {% if welcome.description %}
+                                <div class="mt-6 max-w-3xl text-[15px] leading-8 text-gray-600">
+                                    {{ welcome.description|safe }}
+                                </div>
+                            {% endif %}
+
+                            {% if welcome.read_more %}
+                                <div id="welcomeReadMore" class="hidden max-w-3xl pt-5 text-[15px] leading-8 text-gray-600">
+                                    {{ welcome.read_more|safe }}
+                                </div>
+
+                                <button type="button" id="readMoreBtn" class="mt-6 inline-flex items-center gap-2 border-b border-[#b89252] pb-1 text-sm font-semibold text-[#9a7139] transition hover:text-[#765628]">
+                                    Read More
+                                    <svg class="h-4 w-4 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                                    </svg>
+                                </button>
+                            {% endif %}
+                        </div>
+
+                        <div class="flex flex-col justify-between bg-[#171717] p-7 sm:p-10">
+                            <div>
+                                <span class="text-xs font-semibold uppercase tracking-[0.22em] text-[#c9a86b]">About The Project</span>
+
+                                <div class="mt-5 h-px w-12 bg-[#b89252]"></div>
+
+                                <p class="mt-5 text-sm leading-7 text-gray-300">
+                                    Discover the lifestyle, location and opportunities offered by {{ project.project_name }}.
+                                </p>
+                            </div>
+
+                            <div class="mt-8 grid grid-cols-2 gap-4 border-t border-white/10 pt-6">
+                                <div>
+                                    <p class="text-xs uppercase tracking-wider text-gray-500">Status</p>
+                                    <p class="mt-1 text-sm font-semibold text-white">{{ project.construction_status|default:"—" }}</p>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="rounded-2xl border border-[#e5e0d6] bg-white p-8 text-center">
+                    <p class="text-sm text-gray-500">Project overview will be updated soon.</p>
+                </div>
+            {% endfor %}
+        </section>
+            
+        <section id="pricing" class="scroll-mt-24 py-6 sm:py-10">
+            <div class="rounded-2xl border border-[#e5e0d6] bg-white p-4 sm:p-8 lg:p-10">
+                <div>
+                    <p class="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#b89252] sm:text-xs">Pricing & Unit Plans</p>
+                    <h2 class="mt-1.5 text-xl font-bold tracking-tight text-gray-900 sm:mt-2 sm:text-3xl">Choose Your Configuration</h2>
+                    <p class="mt-2 text-xs text-gray-500 sm:mt-3 sm:text-sm">Explore available unit sizes, pricing and floor plans.</p>
+                </div>
+
+                {% regroup project.configurations.all by bhk_type as bhk_groups %}
+                {% if bhk_groups %}
+                <div class="mt-5 overflow-x-auto border-b border-[#e5e0d6] sm:mt-8">
+                    <div class="flex min-w-max">
+                        {% for group in bhk_groups %}
+                        <button type="button" data-tab="{{ forloop.counter }}" class="bhk-tab border-b-2 border-transparent px-4 py-3 text-xs font-semibold text-gray-500 transition hover:text-[#9a7139] sm:px-6 sm:py-4 sm:text-sm {% if forloop.first %}!border-[#b89252] !text-[#9a7139]{% endif %}">
+                            {{ group.grouper }}
+                        </button>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                {% for group in bhk_groups %}
+                <div data-panel="{{ forloop.counter }}" class="bhk-panel {% if not forloop.first %}hidden{% endif %}">
+                    <div class="mt-4 hidden overflow-hidden rounded-xl border border-[#e5e0d6] sm:block">
+                        <div class="grid grid-cols-[1.2fr_1fr_1.2fr_1fr_1fr] bg-[#f8f6f1] px-5 py-4 text-xs font-semibold uppercase tracking-wider text-gray-500">
+                            <span>Unit Type</span>
+                            <span>Carpet Area</span>
+                            <span>Price</span>
+                            <span>Parking</span>
+                            <span class="text-right">Floor Plan</span>
+                        </div>
+
+                        {% for config in group.list %}
+                        <div class="grid grid-cols-[1.2fr_1fr_1.2fr_1fr_1fr] items-center border-t border-[#e5e0d6] px-5 py-5 transition hover:bg-[#fcfbf8]">
+                            <div class="font-semibold text-gray-900">{{ config.bhk_type }}</div>
+                            <div class="text-sm text-gray-600">{{ config.area_sqft }} Sq.Yd</div>
+                            <div class="text-sm font-semibold text-[#9a7139]">₹ {{ config.formatted_price }}</div>
+                            <div>
+                                {% if config.parking %}
+                                <span class="inline-flex items-center gap-1.5 text-sm font-medium text-green-700"><span class="flex h-5 w-5 items-center justify-center rounded-full bg-green-50">✓</span> Available</span>
+                                {% else %}
+                                <span class="text-sm text-gray-400">Not Available</span>
+                                {% endif %}
+                            </div>
+                            <div class="text-right">
+                                {% if config.unit_plan %}
+                                <button type="button" onclick="openUnitPlan('{{ config.unit_plan.url }}')" class="text-sm font-semibold text-[#9a7139] hover:text-[#765628]">View Plan →</button>
+                                {% else %}
+                                <span class="text-sm text-gray-400">Not Available</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="mt-4 space-y-2.5 sm:hidden">
+                        {% for config in group.list %}
+                        <div class="grid grid-cols-2 gap-x-3 gap-y-2 rounded-xl border border-[#e5e0d6] px-3.5 py-3.5">
+                            <div>
+                                <p class="text-[9px] font-medium uppercase tracking-wider text-gray-400">Unit Type</p>
+                                <p class="mt-0.5 text-xs font-semibold text-gray-900">{{ config.bhk_type }}</p>
+                            </div>
+
+                            <div>
+                                <p class="text-[9px] font-medium uppercase tracking-wider text-gray-400">Area</p>
+                                <p class="mt-0.5 text-xs font-semibold text-gray-700">{{ config.area_sqft }} Sq.Yd</p>
+                            </div>
+
+                            <div>
+                                <p class="text-[9px] font-medium uppercase tracking-wider text-gray-400">Price</p>
+                                <p class="mt-0.5 text-xs font-semibold text-[#9a7139]">₹ {{ config.formatted_price }}</p>
+                            </div>
+
+                            <div>
+                                <p class="text-[9px] font-medium uppercase tracking-wider text-gray-400">Parking</p>
+                                {% if config.parking %}
+                                <p class="mt-0.5 text-xs font-medium text-green-700">✓ Available</p>
+                                {% else %}
+                                <p class="mt-0.5 text-xs text-gray-400">Not Available</p>
+                                {% endif %}
+                            </div>
+
+                            <div class="col-span-2 border-t border-[#eee9df] pt-2">
+                                {% if config.unit_plan %}
+                                <button type="button" onclick="openUnitPlan('{{ config.unit_plan.url }}')" class="text-xs font-semibold text-[#9a7139] hover:text-[#765628]">View Floor Plan →</button>
+                                {% else %}
+                                <span class="text-xs text-gray-400">Floor Plan Not Available</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <div class="mt-6 rounded-xl border border-dashed border-[#dcd5c8] p-8 text-center">
+                    <p class="text-xs text-gray-500 sm:text-sm">Pricing and unit plans will be updated soon.</p>
+                </div>
+                {% endif %}
+            </div>
+        </section>
+
+        <section id="location" class="scroll-mt-24 py-6 sm:py-10">
+            <div class="rounded-2xl border border-[#e5e0d6] bg-white p-4 sm:p-8 lg:p-10">
+                <div class="max-w-2xl">
+                    <p class="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#b89252] sm:text-xs">Project Location</p>
+                    <h2 class="mt-1.5 text-xl font-bold tracking-tight text-gray-900 sm:mt-2 sm:text-3xl">Location & Connectivity</h2>
+                    <p class="mt-2 text-xs leading-5 text-gray-500 sm:mt-3 sm:text-sm">Explore the project location and its connectivity to important destinations.</p>
+                </div>
+
+                <div class="mt-6 grid gap-5 lg:mt-8 lg:grid-cols-[1.05fr_.95fr] lg:gap-8">
+
+                        <style>
+                            .google-map-wrapper {
+                                width: 100%;
+                                height: 500px;
+                                overflow: hidden;
+                            }
+
+                            .google-map-wrapper iframe {
+                                display: block !important;
+                                width: 100% !important;
+                                height: 100% !important;
+                                min-height: 100% !important;
+                                max-height: none !important;
+                                border: 0 !important;
+                                margin: 0 !important;
+                                padding: 0 !important;
+                                vertical-align: top !important;
+                            }
+
+                            @media (max-width: 1023px) {
+                                .google-map-wrapper {
+                                    height: 450px;
+                                }
+                            }
+
+                            @media (max-width: 639px) {
+                                .google-map-wrapper {
+                                    height: 300px;
+                                }
+                            }
+                        </style>
+
+                        <div class="overflow-hidden rounded-xl border border-[#e5e0d6] bg-[#f8f6f1]">
+
+                            {% if project.google_map_iframe %}
+
+                                <div class="google-map-wrapper">
+                                    {{ project.google_map_iframe|safe }}
+                                </div>
+
+                            {% else %}
+
+                                <div class="flex h-[300px] items-center justify-center text-sm text-gray-400 sm:h-[450px] lg:h-[500px]">
+                                    Map not available
+                                </div>
+
+                            {% endif %}
+
+                        </div>
+
+                    <div>
+                        <div class="border-b border-[#e5e0d6] pb-5">
+                            <p class="text-[10px] font-semibold uppercase tracking-wider text-gray-400">Project Address</p>
+                            <div class="mt-2 flex gap-3">
+                                <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#f8f1e5] text-[#b89252]">
+                                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 21s7-5.2 7-12a7 7 0 1 0-14 0c0 6.8 7 12 7 12Z"/>
+                                        <circle cx="12" cy="9" r="2.3" stroke-width="1.8"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-semibold text-gray-900">
+                                        {{ project.locality.name }}{% if project.area %}, {{ project.area }}{% endif %}
+                                    </p>
+                                    <p class="mt-1 text-xs leading-5 text-gray-500">
+                                        {% if project.address %}{{ project.address }}{% endif %}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pt-5">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-[10px] font-semibold uppercase tracking-wider text-gray-400">Nearby Connectivity</p>
+                                    <h3 class="mt-1 text-lg font-bold text-gray-900">Everything Within Reach</h3>
+                                </div>
+                                <span class="text-xs text-gray-400">{{ project.connectivity.count }} Places</span>
+                            </div>
+                            
+                            <div class="mt-4 max-h-[305px] overflow-y-auto divide-y divide-[#eee9df] pr-2 scrollbar-thin scrollbar-thumb-neutral-300 hover:scrollbar-thumb-[#9a7139]">
+                                {% for item in project.connectivity.all %}
+                                <div class="flex items-center justify-between gap-4 py-3">
+                                    <div class="min-w-0">
+                                        <p class="truncate text-sm font-semibold text-gray-800">{{ item.title }}</p>
+                                        {% if item.subtitle %}
+                                        <p class="mt-0.5 truncate text-xs text-gray-400">{{ item.subtitle }}</p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                {% empty %}
+                                <p class="py-6 text-center text-xs text-gray-400">Connectivity details will be updated soon.</p>
+                                {% endfor %}
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="video" class="scroll-mt-24 py-6 sm:py-10">
+            <div class="rounded-2xl border border-[#e5e0d6] bg-white p-4 sm:p-8 lg:p-10">
+                <div class="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+                    <div>
+                        <p class="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#b89252] sm:text-xs">Project Video</p>
+                        <h2 class="mt-1.5 text-xl font-bold tracking-tight text-gray-900 sm:mt-2 sm:text-3xl">Experience The Project</h2>
+                        <p class="mt-2 text-xs leading-5 text-gray-500 sm:text-sm">Take a closer look at the project, amenities and overall lifestyle.</p>
+                    </div>
+                </div>
+
+                {% if project.youtube_embed_id %}
+                <div class="mt-5 overflow-hidden rounded-xl bg-black sm:mt-8">
+                    <div class="relative aspect-video w-full">
+                        <iframe
+                            src="https://www.youtube.com/embed/{{ project.youtube_embed_id }}"
+                            title="{{ project.project_name }} Project Video"
+                            class="absolute inset-0 h-full w-full"
+                            frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                </div>
+                {% else %}
+                <div class="mt-5 flex aspect-video items-center justify-center rounded-xl border border-dashed border-[#dcd5c8] bg-[#faf9f6] sm:mt-8">
+                    <div class="text-center">
+                        <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[#f8f1e5] text-[#b89252]">
+                            <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M8 5v14l11-7z"/>
+                            </svg>
+                        </div>
+                        <p class="mt-3 text-xs font-medium text-gray-500 sm:text-sm">Project video will be available soon.</p>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </section>
+
+        <section id="amenities" class="scroll-mt-24 py-6 sm:py-10">
+            <div class="rounded-2xl border border-[#e5e0d6] bg-white p-4 sm:p-8 lg:p-10">
+                <div>
+                    <p class="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#b89252] sm:text-xs">Project Amenities</p>
+                    <h2 class="mt-1.5 text-xl font-bold tracking-tight text-gray-900 sm:mt-2 sm:text-3xl">Amenities & Facilities</h2>
+                    <p class="mt-2 text-xs leading-5 text-gray-500 sm:mt-3 sm:text-sm">Everything you need for a comfortable and convenient lifestyle.</p>
+                </div>
+
+                {% if project.amenities.all %}
+                <div class="mt-6 grid grid-cols-2 gap-x-3 gap-y-4 sm:mt-8 sm:grid-cols-3 sm:gap-5 lg:grid-cols-4">
+                    {% for amenity in project.amenities.all %}
+                    <div class="group flex items-center gap-3 border-b border-[#eee9df] pb-4">
+                        <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#f8f1e5] text-[#b89252] transition group-hover:bg-[#b89252] group-hover:text-white">
+                          
+                           <i class="{{amenity.amenities.icon}}"></i>
+                        </div>
+                        <div class="min-w-0">
+                            <p class="truncate text-xs font-semibold text-gray-800 sm:text-sm">{{ amenity.amenities.title }}</p>
+                            <p class="mt-0.5 text-[10px] text-gray-400 sm:text-xs">Available</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="mt-6 rounded-xl border border-dashed border-[#dcd5c8] p-8 text-center sm:mt-8">
+                    <p class="text-xs text-gray-500 sm:text-sm">Amenities details will be updated soon.</p>
+                </div>
+                {% endif %}
+            </div>
+        </section>
+
+        <section id="floorplan" class="scroll-mt-24 py-6 sm:py-10">
+                <div class="rounded-2xl border border-[#e5e0d6] bg-white p-4 sm:p-8 lg:p-10">
+                    <div>
+                        <p class="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#b89252] sm:text-xs">Floor Plans</p>
+                        <h2 class="mt-1.5 text-xl font-bold tracking-tight text-gray-900 sm:mt-2 sm:text-3xl">Explore Floor Plans</h2>
+                        <p class="mt-2 text-xs leading-5 text-gray-500 sm:mt-3 sm:text-sm">View detailed floor plans and explore the available configurations.</p>
+                    </div>
+
+                    {% if project.configurations.all %}
+                    <div class="mt-6 grid gap-4 sm:mt-8 sm:grid-cols-2 lg:grid-cols-3">
+                        {% for config in project.configurations.all %}
+                        {% if config.unit_plan %}
+                        <div class="group overflow-hidden rounded-xl border border-[#e5e0d6] bg-white">
+                            <button type="button" onclick="openUnitPlan('{{ config.unit_plan.url }}')" class="relative block aspect-[4/3] w-full overflow-hidden bg-[#f8f6f1]">
+                                <img src="{{ config.unit_plan.url }}" alt="{{ config.bhk_type }} Floor Plan" class="h-full w-full object-contain p-3 transition duration-500 group-hover:scale-[1.03]">
+                                <span class="absolute bottom-3 right-3 rounded-lg bg-black/70 px-3 py-1.5 text-[10px] font-semibold text-white backdrop-blur-sm sm:text-xs">View Plan</span>
+                            </button>
+
+                            <div class="flex items-center justify-between gap-3 border-t border-[#e5e0d6] px-4 py-3.5">
+                                <div>
+                                    <p class="text-sm font-semibold text-gray-900">{{ config.bhk_type }}</p>
+                                    <p class="mt-0.5 text-[10px] text-gray-400 sm:text-xs">{{ config.area_sqft }} Sq.Yd</p>
+                                </div>
+                                <p class="text-xs font-semibold text-[#9a7139]">₹ {{ config.formatted_price }}</p>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="mt-6 rounded-xl border border-dashed border-[#dcd5c8] p-8 text-center sm:mt-8">
+                        <p class="text-xs text-gray-500 sm:text-sm">Floor plans will be updated soon.</p>
+                    </div>
+                    {% endif %}
+                </div>
+        </section>
+
+        <section id="emi_calculator" class="scroll-mt-24 py-6 sm:py-10">
+            <div class="rounded-2xl border border-[#e5e0d6] bg-white p-4 sm:p-8 lg:p-10">
+                <div>
+                    <p class="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#b89252] sm:text-xs">EMI Calculator</p>
+                    <h2 class="mt-1.5 text-xl font-bold tracking-tight text-gray-900 sm:mt-2 sm:text-3xl">Calculate Your Home Loan EMI</h2>
+                    <p class="mt-2 text-xs leading-5 text-gray-500 sm:mt-3 sm:text-sm">Estimate your monthly EMI, total interest and total repayment amount.</p>
+                </div>
+
+                <div class="mt-6 grid gap-6 lg:mt-8 lg:grid-cols-[1fr_1fr] lg:gap-10">
+                    
+                    <div class="space-y-5">
+                        <!-- Property Price Input -->
+                        <div>
+                            <div class="flex items-center justify-between">
+                                <label class="text-xs font-semibold text-gray-700 sm:text-sm">Property Price</label>
+                                <span id="propertyPriceValue" class="text-xs font-bold text-[#9a7139] sm:text-sm">₹ 1,38,00,000</span>
+                            </div>
+                            <input id="propertyPrice" type="range" min="1000000" max="50000000" step="100000" value="13800000" class="mt-3 h-1.5 w-full cursor-pointer accent-[#b89252]">
+                            <div class="mt-1 flex justify-between text-[10px] text-gray-400">
+                                <span>₹10 Lakh</span>
+                                <span>₹5 Crore</span>
+                            </div>
+                        </div>
+
+                        <!-- Down Payment Percentage Input -->
+                        <div>
+                            <div class="flex items-center justify-between">
+                                <label class="text-xs font-semibold text-gray-700 sm:text-sm">
+                                    Down Payment (<span id="downPaymentPercentValue">20</span>%)
+                                </label>
+                                <span id="downPaymentValue" class="text-xs font-bold text-[#9a7139] sm:text-sm">₹ 27,60,000</span>
+                            </div>
+                            <input id="downPaymentPercent" type="range" min="10" max="80" step="1" value="20" class="mt-3 h-1.5 w-full cursor-pointer accent-[#b89252]">
+                            <div class="mt-1 flex justify-between text-[10px] text-gray-400">
+                                <span>10%</span>
+                                <span>80%</span>
+                            </div>
+                        </div>
+
+                        <!-- Calculated Loan Amount Display -->
+                        <div class="rounded-lg bg-[#fcfbf9] p-3 border border-[#e5e0d6]">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-medium text-gray-600">Calculated Loan Amount</span>
+                                <span id="loanAmountValue" class="text-xs font-bold text-[#9a7139] sm:text-sm">₹ 1,10,40,000</span>
+                            </div>
+                        </div>
+
+                        <!-- Interest Rate Input -->
+                        <div>
+                            <div class="flex items-center justify-between">
+                                <label class="text-xs font-semibold text-gray-700 sm:text-sm">Interest Rate</label>
+                                <span id="interestValue" class="text-xs font-bold text-[#9a7139] sm:text-sm">8.5%</span>
+                            </div>
+                            <input id="interestRate" type="range" min="5" max="15" step="0.1" value="8.5" class="mt-3 h-1.5 w-full cursor-pointer accent-[#b89252]">
+                            <div class="mt-1 flex justify-between text-[10px] text-gray-400">
+                                <span>5%</span>
+                                <span>15%</span>
+                            </div>
+                        </div>
+
+                        <!-- Loan Tenure Input -->
+                        <div>
+                            <div class="flex items-center justify-between">
+                                <label class="text-xs font-semibold text-gray-700 sm:text-sm">Loan Tenure</label>
+                                <span id="tenureValue" class="text-xs font-bold text-[#9a7139] sm:text-sm">20 Years</span>
+                            </div>
+                            <input id="loanTenure" type="range" min="1" max="30" step="1" value="20" class="mt-3 h-1.5 w-full cursor-pointer accent-[#b89252]">
+                            <div class="mt-1 flex justify-between text-[10px] text-gray-400">
+                                <span>1 Year</span>
+                                <span>30 Years</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="rounded-xl bg-[#f8f6f1] p-4 sm:p-6">
+                        <div class="border-b border-[#e5e0d6] pb-5">
+                            <p class="text-[10px] font-semibold uppercase tracking-wider text-gray-400">Monthly EMI</p>
+                            <p id="emiAmount" class="mt-1 text-2xl font-bold text-[#9a7139] sm:text-3xl">₹ 43,391</p>
+                        </div>
+
+                        <div class="mt-5 grid grid-cols-2 gap-4">
+                            <div>
+                                <p class="text-[10px] uppercase tracking-wider text-gray-400">Principal Amount</p>
+                                <p id="principalAmount" class="mt-1 text-xs font-semibold text-gray-800 sm:text-sm">₹ 50,00,000</p>
+                            </div>
+
+                            <div>
+                                <p class="text-[10px] uppercase tracking-wider text-gray-400">Total Interest</p>
+                                <p id="totalInterest" class="mt-1 text-xs font-semibold text-gray-800 sm:text-sm">₹ 54,13,840</p>
+                            </div>
+
+                            <div class="col-span-2 border-t border-[#e5e0d6] pt-4">
+                                <p class="text-[10px] uppercase tracking-wider text-gray-400">Total Payment</p>
+                                <p id="totalPayment" class="mt-1 text-sm font-bold text-gray-900 sm:text-base">₹ 1,04,13,840</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="about_developer" class="scroll-mt-24 w-full bg-white p-3 sm:p-5 lg:p-8">
+            <div class="mx-auto max-w-7xl space-y-6">
+
+                <!-- Top Section -->
+                <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+
+                    <!-- Developer Information -->
+                    <div class="flex flex-col gap-5 rounded-xl border border-gray-200 p-4 sm:flex-row sm:items-center sm:p-6">
+
+                        <!-- Developer Logo -->
+                        <div class="mx-auto h-40 w-40 shrink-0 sm:mx-0 sm:h-48 sm:w-48">
+                            {% if project.developer.logo %}
+                            <img src="{{ project.developer.logo.url }}" alt="Developer Logo" class="h-full w-full rounded-xl object-contain">
+                            {% else %}
+                            <div class="flex h-full w-full items-center justify-center rounded-xl bg-gray-100">
+                                <i class="fa-solid fa-building text-5xl text-gray-400"></i>
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Developer Details -->
+                        <div class="min-w-0 flex-1 space-y-4 text-center sm:text-left">
+                            <span class="block text-xs font-semibold uppercase tracking-[0.25em] text-[#B89252]">
+                                About Developer
+                            </span>
+
+                            <h2 class="text-2xl font-bold text-gray-900 sm:text-3xl">
+                                {{ project.developer }}
+                            </h2>
+
+                            <p class="text-sm leading-6 text-gray-500">
+                                Learn more about the developer behind
+                                {{ project.name }}.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Statistics and Highlights -->
+                    <div class="flex flex-col gap-5">
+
+                        <!-- Statistics -->
+                        <div class="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
+
+                                {% for rs in project.developer.developer_impact_metrics.all %}
+                                <div class="flex min-h-24 flex-col items-center justify-center rounded-xl border border-gray-200 p-3 text-center">
+                                    <i class="{{rs.icon}} text-xl text-[#B89252]"></i>
+                                    <h3 class="mt-2 text-xl font-bold text-gray-900">{{rs.value}}</h3>
+                                    <p class="text-xs text-gray-500">{{rs.title}}</p>
+                                </div>
+                                {% endfor %}
+
+                        </div>
+
+                        <!-- Highlight Box -->
+                        <div class="flex flex-1 flex-col justify-center rounded-xl border border-gray-200 p-5 sm:p-6">
+                            <h3 class="text-lg font-bold text-gray-900">
+                                Building Trust, Creating Value
+                            </h3>
+                            <p class="mt-2 text-sm leading-6 text-gray-500">
+                                Discover the developer's vision, commitment
+                                to quality and approach to creating modern
+                                residential spaces.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- About Description -->
+                <div class="relative rounded-xl border border-gray-200 p-5 sm:p-8 lg:p-10">
+                    <div class="max-w-4xl space-y-4">
+                        <span class="text-xs font-semibold uppercase tracking-[0.25em] text-[#B89252]">
+                            Our Story
+                        </span>
+
+                        <h2 class="text-2xl font-bold text-gray-900 sm:text-3xl">
+                            About {{ project.developer.name }}
+                        </h2>
+
+                        <p class="text-sm leading-7 text-gray-600 sm:text-base">
+                            {{ project.developer.about_developer}}
+                        </p>
+                    </div>
+
+                    <!-- Button -->
+                    <div class="mt-6 flex justify-start sm:justify-end">
+                        <a href="{% url "developer" %}" class="inline-flex items-center justify-center gap-2 rounded-lg bg-[#B89252] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#9c783c]">
+                            Know More
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+        
+        <section id="faqs" class="scroll-mt-24 py-6 sm:py-10">
+            <div class="rounded-2xl border border-[#e5e0d6] bg-white p-4 sm:p-8 lg:p-10">
+                <div>
+                    <p class="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#b89252] sm:text-xs">FAQs</p>
+                    <h2 class="mt-1.5 text-xl font-bold tracking-tight text-gray-900 sm:mt-2 sm:text-3xl">Frequently Asked Questions</h2>
+                    <p class="mt-2 text-xs leading-5 text-gray-500 sm:mt-3 sm:text-sm">Find answers to the most common questions about {{ project.project_name }}.</p>
+                </div>
+
+                {% if project.faqs.all %}
+                <div class="mt-6 divide-y divide-[#e5e0d6] border-y border-[#e5e0d6] sm:mt-8">
+                    {% for faq in project.faqs.all %}
+                    <div class="faq-item">
+                        <button type="button" class="faq-question flex w-full items-center justify-between gap-4 py-4 text-left sm:py-5">
+                            <span class="text-xs font-semibold leading-5 text-gray-800 sm:text-sm">{{ faq.question }}</span>
+                            <span class="faq-icon flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#f8f1e5] text-[#9a7139] transition-transform duration-300">
+                                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="m6 9 6 6 6-6"/>
+                                </svg>
+                            </span>
+                        </button>
+
+                        <div class="faq-answer grid grid-rows-[0fr] transition-all duration-300">
+                            <div class="overflow-hidden">
+                                <div class="pb-4 pr-10 text-xs leading-6 text-gray-500 sm:pb-5 sm:text-sm sm:leading-7">
+                                    {{ faq.answer|safe }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="mt-6 rounded-xl border border-dashed border-[#dcd5c8] p-8 text-center sm:mt-8">
+                    <p class="text-xs text-gray-500 sm:text-sm">Frequently asked questions will be updated soon.</p>
+                </div>
+                {% endif %}
+            </div>
+        </section>
+
+        <section class="py-6 sm:py-10">
+            <div class="rounded-2xl border border-[#e5e0d6] bg-white p-4 sm:p-8 lg:p-10">
+                <div>
+                    <p class="text-[10px] font-semibold uppercase tracking-[0.22em] text-[#b89252] sm:text-xs">More Projects</p>
+                    <h2 class="mt-1.5 text-xl font-bold tracking-tight text-gray-900 sm:mt-2 sm:text-3xl">More Projects from {{ project.developer.title }}</h2>
+                    <p class="mt-2 text-xs leading-5 text-gray-500 sm:mt-3 sm:text-sm">Explore more projects developed by {{ project.developer }}.</p>
+                </div>
+
+                {% if more_projects %}
+                <div class="mt-6 grid gap-4 sm:mt-8 sm:grid-cols-2 lg:grid-cols-4">
+                    {% for item in more_projects %}
+                    <a href="{{ item.get_absolute_url }}" class="group overflow-hidden rounded-xl border border-[#e5e0d6] bg-white transition duration-300 hover:-translate-y-1 hover:shadow-lg">
+                        <div class="relative aspect-[4/3] overflow-hidden bg-[#f8f6f1]">
+                            {% if item.image %}
+                            <img src="{{ item.image.url }}" alt="{{ item.project_name }}" class="h-full w-full object-cover transition duration-500 group-hover:scale-105">
+                            {% else %}
+                            <div class="flex h-full items-center justify-center text-xs text-gray-400">No Image</div>
+                            {% endif %}
+
+                            {% if item.construction_status %}
+                            <span class="absolute left-3 top-3 rounded-md bg-white/90 px-2.5 py-1 text-[9px] font-semibold text-[#9a7139] shadow-sm backdrop-blur-sm">
+                                {{ item.construction_status }}
+                            </span>
+                            {% endif %}
+                        </div>
+
+                        <div class="p-3.5 sm:p-4">
+                            <h3 class="truncate text-sm font-bold text-gray-900 group-hover:text-[#9a7139]">{{ item.project_name }}</h3>
+
+                            <p class="mt-1 text-[10px] text-gray-500 sm:text-xs">
+                                {% if item.locality.name %}{{ item.locality.name }}{% endif %}
+                                {% if item.city.name %}, {{ item.city.name }}{% endif %}
+                            </p>
+
+                            <div class="mt-3 flex items-center justify-between border-t border-[#eee9df] pt-3">
+                                <span class="text-[10px] text-gray-400 sm:text-xs">
+                                    {{ item.bhk_type|default:"Multiple Configurations" }}
+                                </span>
+
+                                {% if item.pricing %}
+                                <span class="text-xs font-semibold text-[#9a7139]">{{ item.pricing }}</span>
+                                {% else %}
+                                <span class="text-xs font-semibold text-[#9a7139]">View Details →</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </a>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="mt-6 rounded-xl border border-dashed border-[#dcd5c8] p-8 text-center sm:mt-8">
+                    <p class="text-xs text-gray-500 sm:text-sm">No other projects available from this developer.</p>
+                </div>
+                {% endif %}
+            </div>
+        </section>
+
+    </main>
+
+</div>
+
+<div id="galleryData" class="hidden">
+    {% for item in project.gallery.all %}
+        {% if item.image %}
+        <div class="gallery-data-item" data-image="{{ item.image.url }}" data-title="{{ item.title|default:project.project_name }}" data-category="{{ item.get_category_display }}">
+        </div>
+        {% endif %}
+    {% endfor %}
+</div>
+
+<div id="galleryModal" class="fixed inset-0 z-[9999] hidden bg-black/95 backdrop-blur-sm">
+
+    <div class="absolute left-0 right-0 top-0 z-30 flex items-center justify-between px-4 py-4 sm:px-7">
+        <div id="galleryCounter" class="rounded-full border border-white/15 bg-white/10 px-4 py-2 text-xs font-medium text-white backdrop-blur-md">
+            1 / 1
+        </div>
+
+        <button type="button" id="closeGalleryBtn" class="flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-white/10 text-white backdrop-blur-md transition hover:bg-white hover:text-black" aria-label="Close Gallery">
+            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 6l12 12M18 6 6 18"/>
+            </svg>
+        </button>
+    </div>
+
+    <div class="absolute inset-0 flex items-center justify-center px-14 py-20 sm:px-20">
+        <img id="galleryMainImage" src="" alt="" class="max-h-full max-w-full rounded-lg object-contain shadow-2xl transition duration-300">
+    </div>
+
+    <button type="button" id="galleryPrev" class="absolute left-3 top-1/2 z-30 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/15 bg-white/10 text-white backdrop-blur-md transition hover:bg-white hover:text-black sm:left-6">
+        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15 18-6-6 6-6"/>
+        </svg>
+    </button>
+
+    <button type="button" id="galleryNext" class="absolute right-3 top-1/2 z-30 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-white/15 bg-white/10 text-white backdrop-blur-md transition hover:bg-white hover:text-black sm:right-6">
+        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 18 6-6-6 6"/>
+        </svg>
+    </button>
+
+    <div class="absolute bottom-24 left-1/2 z-30 w-full max-w-xl -translate-x-1/2 px-4 text-center">
+        <h3 id="galleryImageTitle" class="text-base font-semibold text-white sm:text-lg"></h3>
+
+        <p id="galleryImageCategory" class="mt-1 text-xs text-white/60 sm:text-sm"></p>
+    </div>
+
+    <div class="absolute bottom-3 left-0 right-0 z-30 px-3 sm:bottom-5 sm:px-6">
+        <div id="galleryThumbnails" class="mx-auto flex max-w-5xl items-center justify-center gap-2 overflow-x-auto pb-1">
+        </div>
+    </div>
+</div>
+
+<div id="imageLightbox" class="fixed inset-0 z-[100] hidden h-screen w-screen items-center justify-center overflow-hidden bg-black/90 p-4">
+    
+    <button type="button" id="lightboxClose" class="absolute right-5 top-5 z-20 flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-2xl text-white backdrop-blur-md transition hover:bg-white hover:text-black">
+        &times;
+    </button>
+
+    <button type="button" id="lightboxPrev" class="absolute left-4 top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-md transition hover:bg-white hover:text-black">
+        &#10094;
+    </button>
+
+    <img id="lightboxImage" src="" alt="" class="max-h-[90vh] max-w-[90vw] object-contain">
+
+    <button type="button" id="lightboxNext" class="absolute right-4 top-1/2 z-20 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-md transition hover:bg-white hover:text-black">
+        &#10095;
+    </button>
+
+
+</div>
+
+
+<script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const slides = [...document.querySelectorAll(".hero-slide")];
+        const images = [...document.querySelectorAll(".hero-lightbox-trigger")];
+
+        const prevButton = document.getElementById("heroPrev");
+        const nextButton = document.getElementById("heroNext");
+        const dotsContainer = document.getElementById("heroDots");
+
+        const lightbox = document.getElementById("imageLightbox");
+        const lightboxImage = document.getElementById("lightboxImage");
+        const lightboxClose = document.getElementById("lightboxClose");
+        const lightboxPrev = document.getElementById("lightboxPrev");
+        const lightboxNext = document.getElementById("lightboxNext");
+
+        let currentSlide = 0;
+        let lightboxIndex = 0;
+        let autoPlay;
+
+
+        function showSlide(index) {
+
+            if (!slides.length) return;
+
+            currentSlide = (index + slides.length) % slides.length;
+
+            slides.forEach((slide, i) => {
+                slide.classList.toggle("opacity-100", i === currentSlide);
+                slide.classList.toggle("opacity-0", i !== currentSlide);
+            });
+
+            document.querySelectorAll(".hero-dot").forEach((dot, i) => {
+                dot.style.width = i === currentSlide ? "24px" : "6px";
+                dot.style.backgroundColor =
+                    i === currentSlide
+                        ? "rgba(255,255,255,1)"
+                        : "rgba(255,255,255,.45)";
+            });
+        }
+
+
+        if (slides.length > 1) {
+
+            slides.forEach((_, index) => {
+
+                const dot = document.createElement("button");
+
+                dot.type = "button";
+                dot.className = "hero-dot h-1.5 rounded-full transition-all duration-300";
+
+                dot.addEventListener("click", () => {
+                    showSlide(index);
+                    restartAutoPlay();
+                });
+
+                dotsContainer?.appendChild(dot);
+
+            });
+
+            prevButton?.addEventListener("click", () => {
+                showSlide(currentSlide - 1);
+                restartAutoPlay();
+            });
+
+            nextButton?.addEventListener("click", () => {
+                showSlide(currentSlide + 1);
+                restartAutoPlay();
+            });
+
+            autoPlay = setInterval(() => {
+                showSlide(currentSlide + 1);
+            }, 5000);
+
+        }
+
+
+        function restartAutoPlay() {
+            clearInterval(autoPlay);
+            autoPlay = setInterval(() => {
+                showSlide(currentSlide + 1);
+            }, 5000);
+        }
+
+
+        function openLightbox(index) {
+
+            if (!images.length) return;
+
+            lightboxIndex = (index + images.length) % images.length;
+
+            lightboxImage.src = images[lightboxIndex].src;
+            lightboxImage.alt = images[lightboxIndex].alt;
+
+            lightbox.classList.remove("hidden");
+            lightbox.classList.add("flex");
+
+            document.body.classList.add("overflow-hidden");
+        }
+
+
+        function closeLightbox() {
+
+            lightbox.classList.add("hidden");
+            lightbox.classList.remove("flex");
+
+            document.body.classList.remove("overflow-hidden");
+        }
+
+
+        images.forEach((image, index) => {
+
+            image.addEventListener("click", () => {
+                openLightbox(index);
+            });
+
+        });
+
+
+        lightboxClose?.addEventListener("click", closeLightbox);
+
+        lightboxPrev?.addEventListener("click", () => {
+            openLightbox(lightboxIndex - 1);
+        });
+
+        lightboxNext?.addEventListener("click", () => {
+            openLightbox(lightboxIndex + 1);
+        });
+
+
+        lightbox?.addEventListener("click", (event) => {
+
+            if (event.target === lightbox) {
+                closeLightbox();
+            }
+
+        });
+
+
+        document.addEventListener("keydown", (event) => {
+
+            if (lightbox.classList.contains("hidden")) return;
+
+            if (event.key === "Escape") {
+                closeLightbox();
+            }
+
+            if (event.key === "ArrowLeft") {
+                openLightbox(lightboxIndex - 1);
+            }
+
+            if (event.key === "ArrowRight") {
+                openLightbox(lightboxIndex + 1);
+            }
+
+        });
+
+
+        showSlide(0);
+
+    });
+
+
+    function shareProject() {
+
+        const shareData = {
+            title: "{{ project.project_name|escapejs }}",
+            text: "Check out {{ project.project_name|escapejs }}",
+            url: window.location.href
+        };
+
+        if (navigator.share) {
+
+            navigator.share(shareData).catch(() => {});
+
+        } else {
+
+            navigator.clipboard.writeText(window.location.href);
+
+            alert("Project link copied!");
+
+        }
+
+    }
+
+    const readMoreBtn = document.getElementById("readMoreBtn");
+    const welcomeReadMore = document.getElementById("welcomeReadMore");
+
+        readMoreBtn?.addEventListener("click", function () {
+            const hidden = welcomeReadMore.classList.toggle("hidden");
+            readMoreBtn.childNodes[0].textContent = hidden ? "Read More " : "Read Less ";
+
+            readMoreBtn.querySelector("svg").classList.toggle("rotate-180", !hidden);
+        });
+
+            document.querySelectorAll(".bhk-tab").forEach(tab => {
+        tab.addEventListener("click", () => {
+            const id = tab.dataset.tab;
+
+            document.querySelectorAll(".bhk-tab").forEach(item => {
+                item.classList.remove("!border-[#b89252]", "!text-[#9a7139]");
+            });
+
+            document.querySelectorAll(".bhk-panel").forEach(panel => {
+                panel.classList.add("hidden");
+            });
+
+            tab.classList.add("!border-[#b89252]", "!text-[#9a7139]");
+            document.querySelector(`[data-panel="${id}"]`).classList.remove("hidden");
+        });
+    });
+
+    function openUnitPlan(url) {
+        const lightbox = document.getElementById("imageLightbox");
+        const image = document.getElementById("lightboxImage");
+
+        image.src = url;
+        image.alt = "Unit Plan";
+        lightbox.classList.remove("hidden");
+        lightbox.classList.add("flex");
+        document.body.classList.add("overflow-hidden");
+    }
+
+    const propertyPrice = document.getElementById("propertyPrice");
+    const downPaymentPercent = document.getElementById("downPaymentPercent");
+    const interestRate = document.getElementById("interestRate");
+    const loanTenure = document.getElementById("loanTenure");
+
+    const formatINR = value => "₹ " + Math.round(value).toLocaleString("en-IN");
+
+    function calculateEMI() {
+        const price = Number(propertyPrice.value);
+        const downPaymentPct = Number(downPaymentPercent.value);
+        
+        // Calculate down payment amount and loan principal
+        const downPaymentAmt = (price * downPaymentPct) / 100;
+        const principal = price - downPaymentAmt;
+
+        const annualRate = Number(interestRate.value);
+        const years = Number(loanTenure.value);
+        const months = years * 12;
+        const monthlyRate = annualRate / 12 / 100;
+
+        // Standard Amortization Formula
+        const emi = monthlyRate === 0
+            ? principal / months
+            : (principal * monthlyRate * Math.pow(1 + monthlyRate, months)) / (Math.pow(1 + monthlyRate, months) - 1);
+
+        const totalPayment = emi * months;
+        const totalInterest = totalPayment - principal;
+
+        // Update Input Displays
+        document.getElementById("propertyPriceValue").textContent = formatINR(price);
+        document.getElementById("downPaymentPercentValue").textContent = downPaymentPct;
+        document.getElementById("downPaymentValue").textContent = formatINR(downPaymentAmt);
+        document.getElementById("loanAmountValue").textContent = formatINR(principal);
+        document.getElementById("interestValue").textContent = annualRate.toFixed(1) + "%";
+        document.getElementById("tenureValue").textContent = years + (years === 1 ? " Year" : " Years");
+
+        // Update Output Cards
+        document.getElementById("emiAmount").textContent = formatINR(emi);
+        document.getElementById("principalAmount").textContent = formatINR(principal);
+        document.getElementById("totalInterest").textContent = formatINR(totalInterest);
+        document.getElementById("totalPayment").textContent = formatINR(totalPayment);
+    }
+
+    [propertyPrice, downPaymentPercent, interestRate, loanTenure].forEach(input => {
+        input.addEventListener("input", calculateEMI);
+    });
+
+    calculateEMI();
+
+    function setProjectNavPosition() {
+    const header = document.querySelector("header");
+    const nav = document.getElementById("projectNav");
+
+        if (!nav) return;
+
+        const headerHeight = header ? header.getBoundingClientRect().height : 0;
+        nav.style.top = `${headerHeight}px`;
+    }
+
+    setProjectNavPosition();
+    window.addEventListener("resize", setProjectNavPosition);
+    window.addEventListener("load", setProjectNavPosition);
+
+    document.querySelectorAll(".faq-question").forEach(button => {
+        button.addEventListener("click", () => {
+            const item = button.closest(".faq-item");
+            const answer = item.querySelector(".faq-answer");
+            const icon = item.querySelector(".faq-icon");
+            const isOpen = answer.classList.contains("faq-open");
+
+            document.querySelectorAll(".faq-answer").forEach(el => {
+                el.classList.remove("faq-open");
+                el.classList.replace("grid-rows-[1fr]", "grid-rows-[0fr]");
+            });
+
+            document.querySelectorAll(".faq-icon").forEach(el => {
+                el.classList.remove("rotate-180");
+            });
+
+            if (!isOpen) {
+                answer.classList.add("faq-open");
+                answer.classList.replace("grid-rows-[0fr]", "grid-rows-[1fr]");
+                icon.classList.add("rotate-180");
+            }
+        });
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const nav = document.getElementById("projectNav");
+        const navLinks = document.querySelectorAll(".project-nav-link");
+
+        // Nav links ke corresponding sections
+        const sections = [];
+
+        navLinks.forEach(link => {
+            const id = link.getAttribute("href");
+
+            if (id && id.startsWith("#")) {
+                const section = document.querySelector(id);
+
+                if (section) {
+                    sections.push({
+                        section: section,
+                        link: link
+                    });
+                }
+            }
+        });
+
+        // Active class
+        function setActive(link) {
+
+            navLinks.forEach(navLink => {
+                navLink.classList.remove(
+                    "border-[#b89252]",
+                    "text-[#9a7139]",
+                    "font-semibold"
+                );
+
+                navLink.classList.add(
+                    "border-transparent",
+                    "text-gray-500",
+                    "font-medium"
+                );
+            });
+
+            if (link) {
+                link.classList.remove(
+                    "border-transparent",
+                    "text-gray-500",
+                    "font-medium"
+                );
+
+                link.classList.add(
+                    "border-[#b89252]",
+                    "text-[#9a7139]",
+                    "font-semibold"
+                );
+
+                // Active link ko horizontal scroll mein visible rakho
+                link.scrollIntoView({
+                    behavior: "smooth",
+                    block: "nearest",
+                    inline: "center"
+                });
+            }
+        }
+
+        // Scroll detection
+        const observer = new IntersectionObserver(
+            (entries) => {
+
+                entries.forEach(entry => {
+
+                    if (entry.isIntersecting) {
+
+                        const item = sections.find(
+                            item => item.section === entry.target
+                        );
+
+                        if (item) {
+                            setActive(item.link);
+                        }
+                    }
+
+                });
+
+            },
+            {
+                root: null,
+
+                // Sticky navbar ke according detection area
+                rootMargin: "-120px 0px -55% 0px",
+
+                threshold: 0
+            }
+        );
+
+        // Observe all sections
+        sections.forEach(item => {
+            observer.observe(item.section);
+        });
+
+
+        // Click par bhi immediately active
+        navLinks.forEach(link => {
+
+            link.addEventListener("click", function () {
+
+                setActive(this);
+
+            });
+
+        });
+
+    });
+
+</script>
+
+{% endblock %}

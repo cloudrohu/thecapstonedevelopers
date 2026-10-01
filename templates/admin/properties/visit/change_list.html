@@ -1,0 +1,1561 @@
+{% extends "admin/change_list.html" %}
+
+{% block extrastyle %}
+{{ block.super }}
+
+<style>
+
+/* =========================================================
+   PAGE
+========================================================= */
+
+.visit-page {
+    padding: 5px 0 25px;
+}
+
+
+/* =========================================================
+   GRID
+========================================================= */
+
+.visit-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(auto-fill, minmax(380px, 1fr));
+
+    gap: 18px;
+
+    width: 100%;
+}
+
+
+/* =========================================================
+   CARD
+========================================================= */
+
+.visit-card {
+    background: #ffffff;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 16px;
+
+    overflow: hidden;
+
+    display: flex;
+
+    flex-direction: column;
+
+    box-shadow:
+        0 4px 15px rgba(15, 23, 42, 0.06);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.visit-card:hover {
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 12px 30px rgba(15, 23, 42, 0.10);
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+.visit-header {
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 13px;
+
+    padding: 17px;
+}
+
+
+.visit-icon {
+    width: 48px;
+    height: 48px;
+
+    min-width: 48px;
+
+    border-radius: 12px;
+
+    background: #fff7ed;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 22px;
+}
+
+
+.visit-header-content {
+    flex: 1;
+
+    min-width: 0;
+}
+
+
+/* =========================================================
+   BADGES
+========================================================= */
+
+.badges {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 6px;
+
+    margin-bottom: 7px;
+}
+
+
+.badge {
+    display: inline-flex;
+
+    align-items: center;
+
+    padding: 4px 9px;
+
+    border-radius: 999px;
+
+    font-size: 9px;
+
+    line-height: 1.3;
+
+    font-weight: 800;
+
+    white-space: nowrap;
+}
+
+
+.badge-id {
+    background: #dbeafe;
+
+    color: #1d4ed8;
+}
+
+
+.badge-type {
+    background: #ede9fe;
+
+    color: #6d28d9;
+}
+
+
+.badge-new {
+    background: #dbeafe;
+
+    color: #1d4ed8;
+}
+
+
+.badge-re {
+    background: #fef3c7;
+
+    color: #92400e;
+}
+
+
+.badge-cancelled {
+    background: #fee2e2;
+
+    color: #991b1b;
+}
+
+
+.badge-done {
+    background: #dcfce7;
+
+    color: #166534;
+}
+
+
+.badge-default {
+    background: #f1f5f9;
+
+    color: #475569;
+}
+
+
+/* =========================================================
+   TITLE
+========================================================= */
+
+.visit-title {
+    font-size: 16px;
+
+    font-weight: 900;
+
+    color: #111827;
+
+    line-height: 1.35;
+
+    word-break: break-word;
+}
+
+
+.visit-subtitle {
+    margin-top: 3px;
+
+    font-size: 10px;
+
+    font-weight: 600;
+
+    color: #64748b;
+}
+
+
+/* =========================================================
+   SECTION
+========================================================= */
+
+.card-section {
+    padding: 14px 17px;
+
+    border-top: 1px solid #eef2f7;
+}
+
+
+.section-title {
+    margin-bottom: 10px;
+
+    font-size: 11px;
+
+    font-weight: 900;
+
+    color: #111827;
+}
+
+
+/* =========================================================
+   ENTITY BOX
+========================================================= */
+
+.entity-box {
+    padding: 12px;
+
+    background: #f8fafc;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 10px;
+}
+
+
+.entity-name {
+    margin-bottom: 6px;
+
+    font-size: 14px;
+
+    font-weight: 900;
+
+    color: #111827;
+
+    line-height: 1.4;
+}
+
+
+.entity-row {
+    font-size: 10px;
+
+    color: #475569;
+
+    line-height: 1.75;
+
+    word-break: break-word;
+}
+
+
+.entity-row a {
+    color: inherit;
+
+    text-decoration: none;
+}
+
+
+.entity-row a:hover {
+    color: #2563eb;
+
+    text-decoration: underline;
+}
+
+
+/* =========================================================
+   PARENT TYPE
+========================================================= */
+
+.parent-type {
+    display: inline-flex;
+
+    margin-top: 9px;
+
+    padding: 4px 9px;
+
+    border-radius: 999px;
+
+    background: #2563eb;
+
+    color: #ffffff;
+
+    font-size: 9px;
+
+    font-weight: 800;
+}
+
+
+/* =========================================================
+   VISIT INFO
+========================================================= */
+
+.info-box {
+    padding: 12px;
+
+    background: #fffaf5;
+
+    border-left: 4px solid #f59e0b;
+
+    border-radius: 9px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 8px;
+}
+
+
+.info-row {
+    display: grid;
+
+    grid-template-columns: 105px minmax(0, 1fr);
+
+    align-items: start;
+
+    gap: 10px;
+
+    width: 100%;
+
+    font-size: 10px;
+
+    line-height: 1.5;
+}
+
+
+.info-label {
+    width: auto;
+
+    min-width: 0;
+
+    font-weight: 800;
+
+    color: #111827;
+
+    white-space: nowrap;
+}
+
+
+.info-value {
+    min-width: 0;
+
+    color: #475569;
+
+    word-break: normal;
+
+    overflow-wrap: anywhere;
+}
+
+
+/* =========================================================
+   COMMENT
+========================================================= */
+
+.comment-box {
+    padding: 11px 12px;
+
+    background: #faf5ff;
+
+    border-left: 4px solid #7c3aed;
+
+    border-radius: 9px;
+
+    color: #475569;
+
+    font-size: 10px;
+
+    line-height: 1.7;
+
+    word-break: break-word;
+}
+
+
+/* =========================================================
+   TRACKING
+========================================================= */
+
+.tracking-box {
+    padding: 11px 12px;
+
+    background: #f8fafc;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 9px;
+}
+
+
+.tracking-row {
+    font-size: 9px;
+
+    color: #64748b;
+
+    line-height: 1.9;
+
+    word-break: break-word;
+}
+
+
+.tracking-row strong {
+    color: #334155;
+}
+
+
+/* =========================================================
+   ACTIONS
+========================================================= */
+
+.card-actions {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 7px;
+
+    padding: 13px 17px;
+
+    margin-top: auto;
+
+    border-top: 1px solid #eef2f7;
+}
+
+
+.card-action {
+    flex: 1;
+
+    min-width: 95px;
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 4px;
+
+    padding: 8px 10px;
+
+    border-radius: 999px;
+
+    color: #ffffff !important;
+
+    text-decoration: none !important;
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+    white-space: nowrap;
+
+    transition:
+        opacity 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.card-action:hover {
+    color: #ffffff !important;
+
+    opacity: 0.9;
+
+    transform: translateY(-1px);
+}
+
+
+.action-call {
+    background: #16a34a;
+}
+
+
+.action-whatsapp {
+    background: #25d366;
+}
+
+
+.action-edit {
+    background: #111827;
+}
+
+
+.action-parent {
+    background: #2563eb;
+}
+
+
+/* =========================================================
+   EMPTY
+========================================================= */
+
+.empty-card {
+    grid-column: 1 / -1;
+
+    padding: 50px 20px;
+
+    background: #ffffff;
+
+    border: 1px solid #e5e7eb;
+
+    border-radius: 14px;
+
+    text-align: center;
+
+    color: #64748b;
+
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 900px) {
+
+    .visit-grid {
+        grid-template-columns: 1fr;
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .visit-header {
+        padding: 14px;
+    }
+
+
+    .card-section {
+        padding: 13px 14px;
+    }
+
+
+    .card-actions {
+        padding: 12px 14px;
+    }
+
+
+    .card-action {
+        min-width: 100px;
+    }
+
+
+    .info-row {
+        display: grid;
+
+        grid-template-columns: 90px minmax(0, 1fr);
+
+        gap: 8px;
+    }
+
+
+    .info-label {
+        display: block;
+
+        width: auto;
+
+        min-width: 0;
+
+        margin-bottom: 0;
+
+        white-space: nowrap;
+    }
+
+}
+
+</style>
+
+{% endblock %}
+
+
+{% block result_list %}
+
+<div class="visit-page">
+
+    <div class="visit-grid">
+
+
+        {% for obj in cl.result_list %}
+
+
+        <div
+            class="visit-card"
+            id="visit-{{ obj.pk }}"
+        >
+
+
+            <!-- =================================================
+                 HEADER
+            ================================================= -->
+
+            <div class="visit-header">
+
+
+                <div class="visit-icon">
+                    📍
+                </div>
+
+
+                <div class="visit-header-content">
+
+
+                    <div class="badges">
+
+
+                        <!-- VISIT ID -->
+
+                        <span class="badge badge-id">
+                            V{{ obj.pk }}
+                        </span>
+
+
+                        <!-- TYPE -->
+
+                        {% if obj.type %}
+
+                        <span class="badge badge-type">
+                            {{ obj.type }}
+                        </span>
+
+                        {% endif %}
+
+
+                        <!-- STATUS -->
+
+                        {% if obj.visit_status %}
+
+                        <span class="badge badge-done">
+                            {{ obj.visit_status }}
+                        </span>
+
+                        {% endif %}
+
+
+
+                    </div>
+
+
+                    <!-- =================================================
+                         PARENT TITLE
+                    ================================================= -->
+
+                    {% if obj.developer %}
+
+                    <div class="visit-title">
+                        {{ obj.developer.title }}
+                    </div>
+
+                    <div class="visit-subtitle">
+                        Developer
+                    </div>
+
+
+                    {% elif obj.architect %}
+
+                    <div class="visit-title">
+                        {{ obj.architect.title }}
+                    </div>
+
+                    <div class="visit-subtitle">
+                        Architect
+                    </div>
+
+
+                    {% elif obj.engineer %}
+
+                    <div class="visit-title">
+                        {{ obj.engineer.title }}
+                    </div>
+
+                    <div class="visit-subtitle">
+                        Engineer
+                    </div>
+
+
+                    {% elif obj.project %}
+
+                    <div class="visit-title">
+                        {{ obj.project.project_name }}
+                    </div>
+
+                    <div class="visit-subtitle">
+                        Project
+                    </div>
+
+
+                    {% else %}
+
+                    <div class="visit-title">
+                        Visit
+                    </div>
+
+                    <div class="visit-subtitle">
+                        No parent assigned
+                    </div>
+
+                    {% endif %}
+
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 PARENT / CONTACT DETAILS
+            ================================================= -->
+
+            <div class="card-section">
+
+
+                <div class="section-title">
+                    👤 Parent Details
+                </div>
+
+
+                <div class="entity-box">
+
+
+                    <!-- ================= DEVELOPER ================= -->
+
+                    {% if obj.developer %}
+
+
+                    <div class="entity-name">
+                        {{ obj.developer.title }}
+                    </div>
+
+
+                    <div class="entity-row">
+
+
+                        {% if obj.developer.contact_person %}
+
+                        👤
+                        {{ obj.developer.contact_person }}
+
+                        <br>
+
+                        {% endif %}
+
+
+                        {% if obj.developer.contact_no %}
+
+                        📞
+
+                        <a href="tel:{{ obj.developer.contact_no }}">
+                            {{ obj.developer.contact_no }}
+                        </a>
+
+                        <br>
+
+                        {% endif %}
+
+
+                        {% if obj.developer.email %}
+
+                        ✉
+
+                        <a href="mailto:{{ obj.developer.email }}">
+                            {{ obj.developer.email }}
+                        </a>
+
+                        <br>
+
+                        {% endif %}
+
+
+                        {% if obj.developer.locality or obj.developer.city %}
+
+                        📍
+
+                        {% if obj.developer.locality %}
+                            {{ obj.developer.locality }}
+                        {% endif %}
+
+                        {% if obj.developer.city %}
+
+                            {% if obj.developer.locality %}
+                                /
+                            {% endif %}
+
+                            {{ obj.developer.city }}
+
+                        {% endif %}
+
+                        <br>
+
+                        {% endif %}
+
+
+                        {% if obj.developer.area %}
+
+                        📌
+                        {{ obj.developer.area }}
+
+                        <br>
+
+                        {% endif %}
+
+
+                        {% if obj.developer.address %}
+
+                        🏠
+                        {{ obj.developer.address }}
+
+                        <br>
+
+                        {% endif %}
+
+
+                        {% if obj.developer.postal_code %}
+
+                        📮
+                        {{ obj.developer.postal_code }}
+
+                        <br>
+
+                        {% endif %}
+
+
+                        {% if obj.developer.web_site %}
+
+                        🌐
+
+                        <a
+                            href="{% if 'http' in obj.developer.web_site %}{{ obj.developer.web_site }}{% else %}https://{{ obj.developer.web_site }}{% endif %}"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            {{ obj.developer.web_site }}
+                        </a>
+
+                        {% endif %}
+
+
+                    </div>
+
+
+                    <span class="parent-type">
+                        🏢 Developer
+                    </span>
+
+
+                    <!-- ================= ARCHITECT ================= -->
+
+                    {% elif obj.architect %}
+
+
+                    <div class="entity-name">
+                        {{ obj.architect.title }}
+                    </div>
+
+
+                    <div class="entity-row">
+
+
+                        {% if obj.architect.contact_person %}
+
+                        👤
+                        {{ obj.architect.contact_person }}
+
+                        <br>
+
+                        {% endif %}
+
+
+                        {% if obj.architect.contact_no %}
+
+                        📞
+
+                        <a href="tel:{{ obj.architect.contact_no }}">
+                            {{ obj.architect.contact_no }}
+                        </a>
+
+                        <br>
+
+                        {% endif %}
+
+
+                        {% if obj.architect.email %}
+
+                        ✉
+
+                        <a href="mailto:{{ obj.architect.email }}">
+                            {{ obj.architect.email }}
+                        </a>
+
+                        <br>
+
+                        {% endif %}
+
+
+                        {% if obj.architect.city %}
+
+                        📍
+                        {{ obj.architect.city }}
+
+                        <br>
+
+                        {% endif %}
+
+
+                        {% if obj.architect.address %}
+
+                        🏠
+                        {{ obj.architect.address }}
+
+                        <br>
+
+                        {% endif %}
+
+
+                    </div>
+
+
+                    <span class="parent-type">
+                        🏛 Architect
+                    </span>
+
+
+                    <!-- ================= ENGINEER ================= -->
+
+                    {% elif obj.engineer %}
+
+
+                    <div class="entity-name">
+                        {{ obj.engineer.title }}
+                    </div>
+
+
+                    <div class="entity-row">
+
+
+                        {% if obj.engineer.contact_person %}
+
+                        👤
+                        {{ obj.engineer.contact_person }}
+
+                        <br>
+
+                        {% endif %}
+
+
+                        {% if obj.engineer.contact_no %}
+
+                        📞
+
+                        <a href="tel:{{ obj.engineer.contact_no }}">
+                            {{ obj.engineer.contact_no }}
+                        </a>
+
+                        <br>
+
+                        {% endif %}
+
+
+                        {% if obj.engineer.email %}
+
+                        ✉
+
+                        <a href="mailto:{{ obj.engineer.email }}">
+                            {{ obj.engineer.email }}
+                        </a>
+
+                        <br>
+
+                        {% endif %}
+
+
+                        {% if obj.engineer.city %}
+
+                        📍
+                        {{ obj.engineer.city }}
+
+                        <br>
+
+                        {% endif %}
+
+
+                        {% if obj.engineer.address %}
+
+                        🏠
+                        {{ obj.engineer.address }}
+
+                        <br>
+
+                        {% endif %}
+
+
+                    </div>
+
+
+                    <span class="parent-type">
+                        🏗 Engineer
+                    </span>
+
+
+                    <!-- ================= PROJECT ================= -->
+
+                    {% elif obj.project %}
+
+
+                    <div class="entity-name">
+                        {{ obj.project.project_name }}
+                    </div>
+
+
+                    <div class="entity-row">
+
+
+                        {% if obj.project.developer %}
+
+                        🏢
+                        {{ obj.project.developer }}
+
+                        <br>
+
+                        {% endif %}
+
+
+                        {% if obj.project.city %}
+
+                        📍
+                        {{ obj.project.city }}
+
+                        {% endif %}
+
+
+                        {% if obj.project.locality %}
+
+                        {% if obj.project.city %}
+                            /
+                        {% endif %}
+
+                        {{ obj.project.locality }}
+
+                        <br>
+
+                        {% endif %}
+
+
+                    </div>
+
+
+                    <span class="parent-type">
+                        🏗 Project
+                    </span>
+
+
+                    {% else %}
+
+
+                    <div class="entity-row">
+                        No parent assigned.
+                    </div>
+
+
+                    {% endif %}
+
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 VISIT DETAILS
+            ================================================= -->
+
+            <div class="card-section">
+
+
+                <div class="section-title">
+                    📍 Visit Details
+                </div>
+
+
+                <div class="info-box">
+
+
+                    <!-- STATUS -->
+
+                    <div class="info-row">
+
+                        <span class="info-label">
+                            Status:
+                        </span>
+
+                        <span class="info-value">
+                            {{ obj.visit_status|default:"-" }}
+                        </span>
+
+                    </div>
+
+
+                    <!-- DATE -->
+
+                    <div class="info-row">
+
+                        <span class="info-label">
+                            Visit Date:
+                        </span>
+
+                        <span class="info-value">
+
+                            {% if obj.visit_date %}
+
+                                {{ obj.visit_date|date:"d M Y h:i A" }}
+
+                            {% else %}
+
+                                -
+
+                            {% endif %}
+
+                        </span>
+
+                    </div>
+
+
+                    <!-- ASSIGNED -->
+
+                    <div class="info-row">
+
+                        <span class="info-label">
+                            Created By:
+                        </span>
+
+                        <span class="info-value">
+                            {{ obj.created_by|default:"-" }}
+                        </span>
+
+                    </div>
+
+
+                    <!-- TYPE -->
+
+                    <div class="info-row">
+
+                        <span class="info-label">
+                            Type:
+                        </span>
+
+                        <span class="info-value">
+                            {{ obj.type|default:"-" }}
+                        </span>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 COMMENT
+            ================================================= -->
+
+            {% if obj.comment %}
+
+            <div class="card-section">
+
+                <div class="section-title">
+                    💬 Comment
+                </div>
+
+
+                <div class="comment-box">
+
+                    {{ obj.comment }}
+
+                </div>
+
+            </div>
+
+            {% endif %}
+
+
+            <!-- =================================================
+                 TRACKING
+            ================================================= -->
+
+            <div class="card-section">
+
+
+                <div class="section-title">
+                    📋 Tracking
+                </div>
+
+
+                <div class="tracking-box">
+
+
+                    <div class="tracking-row">
+
+                        👤
+
+                        <strong>
+                            Created By:
+                        </strong>
+
+                        {{ obj.created_by|default:"-" }}
+
+                    </div>
+
+
+                    <div class="tracking-row">
+
+                        🕒
+
+                        <strong>
+                            Created:
+                        </strong>
+
+                        {% if obj.created_at %}
+
+                            {{ obj.created_at|date:"d M Y h:i A" }}
+
+                        {% else %}
+
+                            -
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <div class="tracking-row">
+
+                        ✏️
+
+                        <strong>
+                            Updated By:
+                        </strong>
+
+                        {{ obj.updated_by|default:"-" }}
+
+                    </div>
+
+
+                    <div class="tracking-row">
+
+                        🕒
+
+                        <strong>
+                            Updated:
+                        </strong>
+
+                        {% if obj.updated_at %}
+
+                            {{ obj.updated_at|date:"d M Y h:i A" }}
+
+                        {% else %}
+
+                            -
+
+                        {% endif %}
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 ACTIONS
+            ================================================= -->
+
+            <div class="card-actions">
+
+
+                <!-- =================================================
+                     DEVELOPER
+                ================================================= -->
+
+                {% if obj.developer %}
+
+
+                    {% if obj.developer.contact_no %}
+
+                    <a
+                        href="tel:{{ obj.developer.contact_no }}"
+                        class="card-action action-call"
+                    >
+                        📞 Call
+                    </a>
+
+
+                    <a
+                        href="https://wa.me/91{{ obj.developer.contact_no }}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="card-action action-whatsapp"
+                    >
+                        💬 WhatsApp
+                    </a>
+
+                    {% endif %}
+
+
+                    <a
+                        href="/admin/properties/developer/{{ obj.developer.pk }}/change/?return_to=visit&visit_id={{ obj.pk }}"
+                        class="card-action action-parent"
+                    >
+                        🏢 Edit Developer
+                    </a>
+
+
+                <!-- =================================================
+                     ARCHITECT
+                ================================================= -->
+
+                {% elif obj.architect %}
+
+
+                    {% if obj.architect.contact_no %}
+
+                    <a
+                        href="tel:{{ obj.architect.contact_no }}"
+                        class="card-action action-call"
+                    >
+                        📞 Call
+                    </a>
+
+
+                    <a
+                        href="https://wa.me/91{{ obj.architect.contact_no }}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="card-action action-whatsapp"
+                    >
+                        💬 WhatsApp
+                    </a>
+
+                    {% endif %}
+
+
+                    <a
+                        href="/admin/properties/architects/{{ obj.architect.pk }}/change/?return_to=visit&visit_id={{ obj.pk }}"
+                        class="card-action action-parent"
+                    >
+                        🏛 Edit Architect
+                    </a>
+
+
+                <!-- =================================================
+                     ENGINEER
+                ================================================= -->
+
+                {% elif obj.engineer %}
+
+
+                    {% if obj.engineer.contact_no %}
+
+                    <a
+                        href="tel:{{ obj.engineer.contact_no }}"
+                        class="card-action action-call"
+                    >
+                        📞 Call
+                    </a>
+
+
+                    <a
+                        href="https://wa.me/91{{ obj.engineer.contact_no }}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="card-action action-whatsapp"
+                    >
+                        💬 WhatsApp
+                    </a>
+
+                    {% endif %}
+
+
+                    <a
+                        href="/admin/properties/engineer/{{ obj.engineer.pk }}/change/?return_to=visit&visit_id={{ obj.pk }}"
+                        class="card-action action-parent"
+                    >
+                        🏗 Edit Engineer
+                    </a>
+
+
+                <!-- =================================================
+                     PROJECT
+                ================================================= -->
+
+                {% elif obj.project %}
+
+
+                    <a
+                        href="/admin/properties/project/{{ obj.project.pk }}/change/?return_to=visit&visit_id={{ obj.pk }}"
+                        class="card-action action-parent"
+                    >
+                        🏗 Edit Project
+                    </a>
+
+
+                {% endif %}
+
+
+                <!-- =================================================
+                     EDIT VISIT
+                ================================================= -->
+
+                <a
+                    href="/admin/properties/visit/{{ obj.pk }}/change/?return_to=visit&visit_id={{ obj.pk }}"
+                    class="card-action action-edit"
+                >
+                    ✏ Edit Visit
+                </a>
+
+
+            </div>
+
+
+        </div>
+
+
+        {% empty %}
+
+
+        <div class="empty-card">
+
+            📍
+
+            <br><br>
+
+            <strong>
+                No Visits Found
+            </strong>
+
+        </div>
+
+
+        {% endfor %}
+
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+{% block extrajs %}
+
+{{ block.super }}
+
+<style>
+
+.visit-card:target {
+
+    animation:
+        visitCardHighlight 1.8s ease;
+
+}
+
+
+@keyframes visitCardHighlight {
+
+    0% {
+
+        box-shadow:
+            0 0 0 4px
+            rgba(245, 158, 11, 0.45);
+
+    }
+
+
+    100% {
+
+        box-shadow:
+            0 4px 15px
+            rgba(15, 23, 42, 0.06);
+
+    }
+
+}
+
+</style>
+
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        const hash =
+            window.location.hash;
+
+
+        if (!hash) {
+
+            return;
+
+        }
+
+
+        const target =
+            document.querySelector(hash);
+
+
+        if (target) {
+
+            setTimeout(
+                function () {
+
+                    target.scrollIntoView({
+
+                        behavior: "smooth",
+
+                        block: "center"
+
+                    });
+
+                },
+                200
+            );
+
+        }
+
+    }
+);
+
+</script>
+
+{% endblock %}

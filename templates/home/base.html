@@ -1,0 +1,68 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% block meta_robots %}
+    <meta name="robots" content="index, follow">
+    {% endblock meta_robots %}
+    <meta name="description" content="{{settings_obj.meta_description}}">
+    <meta name="keywords" content="{{settings_obj.meta_keywords}}">
+    <meta name="author" content="{% block meta_author %}{{settings_obj.site_name}}{% endblock %}">
+    <title>{% block title %}{{settings_obj.site_name}} By {{project_obj.developer}}{% endblock title %}</title>
+    <link rel="icon" type="image/png" href="{{settings_obj.favicon.url}}">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-{{settings_obj.googletagmanager}}"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'AW-{{settings_obj.googletagmanager}}');
+    </script>
+    {% block extra_css %}
+    {% endblock %}
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts for Luxury Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <script>
+    tailwind.config = {
+        theme: {
+        extend: {
+            fontFamily: {
+            sans: ['Montserrat', 'sans-serif'],
+            heading: ['Outfit', 'sans-serif']
+            }
+        }
+        }
+    }
+    </script>
+
+
+</head>
+
+
+<body class="bg-white text-gray-800 font-sans antialiased">
+
+    {% include "home/header.html" %}
+
+{% block content %}
+
+
+
+{% endblock %}
+
+    {% include "home/footer.html" %}
+
+
+</body>
+</html>

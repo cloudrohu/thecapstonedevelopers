@@ -1,0 +1,1247 @@
+{% extends "admin/change_list.html" %}
+{% load static %}
+{% load admin_urls %}
+
+{% block extrastyle %}
+{{ block.super }}
+
+<style>
+
+    /* =========================
+       MAIN GRID
+    ========================= */
+
+    #changelist .results {
+        border: none;
+        background: transparent;
+    }
+
+    .cards {
+        display: grid;
+        grid-template-columns: repeat(
+            auto-fill,
+            minmax(380px, 1fr)
+        );
+        gap: 18px;
+        width: 100%;
+        margin-top: 20px;
+    }
+
+
+    /* =========================
+       CARD
+    ========================= */
+
+    .card {
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-radius: 14px;
+        overflow: hidden;
+
+        box-shadow:
+            0 4px 14px rgba(0, 0, 0, 0.06);
+
+        display: flex;
+        flex-direction: column;
+
+        transition:
+            transform 0.2s ease,
+            box-shadow 0.2s ease;
+    }
+
+    .card:hover {
+        transform: translateY(-3px);
+
+        box-shadow:
+            0 10px 25px rgba(0, 0, 0, 0.10);
+    }
+
+
+    /* =========================
+       HEADER
+    ========================= */
+
+    .header {
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+
+        padding: 18px;
+
+        border-bottom: 1px solid #eef2f7;
+    }
+
+
+    .logo {
+        width: 52px;
+        height: 52px;
+
+        flex-shrink: 0;
+
+        border-radius: 12px;
+
+        overflow: hidden;
+
+        background: #f3f4f6;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+
+    .logo img {
+        width: 100%;
+        height: 100%;
+
+        object-fit: cover;
+    }
+
+
+    .logo span {
+        font-size: 24px;
+    }
+
+
+    .info {
+        flex: 1;
+        min-width: 0;
+    }
+
+
+    /* =========================
+       BADGES
+    ========================= */
+
+    .badges {
+        display: flex;
+        align-items: center;
+
+        gap: 7px;
+
+        flex-wrap: wrap;
+
+        margin-bottom: 7px;
+    }
+
+
+    .badge {
+        display: inline-flex;
+        align-items: center;
+
+        padding: 4px 9px;
+
+        border-radius: 999px;
+
+        font-size: 10px;
+        font-weight: 700;
+
+        white-space: nowrap;
+    }
+
+
+    .badge.blue {
+        background: #dbeafe;
+        color: #1d4ed8;
+    }
+
+
+    .badge.green {
+        background: #dcfce7;
+        color: #166534;
+    }
+
+
+    .badge.orange {
+        background: #fed7aa;
+        color: #c2410c;
+    }
+
+
+    /* =========================
+       TITLE
+    ========================= */
+
+    .title {
+        font-size: 16px;
+        font-weight: 800;
+
+        color: #111827;
+
+        line-height: 1.35;
+    }
+
+
+    .title a {
+        color: inherit;
+        text-decoration: none;
+    }
+
+
+    .title a:hover {
+        color: #2563eb;
+    }
+
+
+    /* =========================
+       SECTIONS
+    ========================= */
+
+    .section {
+        padding: 16px 18px;
+
+        border-top: 1px solid #eef2f7;
+    }
+
+
+    .section-title {
+        font-size: 13px;
+
+        font-weight: 800;
+
+        color: #111827;
+
+        margin-bottom: 10px;
+    }
+
+
+    .row {
+        margin-top: 7px;
+
+        font-size: 12px;
+
+        color: #374151;
+
+        line-height: 1.55;
+
+        word-break: break-word;
+    }
+
+
+    .meta {
+        margin-top: 6px;
+
+        font-size: 12px;
+
+        color: #475569;
+
+        line-height: 1.6;
+
+        word-break: break-word;
+    }
+
+
+    /* =========================
+       CONTACT LINKS
+    ========================= */
+
+    .meta a {
+        color: inherit;
+
+        text-decoration: none;
+    }
+
+
+    .meta a:hover {
+        text-decoration: underline;
+
+        color: #2563eb;
+    }
+
+
+    /* =========================
+       TIMELINE / INFO BOX
+    ========================= */
+
+    .timeline-box {
+        background: #f8fafc;
+
+        border: 1px solid #e5e7eb;
+
+        border-radius: 10px;
+
+        padding: 12px;
+
+        margin-top: 12px;
+    }
+
+
+    /* =========================
+       FOLLOWUP
+    ========================= */
+
+    .followup-box {
+        background: #fffaf0;
+
+        border-left: 4px solid #f59e0b;
+
+        border-radius: 10px;
+
+        padding: 12px;
+    }
+
+
+    /* =========================
+       MEETING
+    ========================= */
+
+    .meeting-box {
+        background: #f8fbff;
+
+        border-left: 4px solid #2563eb;
+
+        border-radius: 10px;
+
+        padding: 12px;
+    }
+
+
+    /* =========================
+       VOICE
+    ========================= */
+
+    .voice-box {
+        background: #fafafa;
+
+        border: 1px solid #e5e7eb;
+
+        border-radius: 10px;
+
+        padding: 12px;
+
+        margin-bottom: 10px;
+    }
+
+
+    .voice-box audio {
+        width: 100%;
+        margin-bottom: 8px;
+    }
+
+
+    /* =========================
+       COUNT
+    ========================= */
+
+    .crm-count {
+        font-weight: 800;
+
+        color: #111827;
+    }
+
+
+    /* =========================
+       ACTIONS
+    ========================= */
+
+    .actions {
+        margin-top: auto;
+
+        padding: 14px 18px;
+
+        display: flex;
+
+        flex-wrap: wrap;
+
+        gap: 8px;
+
+        border-top: 1px solid #eef2f7;
+    }
+
+
+    .actions a {
+        display: inline-flex;
+
+        align-items: center;
+        justify-content: center;
+
+        padding: 8px 13px;
+
+        border-radius: 999px;
+
+        color: #ffffff;
+
+        text-decoration: none;
+
+        font-size: 11px;
+
+        font-weight: 700;
+
+        transition:
+            opacity 0.2s ease,
+            transform 0.2s ease;
+    }
+
+
+    .actions a:hover {
+        opacity: 0.9;
+
+        transform: translateY(-1px);
+
+        color: #ffffff;
+    }
+
+
+    .call {
+        background: #16a34a;
+    }
+
+
+    .whatsapp {
+        background: #25d366;
+    }
+
+
+    .website {
+        background: #2563eb;
+    }
+
+
+    .map {
+        background: #7c3aed;
+    }
+
+
+    .edit {
+        background: #111827;
+    }
+
+
+    /* =========================
+       MOBILE
+    ========================= */
+
+    @media (max-width: 900px) {
+
+        .cards {
+            grid-template-columns: 1fr;
+        }
+
+    }
+
+
+    @media (max-width: 600px) {
+
+        .header {
+            padding: 14px;
+        }
+
+
+        .section {
+            padding: 14px;
+        }
+
+
+        .actions {
+            padding: 12px 14px;
+        }
+
+
+        .actions a {
+            flex: 1;
+
+            min-width: 100px;
+        }
+
+    }
+
+</style>
+
+{% endblock %}
+
+
+{% block result_list %}
+
+<div class="cards">
+
+    {% for obj in cl.result_list %}
+
+    <div class="card">
+
+        <!-- ================= HEADER ================= -->
+
+        <div class="header">
+
+            <div class="logo">
+
+                {% if obj.logo %}
+                    <img
+                        src="{{ obj.logo.url }}"
+                        class="developer-logo"
+                        alt="{{ obj.title }}"
+                    >
+                {% else %}
+                    <div class="developer-placeholder">
+                        🏢
+                    </div>
+                {% endif %}
+
+            </div>
+
+
+            <div class="info">
+
+                <div class="badges">
+
+                    <!-- CRM ID -->
+                    <!-- CRM ID -->
+                    <span class="badge blue">
+                        {{ obj.id }}
+                    </span>
+
+
+                    <!-- Featured -->
+                    {% if obj.featured_builder %}
+                        <span class="badge green">
+                            ⭐ Featured
+                        </span>
+                    {% endif %}
+
+
+                    <!-- Calling Status -->
+                    {% if obj.calling_status %}
+                        <span class="badge orange">
+                            {{ obj.calling_status }}
+                        </span>
+                    {% endif %}
+
+                </div>
+
+
+                <div class="title developer-title">
+
+                    <a href="{% url opts|admin_urlname:'change' obj.pk %}">
+                        {{ obj.title }}
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ================= BASIC INFORMATION ================= -->
+
+        <div class="section">
+
+            <div class="row developer-location">
+
+                📍
+                {{ obj.locality|default:"-" }}
+                /
+                {{ obj.city|default:"-" }}
+
+            </div>
+
+
+            {% if obj.area %}
+
+            <div class="row">
+
+                📌
+                {{ obj.area }}
+
+            </div>
+
+            {% endif %}
+
+
+            <div class="row">
+
+                🏠
+                {{ obj.address|default:"-" }}
+
+            </div>
+
+
+            {% if obj.postal_code %}
+
+            <div class="row">
+
+                📮
+                {{ obj.postal_code }}
+
+            </div>
+
+            {% endif %}
+
+
+            <div class="meta developer-contact">
+
+                👤
+                {{ obj.contact_person|default:"-" }}
+
+            </div>
+
+
+            {% if obj.contact_no %}
+
+            <div class="meta developer-contact">
+
+                📞
+                <a href="tel:+91{{ obj.contact_no }}">
+                    {{ obj.contact_no }}
+                </a>
+
+            </div>
+
+            {% else %}
+
+            <div class="meta">
+
+                📞 -
+
+            </div>
+
+            {% endif %}
+
+
+            {% if obj.email %}
+
+            <div class="meta developer-contact">
+
+                ✉
+                <a href="mailto:{{ obj.email }}">
+                    {{ obj.email }}
+                </a>
+
+            </div>
+
+            {% else %}
+
+            <div class="meta">
+
+                ✉ -
+
+            </div>
+
+            {% endif %}
+
+
+            {% if obj.web_site %}
+
+            <div class="meta">
+
+                🌐
+
+                <a
+                    href="{% if 'http' in obj.web_site %}{{ obj.web_site }}{% else %}https://{{ obj.web_site }}{% endif %}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                >
+                    {{ obj.web_site }}
+                </a>
+
+            </div>
+
+            {% endif %}
+
+
+            <!-- ================= ABOUT ================= -->
+
+            {% if obj.about_developer %}
+
+            <div
+                class="timeline-box"
+                style="margin-top:15px;"
+            >
+
+                <b>📝 About Developer</b>
+
+                <div style="margin-top:8px;">
+
+                    {{ obj.about_developer|truncatechars:220 }}
+
+                </div>
+
+            </div>
+
+            {% endif %}
+
+
+            <!-- ================= SYSTEM INFO ================= -->
+
+            <div
+                class="timeline-box"
+                style="margin-top:15px;"
+            >
+
+                <div class="row">
+
+                    <b>👤 Created By :</b>
+
+                    {{ obj.created_by|default:"-" }}
+
+                    -- 🕒
+
+                    {{ obj.created_at|date:"d M Y h:i A" }}
+
+                </div>
+
+
+                <div class="row">
+
+                    <b>✏ Updated By :</b>
+
+                    {{ obj.updated_by|default:"-" }}
+
+                    -- 🕒
+
+                    {{ obj.updated_at|date:"d M Y h:i A" }}
+
+                </div>
+
+
+                {% if obj.note %}
+
+                <hr
+                    style="
+                        margin:10px 0;
+                        border:none;
+                        border-top:1px dashed #d1d5db;
+                    "
+                >
+
+
+                <div class="row">
+
+                    <b>📝 Note</b>
+
+                </div>
+
+
+                <div class="meta">
+
+                    {{ obj.note|truncatechars:200 }}
+
+                </div>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- ================= FOLLOWUP ====================== -->
+        <!-- ================================================= -->
+
+        <div class="section">
+
+            <div class="section-title">
+
+                📌 Followup
+
+            </div>
+
+
+            {% if obj.followup %}
+
+            <div class="followup-box">
+
+                <div class="row">
+
+                    <b>Status :</b>
+
+                    {{ obj.followup.status }}
+                    <span class="badge orange" style="margin-left:0px;">
+                        {{ obj.followup.id }}
+                    </span>
+
+                </div>
+
+
+                <div class="row">
+
+                    <b>Date :</b>
+
+                    {% if obj.followup.followup_date %}
+
+                        {{ obj.followup.followup_date|date:"d M Y h:i A" }}
+
+                    {% else %}
+
+                        -
+
+                    {% endif %}
+
+                </div>
+
+
+                <div class="row">
+
+                    <b>Assigned :</b>
+
+                    {{ obj.followup.assigned_to|default:"-" }}
+
+                </div>
+
+
+                {% if obj.followup.comment %}
+
+                <div class="row">
+
+                    <b>Comment :</b>
+
+                    {{ obj.followup.comment }}
+
+                </div>
+
+                {% endif %}
+
+
+                <div class="meta">
+
+                    👤
+                    {{ obj.followup.created_by|default:"-" }}
+
+                    --
+
+                    🕒
+                    {{ obj.followup.created_at|date:"d M Y h:i A" }}
+
+                </div>
+
+            </div>
+
+            {% else %}
+
+            <div class="meta">
+
+                No followup available.
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- ================= MEETING ======================= -->
+        <!-- ================================================= -->
+
+        <div class="section">
+
+            <div class="section-title">
+
+                🤝 Meeting
+
+            </div>
+
+
+            {% if obj.meeting %}
+
+            <div class="meeting-box">
+
+                <div class="row">
+
+                    <b>Status :</b>
+
+                    {{ obj.meeting.status }}
+
+                    <span class="badge blue" style="margin-left:8px;">
+                        {{ obj.meeting.id }}
+                    </span>
+
+                </div>
+
+
+                <div class="row">
+
+                    <b>Date :</b>
+
+                    {% if obj.meeting.meeting_date %}
+
+                        {{ obj.meeting.meeting_date|date:"d M Y h:i A" }}
+
+                    {% else %}
+
+                        -
+
+                    {% endif %}
+
+                </div>
+
+
+                <div class="row">
+
+                    <b>Assigned :</b>
+
+                    {{ obj.meeting.assigned_to|default:"-" }}
+
+                </div>
+
+
+                {% if obj.meeting.comment %}
+
+                <div class="row">
+
+                    <b>Comment :</b>
+
+                    {{ obj.meeting.comment }}
+
+                </div>
+
+                {% endif %}
+
+
+                <div class="meta">
+
+                    👤
+                    {{ obj.meeting.created_by|default:"-" }}
+
+                    --
+
+                    🕒
+                    {{ obj.meeting.created_at|date:"d M Y h:i A" }}
+
+                </div>
+
+            </div>
+
+            {% else %}
+
+            <div class="meta">
+
+                No meeting available.
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- ================= VISITS ======================== -->
+        <!-- ================================================= -->
+
+        <div class="section">
+
+            <div class="section-title">
+
+                🚗 Visits
+
+                <span class="crm-count">
+                    ({{ obj.visits.count }})
+                </span>
+
+            </div>
+
+
+            {% for visit in obj.visits.all %}
+
+            <div class="timeline-box">
+
+                <div class="row">
+
+                    <b>Visit For :</b>
+
+                    {{ visit.visit_for|default:"-" }}
+
+                </div>
+
+
+                <div class="row">
+
+                    <b>Visit Type :</b>
+
+                    {{ visit.visit_type|default:"-" }}
+
+                </div>
+
+
+                <div class="row">
+
+                    <b>Status :</b>
+
+                    {{ visit.visit_status|default:"-" }}
+
+                </div>
+
+
+                {% if visit.comment %}
+
+                <div class="row">
+
+                    <b>Comment :</b>
+
+                    {{ visit.comment }}
+
+                </div>
+
+                {% endif %}
+
+
+                <div class="meta">
+
+                    👤
+                    {{ visit.created_by|default:"-" }}
+
+                    --
+
+                    🕒
+                    {{ visit.created_at|date:"d M Y h:i A" }}
+
+                </div>
+
+            </div>
+
+
+            {% empty %}
+
+            <div class="meta">
+
+                No visits found.
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- ================= COMMENTS ====================== -->
+        <!-- ================================================= -->
+
+        <div class="section">
+
+            <div class="section-title">
+
+                💬 Comments
+
+                <span class="crm-count">
+                    ({{ obj.comments.count }})
+                </span>
+
+            </div>
+
+
+            {% for comment in obj.comments.all %}
+
+            <div
+                style="
+                    padding:10px 0;
+                    border-bottom:1px solid #edf2f7;
+                "
+            >
+
+                <div class="row">
+
+                    {{ comment.comment }}
+
+                </div>
+
+
+                <div class="meta">
+
+                    👤
+                    {{ comment.created_by|default:"-" }}
+
+                    -
+
+                    🕒
+                    {{ comment.created_at|date:"d M Y h:i A" }}
+
+                </div>
+
+            </div>
+
+
+            {% empty %}
+
+            <div class="meta">
+
+                No comments found.
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- ================= VOICE ========================= -->
+        <!-- ================================================= -->
+
+        <div class="section">
+
+            <div class="section-title">
+
+                🎤 Voice Recordings
+
+                <span class="crm-count">
+                    ({{ obj.voice_recordings.count }})
+                </span>
+
+            </div>
+
+
+            {% for voice in obj.voice_recordings.all %}
+
+            <div class="voice-box">
+
+                {% if voice.file %}
+
+                <audio
+                    controls
+                    style="
+                        width:100%;
+                        margin-bottom:10px;
+                    "
+                >
+
+                    <source src="{{ voice.file.url }}">
+
+                    Your browser does not support the audio element.
+
+                </audio>
+
+                {% endif %}
+
+
+                {% if voice.title %}
+
+                <div class="row">
+
+                    <b>Title :</b>
+
+                    {{ voice.title }}
+
+                </div>
+
+                {% endif %}
+
+
+                {% if voice.note %}
+
+                <div class="row">
+
+                    <b>Note :</b>
+
+                    {{ voice.note }}
+
+                </div>
+
+                {% endif %}
+
+
+                <div class="meta">
+
+                    👤
+                    {{ voice.uploaded_by|default:"-" }}
+
+                </div>
+
+
+                <div class="meta">
+
+                    🕒
+                    {{ voice.created_at|date:"d M Y h:i A" }}
+
+                </div>
+
+            </div>
+
+
+            {% empty %}
+
+            <div class="meta">
+
+                No voice recordings found.
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+
+        <!-- ================================================= -->
+        <!-- ================= ACTIONS ======================= -->
+        <!-- ================================================= -->
+
+        <div class="actions">
+
+
+            {% if obj.contact_no %}
+
+            <a
+                href="tel:+91{{ obj.contact_no }}"
+                class="call"
+            >
+
+                📞 Call
+
+            </a>
+
+
+            <a
+                href="https://wa.me/91{{ obj.contact_no }}"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="whatsapp"
+            >
+
+                💬 WhatsApp
+
+            </a>
+
+            {% endif %}
+
+
+            {% if obj.web_site %}
+
+            <a
+                href="{% if 'http' in obj.web_site %}{{ obj.web_site }}{% else %}https://{{ obj.web_site }}{% endif %}"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="website"
+            >
+
+                🌐 Website
+
+            </a>
+
+            {% endif %}
+
+
+            {% if obj.google_map %}
+
+            <a
+                href="{{ obj.google_map }}"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="map"
+            >
+
+                📍 Map
+
+            </a>
+
+            {% endif %}
+
+
+            <a
+                href="{% url opts|admin_urlname:'change' obj.pk %}"
+                class="edit"
+            >
+
+                ✏ Edit Developer
+
+            </a>
+
+        </div>
+
+    </div>
+
+    {% endfor %}
+
+</div>
+
+{% endblock %}

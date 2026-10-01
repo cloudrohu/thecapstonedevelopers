@@ -1,0 +1,586 @@
+{% extends "home/base.html" %}
+
+{% block content %}
+
+
+<!-- ================= LUXURY ARCHITECTURAL GALLERY ================= -->
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Cinzel:wght@600;700;800&display=swap');
+
+  :root {
+    --gal-bg: #06080d;
+    --gal-surface: #0b0f19;
+    --gal-gold: #d4af37;
+    --gal-gold-light: #f5e8b7;
+    --gal-gold-glow: rgba(212, 175, 55, 0.28);
+    --gal-border: rgba(212, 175, 55, 0.16);
+    --gal-border-soft: rgba(255, 255, 255, 0.08);
+    --gal-muted: #8492a6;
+  }
+
+  .gal-master-wrap {
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    background: var(--gal-bg);
+    color: #ffffff;
+    min-height: 100vh;
+    padding-bottom: 120px;
+    position: relative;
+  }
+
+  /* ---------------- HERO SECTION ---------------- */
+  .gal-hero {
+    position: relative;
+    padding: 120px 24px 70px;
+    text-align: center;
+    border-bottom: 1px solid var(--gal-border-soft);
+    background: radial-gradient(circle at 50% 15%, rgba(212, 175, 55, 0.08), transparent 75%);
+  }
+
+  .gal-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 24px;
+    border-radius: 9999px;
+    background: rgba(212, 175, 55, 0.06);
+    border: 1px solid var(--gal-border);
+    backdrop-filter: blur(8px);
+    margin-bottom: 24px;
+  }
+
+  .gal-pill span {
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gal-gold-light);
+  }
+
+  .gal-node {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--gal-gold);
+    box-shadow: 0 0 10px var(--gal-gold);
+  }
+
+  .gal-hero-title {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(2.4rem, 5.2vw, 4.2rem);
+    font-weight: 700;
+    line-height: 1.15;
+    margin: 0 0 18px;
+    letter-spacing: -0.02em;
+  }
+
+  .gal-hero-title span {
+    background: linear-gradient(135deg, #ffffff 10%, var(--gal-gold-light) 55%, var(--gal-gold) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .gal-hero-desc {
+    max-width: 660px;
+    margin: 0 auto;
+    color: var(--gal-muted);
+    font-size: 1.08rem;
+    line-height: 1.75;
+    font-weight: 300;
+  }
+
+  /* ---------------- FILTER TABS ---------------- */
+  .gal-container {
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 50px 24px 0;
+  }
+
+  .gal-filter-bar {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 50px;
+  }
+
+  .gal-tab-btn {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--gal-border-soft);
+    color: var(--gal-muted);
+    padding: 10px 24px;
+    border-radius: 9999px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .gal-tab-btn:hover,
+  .gal-tab-btn.active {
+    background: var(--gal-gold);
+    color: #06080d;
+    border-color: var(--gal-gold);
+    box-shadow: 0 0 20px var(--gal-gold-glow);
+    transform: translateY(-2px);
+  }
+
+  /* ---------------- MASONRY / DYNAMIC GRID ---------------- */
+  .gal-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 24px;
+  }
+
+  .gal-card {
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    height: 360px;
+    background: var(--gal-surface);
+    border: 1px solid var(--gal-border-soft);
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* Span wider for first/featured items */
+  .gal-card.featured {
+    grid-column: span 2;
+  }
+
+  .gal-card:hover {
+    transform: translateY(-8px);
+    border-color: var(--gal-border);
+    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.8),
+                0 0 30px rgba(212, 175, 55, 0.15);
+  }
+
+  .gal-card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), filter 0.5s ease;
+    filter: brightness(0.92);
+  }
+
+  .gal-card:hover .gal-card-img {
+    transform: scale(1.08);
+    filter: brightness(1.04);
+  }
+
+  /* Overlay Details */
+  .gal-card-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to top,
+      rgba(6, 8, 13, 0.95) 0%,
+      rgba(6, 8, 13, 0.4) 45%,
+      transparent 100%
+    );
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 26px;
+    opacity: 0.9;
+    transition: opacity 0.3s ease;
+  }
+
+  .gal-card:hover .gal-card-overlay {
+    opacity: 1;
+  }
+
+  .gal-tag {
+    display: inline-block;
+    color: var(--gal-gold-light);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  .gal-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 0;
+    color: #ffffff;
+    transform: translateY(6px);
+    transition: transform 0.35s ease, color 0.35s ease;
+  }
+
+  .gal-card:hover .gal-title {
+    transform: translateY(0);
+    color: var(--gal-gold-light);
+  }
+
+  .gal-zoom-icon {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(6, 8, 13, 0.7);
+    border: 1px solid var(--gal-border);
+    backdrop-filter: blur(10px);
+    color: var(--gal-gold-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transform: scale(0.8);
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .gal-card:hover .gal-zoom-icon {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  /* ---------------- LIGHTBOX MODAL ---------------- */
+/* ================= FIXED LUXURY LIGHTBOX ================= */
+.gal-lightbox {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(4, 6, 10, 0.96);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  z-index: 999999 !important; /* Header ke upar aane ke liye zaroori */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  padding: 40px 20px 20px;
+  box-sizing: border-box;
+}
+
+.gal-lightbox.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Floating High-Contrast Close Button */
+.lightbox-close-btn {
+  position: fixed;
+  top: 24px;
+  right: 28px;
+  z-index: 1000000 !important;
+  background: rgba(212, 175, 55, 0.15);
+  border: 1px solid var(--gal-gold, #d4af37);
+  color: #ffffff;
+  padding: 8px 20px;
+  border-radius: 9999px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  backdrop-filter: blur(10px);
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+}
+
+.lightbox-close-btn:hover {
+  background: var(--gal-gold, #d4af37);
+  color: #06080d;
+  box-shadow: 0 0 25px rgba(212, 175, 55, 0.5);
+  transform: scale(1.05);
+}
+
+/* Lightbox Content Frame */
+.lightbox-content {
+  position: relative;
+  max-width: 92vw;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+}
+
+/* Responsive Image (Never cuts off top or bottom) */
+.lightbox-img {
+  max-width: 90vw;
+  max-height: calc(100vh - 120px) !important; /* Screen se bahar nahi jayegi */
+  width: auto;
+  height: auto;
+  object-fit: contain !important;
+  border-radius: 12px;
+  border: 1px solid rgba(212, 175, 55, 0.25);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.95);
+  transition: transform 0.2s ease;
+}
+
+.lightbox-caption {
+  font-family: 'Cinzel', serif;
+  font-size: 1.05rem;
+  color: #f5e8b7;
+  margin-top: 14px;
+  letter-spacing: 1.5px;
+  text-align: center;
+  font-weight: 600;
+}
+
+/* Nav Prev/Next Buttons */
+.lightbox-nav {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  color: #ffffff;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 1000000;
+  transition: all 0.25s ease;
+  backdrop-filter: blur(8px);
+}
+
+.lightbox-nav:hover {
+  background: var(--gal-gold, #d4af37);
+  color: #06080d;
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+}
+
+.lightbox-prev { left: 24px; }
+.lightbox-next { right: 24px; }
+
+@media (max-width: 768px) {
+  .lightbox-close-btn {
+    top: 16px;
+    right: 16px;
+    padding: 6px 14px;
+    font-size: 0.75rem;
+  }
+  .lightbox-prev { left: 12px; width: 42px; height: 42px; }
+  .lightbox-next { right: 12px; width: 42px; height: 42px; }
+  .lightbox-img {
+    max-height: calc(100vh - 140px) !important;
+  }
+}
+</style>
+
+<div class="gal-master-wrap">
+
+  <!-- HERO SECTION -->
+  <header class="gal-hero">
+    <div class="gal-pill">
+      <span class="gal-node"></span>
+      <span>{{ project_obj.title|default:"Visual Portfolio" }}</span>
+    </div>
+    <h1 class="gal-hero-title">Architectural <span>Splendor</span></h1>
+    <p class="gal-hero-desc">
+      A curated visual chronicle capturing timeless elevations, bespoke interiors, and expansive lifestyle spaces.
+    </p>
+  </header>
+
+  <main class="gal-container">
+
+    <!-- CATEGORY FILTER TABS -->
+    <div class="gal-filter-bar">
+      <button class="gal-tab-btn active" onclick="filterGallery('all', this)">All Perspectives</button>
+      <button class="gal-tab-btn" onclick="filterGallery('exterior', this)">Elevation & Exterior</button>
+      <button class="gal-tab-btn" onclick="filterGallery('interior', this)">Interiors</button>
+      <button class="gal-tab-btn" onclick="filterGallery('amenities', this)">Amenities</button>
+      <button class="gal-tab-btn" onclick="filterGallery('construction', this)">Site Progress</button>
+    </div>
+
+    <!-- DYNAMIC GALLERY GRID -->
+    <div class="gal-grid" id="galleryGrid">
+
+      <!-- ================= DJANGO LOOP ================= -->
+      {% for item in gallery_items %}
+      <div class="gal-card {% if forloop.first %}featured{% endif %}" data-category="{{ item.category|lower }}">
+        {% if item.image %}
+          <img class="gal-card-img" src="{{ item.image.url }}" alt="{{ item.title }}" loading="lazy">
+        {% else %}
+          <img class="gal-card-img" src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80" alt="{{ item.title }}">
+        {% endif %}
+
+        <div class="gal-zoom-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 3 21 3 21 9"></polyline>
+            <polyline points="9 21 3 21 3 15"></polyline>
+            <line x1="21" y1="3" x2="14" y2="10"></line>
+            <line x1="3" y1="21" x2="10" y2="14"></line>
+          </svg>
+        </div>
+
+        <div class="gal-card-overlay">
+          <span class="gal-tag">{{ item.get_category_display|default:item.category }}</span>
+          <h3 class="gal-title">{{ item.title|default:"Signature Residence" }}</h3>
+        </div>
+      </div>
+      {% empty %}
+      <!-- Fallback Static Previews -->
+      <div class="gal-card featured" data-category="exterior">
+        <img class="gal-card-img" src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80" alt="Iconic Grand Elevation">
+        <div class="gal-zoom-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="15 3 21 3 21 9"></polyline><polyline points="9 21 3 21 3 15"></polyline><line x1="21" y1="3" x2="14" y2="10"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg></div>
+        <div class="gal-card-overlay">
+          <span class="gal-tag">Exterior</span>
+          <h3 class="gal-title">Iconic Grand Elevation</h3>
+        </div>
+      </div>
+
+      <div class="gal-card" data-category="interior">
+        <img class="gal-card-img" src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80" alt="Master Suite Lounge">
+        <div class="gal-zoom-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="15 3 21 3 21 9"></polyline><polyline points="9 21 3 21 3 15"></polyline><line x1="21" y1="3" x2="14" y2="10"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg></div>
+        <div class="gal-card-overlay">
+          <span class="gal-tag">Interior</span>
+          <h3 class="gal-title">Master Suite Lounge</h3>
+        </div>
+      </div>
+
+      <div class="gal-card" data-category="amenities">
+        <img class="gal-card-img" src="https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?auto=format&fit=crop&w=800&q=80" alt="Infinity Deck & Horizon Pool">
+        <div class="gal-zoom-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="15 3 21 3 21 9"></polyline><polyline points="9 21 3 21 3 15"></polyline><line x1="21" y1="3" x2="14" y2="10"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg></div>
+        <div class="gal-card-overlay">
+          <span class="gal-tag">Amenities</span>
+          <h3 class="gal-title">Infinity Deck & Horizon Pool</h3>
+        </div>
+      </div>
+      {% endfor %}
+
+    </div>
+  </main>
+</div>
+
+<!-- ================= FULLSCREEN LIGHTBOX MODAL ================= -->
+<div class="gal-lightbox" id="galLightbox" onclick="handleBackdropClick(event)">
+  
+  <!-- Clear Visible Close Button -->
+  <button class="lightbox-close-btn" onclick="closeLightbox()">
+    <span>Close</span>
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="18" y1="6" x2="6" y2="18"></line>
+      <line x1="6" y1="6" x2="18" y2="18"></line>
+    </svg>
+  </button>
+
+  <button class="lightbox-nav lightbox-prev" onclick="prevImage(event)">&#10094;</button>
+  <button class="lightbox-nav lightbox-next" onclick="nextImage(event)">&#10095;</button>
+
+  <div class="lightbox-content" onclick="event.stopPropagation()">
+    <img class="lightbox-img" id="lightboxImg" src="" alt="Project Photo">
+    <div class="lightbox-caption" id="lightboxCaption"></div>
+  </div>
+</div>
+<!-- ================= LIGHTBOX & FILTER SCRIPT ================= -->
+
+
+<script>
+  let visibleCards = [];
+  let currentImgIndex = 0;
+
+  function updateVisibleCards() {
+    visibleCards = Array.from(document.querySelectorAll('.gal-card')).filter(
+      c => window.getComputedStyle(c).display !== 'none'
+    );
+  }
+
+  // 1. Instant Category Filter
+  function filterGallery(category, btn) {
+    document.querySelectorAll('.gal-tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    const cards = document.querySelectorAll('.gal-card');
+    cards.forEach(card => {
+      const cardCategory = card.getAttribute('data-category');
+      if (category === 'all' || cardCategory === category) {
+        card.style.display = '';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+
+    updateVisibleCards();
+  }
+
+  // 2. Open Lightbox
+  function openLightboxAt(index) {
+    if (index < 0 || index >= visibleCards.length) return;
+    currentImgIndex = index;
+    const targetCard = visibleCards[currentImgIndex];
+    const img = targetCard.querySelector('.gal-card-img');
+    const title = targetCard.querySelector('.gal-title');
+
+    const lightboxImg = document.getElementById('lightboxImg');
+    const lightboxCaption = document.getElementById('lightboxCaption');
+    
+    if (lightboxImg && img) lightboxImg.src = img.src;
+    if (lightboxCaption) lightboxCaption.innerText = title ? title.innerText : '';
+
+    document.body.style.overflow = 'hidden';
+    const lightbox = document.getElementById('galLightbox');
+    if (lightbox) lightbox.classList.add('active');
+  }
+
+  // 3. Close Lightbox
+  function closeLightbox() {
+    document.body.style.overflow = '';
+    const lightbox = document.getElementById('galLightbox');
+    if (lightbox) lightbox.classList.remove('active');
+  }
+
+  function handleBackdropClick(e) {
+    if (e.target.id === 'galLightbox') {
+      closeLightbox();
+    }
+  }
+
+  // 4. Slide Controls
+  function nextImage(e) {
+    if (e) e.stopPropagation();
+    if (visibleCards.length === 0) return;
+    currentImgIndex = (currentImgIndex + 1) % visibleCards.length;
+    openLightboxAt(currentImgIndex);
+  }
+
+  function prevImage(e) {
+    if (e) e.stopPropagation();
+    if (visibleCards.length === 0) return;
+    currentImgIndex = (currentImgIndex - 1 + visibleCards.length) % visibleCards.length;
+    openLightboxAt(currentImgIndex);
+  }
+
+  // 5. Card Click Listeners
+  document.querySelectorAll('.gal-card').forEach((card) => {
+    card.addEventListener('click', () => {
+      updateVisibleCards();
+      const idx = visibleCards.indexOf(card);
+      if (idx !== -1) openLightboxAt(idx);
+    });
+  });
+
+  // 6. Keyboard navigation (ESC, Left, Right)
+  document.addEventListener('keydown', (e) => {
+    const lightbox = document.getElementById('galLightbox');
+    if (!lightbox || !lightbox.classList.contains('active')) return;
+
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowRight') nextImage(e);
+    if (e.key === 'ArrowLeft') prevImage(e);
+  });
+
+  // Initial setup
+  updateVisibleCards();
+</script>
+
+{% endblock content %}

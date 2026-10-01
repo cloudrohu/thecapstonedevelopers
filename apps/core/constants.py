@@ -1,0 +1,7 @@
+APP_NAME = "Findexors CRM"
+
+DEFAULT_COUNTRY = "India"
+
+PHONE_LENGTH = 10
+
+GST_LENGTH = 15

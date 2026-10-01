@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+
+    <div class="bg-white rounded-2xl shadow p-6">
+        <p class="text-gray-500">Total Leads</p>
+        <h2 class="text-4xl font-bold mt-2">248</h2>
+    </div>
+
+    <div class="bg-white rounded-2xl shadow p-6">
+        <p class="text-gray-500">Customers</p>
+        <h2 class="text-4xl font-bold mt-2">92</h2>
+    </div>
+
+    <div class="bg-white rounded-2xl shadow p-6">
+        <p class="text-gray-500">Meetings</p>
+        <h2 class="text-4xl font-bold mt-2">16</h2>
+    </div>
+
+    <div class="bg-white rounded-2xl shadow p-6">
+        <p class="text-gray-500">Revenue</p>
+        <h2 class="text-4xl font-bold mt-2">₹12.5L</h2>
+    </div>
+
+</div>
+
+<div class="grid lg:grid-cols-3 gap-6 mt-8">
+
+    <!-- Chart -->
+    <div class="lg:col-span-2 bg-white rounded-2xl shadow p-6">
+
+        <h3 class="text-xl font-bold mb-4">
+            Sales Analytics
+        </h3>
+
+        <div class="h-80 flex items-center justify-center text-gray-400">
+
+            Chart Coming Soon
+
+        </div>
+
+    </div>
+
+    <!-- Activity -->
+
+    <div class="bg-white rounded-2xl shadow p-6">
+
+        <h3 class="text-xl font-bold mb-4">
+            Recent Activity
+        </h3>
+
+        <ul class="space-y-4">
+
+            <li>✅ New Lead Added</li>
+
+            <li>📅 Meeting Scheduled</li>
+
+            <li>📞 Follow-up Completed</li>
+
+            <li>💰 New Booking</li>
+
+        </ul>
+
+    </div>
+
+</div>
+
+{% endblock %}

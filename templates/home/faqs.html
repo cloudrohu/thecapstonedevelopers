@@ -1,0 +1,206 @@
+{% extends "home/base.html" %}
+
+{% block content %}
+
+<!-- FAQ HERO -->
+<section class="relative overflow-hidden bg-[#faf9f6] pt-28 pb-16 sm:pt-32 sm:pb-20 lg:pt-36 lg:pb-24">
+
+    <!-- Decorative Background -->
+    <div class="absolute -top-24 -right-24 w-72 h-72 rounded-full bg-[#d9b98c]/10 blur-3xl"></div>
+    <div class="absolute -bottom-24 -left-24 w-72 h-72 rounded-full bg-[#d9b98c]/10 blur-3xl"></div>
+
+    <div class="relative max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
+
+        <div class="max-w-3xl mx-auto text-center">
+
+            <!-- Label -->
+            <div class="inline-flex items-center gap-2 mb-5">
+                <span class="w-7 h-px bg-[#b28a55]"></span>
+
+                <span class="text-[11px] sm:text-xs font-semibold tracking-[0.22em] uppercase text-[#9a7445]">
+                    Frequently Asked Questions
+                </span>
+
+                <span class="w-7 h-px bg-[#b28a55]"></span>
+            </div>
+
+            <!-- Heading -->
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tight text-neutral-900 leading-[1.08]">
+                Everything You Need
+                <span class="block text-[#a47b48]">
+                    To Know
+                </span>
+            </h1>
+
+            <!-- Description -->
+            <p class="mt-6 max-w-2xl mx-auto text-sm sm:text-base lg:text-lg leading-7 text-neutral-600">
+                Find answers to the most common questions about
+                Vinayak Sapphire II, from project details and amenities
+                to location, pricing and booking.
+            </p>
+
+        </div>
+
+    </div>
+</section>
+<!-- ================= FAQ SECTION START ================= -->
+<style>
+  .faq-container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 0 20px;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  }
+
+  .faq-heading {
+    text-align: center;
+    font-size: 2rem;
+    color: #1e293b;
+    margin-bottom: 30px;
+    font-weight: 700;
+  }
+
+  .faq-item {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    margin-bottom: 14px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+  }
+
+  .faq-item.active {
+    border-color: #3b82f6;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.08);
+  }
+
+  .faq-question {
+    width: 100%;
+    padding: 18px 20px;
+    background: none;
+    border: none;
+    outline: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    text-align: left;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #1e293b;
+    transition: color 0.2s ease;
+  }
+
+  .faq-question:hover {
+    color: #2563eb;
+  }
+
+  .faq-icon {
+    width: 20px;
+    height: 20px;
+    position: relative;
+    flex-shrink: 0;
+    margin-left: 15px;
+    transition: transform 0.3s ease;
+  }
+
+  .faq-icon::before,
+  .faq-icon::after {
+    content: '';
+    position: absolute;
+    background-color: #64748b;
+    border-radius: 2px;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+  }
+
+  /* Horizontal line */
+  .faq-icon::before {
+    top: 9px;
+    left: 2px;
+    width: 16px;
+    height: 2px;
+  }
+
+  /* Vertical line */
+  .faq-icon::after {
+    top: 2px;
+    left: 9px;
+    width: 2px;
+    height: 16px;
+  }
+
+  /* Active state par Plus (+) se Minus (-) banega */
+  .faq-item.active .faq-icon {
+    transform: rotate(180deg);
+  }
+
+  .faq-item.active .faq-icon::after {
+    transform: rotate(90deg);
+    opacity: 0;
+  }
+
+  .faq-item.active .faq-icon::before {
+    background-color: #2563eb;
+  }
+
+  .faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease, padding 0.35s ease;
+    padding: 0 20px;
+  }
+
+  .faq-answer p {
+    margin: 0;
+    padding-bottom: 20px;
+    color: #64748b;
+    line-height: 1.6;
+    font-size: 0.98rem;
+  }
+</style>
+
+<div class="faq-container">
+  <h2 class="faq-heading">Frequently Asked Questions</h2>
+
+  {% for rs in faqs %}
+  <!-- FAQ Item 1 -->
+  <div class="faq-item">
+    <button class="faq-question">
+      <span>{{ rs.question }}</span>
+      <span class="faq-icon"></span>
+    </button>
+    <div class="faq-answer">
+      <p>{{ rs.answer|safe|linebreaksbr }}</p>
+    </div>
+  </div>
+  {% endfor %}
+
+</div>
+
+<script>
+  document.querySelectorAll('.faq-question').forEach((button) => {
+    button.addEventListener('click', () => {
+      const faqItem = button.parentElement;
+      const faqAnswer = button.nextElementSibling;
+      const isActive = faqItem.classList.contains('active');
+
+      // Dusre sabhi open FAQs ko close karne ke liye (Accordion behavior)
+      document.querySelectorAll('.faq-item').forEach((item) => {
+        item.classList.remove('active');
+        item.querySelector('.faq-answer').style.maxHeight = null;
+      });
+
+      // Agar pehle se open nahi tha to ise open karein
+      if (!isActive) {
+        faqItem.classList.add('active');
+        faqAnswer.style.maxHeight = faqAnswer.scrollHeight + 'px';
+      }
+    });
+  });
+</script>
+<!-- ================= FAQ SECTION END ================= -->
+
+
+
+{% endblock content %}
