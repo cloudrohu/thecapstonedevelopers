@@ -8,4 +8,2139 @@
 {% block content %}
 
 
+<section id="home" class="relative w-full h-[calc(100vh-68px)] lg:h-[calc(100vh-76px)] min-h-[620px] overflow-hidden">
+
+    <div id="heroSlider" class="absolute inset-0">
+
+
+
+        {% for slider in slider %}
+            <div class="hero-slide absolute inset-0 opacity-100 transition-opacity duration-1000">
+                <img src="{{slider.image.url}}" alt="{{slider.badge_title}}" class="w-full h-full object-cover">
+
+                <div class="absolute inset-0 bg-black/40"></div>
+
+                <div class="absolute inset-0 flex items-center">
+                    <div class="max-w-[1500px] w-full mx-auto px-5 sm:px-7 lg:px-10">
+
+                        <div class="max-w-3xl text-white">
+
+                            <span class="inline-flex items-center gap-3 text-[11px] sm:text-xs tracking-[0.3em] uppercase text-white/80 mb-5">
+                                <span class="w-8 h-px bg-white/70"></span>
+                            {{slider.badge_title}}
+                            </span>
+
+                            <h1 class="luxury-font text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-[1.05]">
+                                {{slider.title1}}
+                                <br>
+                                <span class="italic font-normal">{{slider.title2}}</span>
+                            </h1>
+
+                            <p class="mt-6 max-w-xl text-sm sm:text-base leading-7 text-white/80">
+                            {{slider.description}}
+                            </p>
+
+                            <div class="mt-8 flex flex-wrap gap-3">
+
+                                <a href="https://wa.me/91{{settings_obj.whatsapp}}" target="_blank" class="inline-flex items-center justify-center px-6 sm:px-7 py-3.5 bg-white text-neutral-900 text-[11px] font-semibold tracking-[0.16em] uppercase hover:bg-[#a8874b] hover:text-white transition-all duration-300">
+                                    Contact Us
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+
+
+ </div>
+
+    <button id="heroPrev" type="button" aria-label="Previous Slide" class="absolute left-4 sm:left-7 lg:left-10 top-1/2 -translate-y-1/2 w-11 h-11 sm:w-12 sm:h-12 border border-white/30 text-white flex items-center justify-center hover:bg-white hover:text-neutral-900 transition-all duration-300 z-20">
+
+        <i class="fa-solid fa-arrow-left text-xs"></i>
+
+    </button>
+
+    <button id="heroNext" type="button" aria-label="Next Slide" class="absolute right-4 sm:right-7 lg:right-10 top-1/2 -translate-y-1/2 w-11 h-11 sm:w-12 sm:h-12 border border-white/30 text-white flex items-center justify-center hover:bg-white hover:text-neutral-900 transition-all duration-300 z-20">
+
+        <i class="fa-solid fa-arrow-right text-xs"></i>
+
+    </button>
+
+    <div class="absolute bottom-7 sm:bottom-10 left-0 w-full z-20">
+
+        <div class="max-w-[1500px] mx-auto px-5 sm:px-7 lg:px-10 flex items-end justify-between">
+
+            <div class="flex items-center gap-2">
+
+                <button class="hero-dot w-8 h-[2px] bg-white transition-all duration-300"></button>
+                <button class="hero-dot w-8 h-[2px] bg-white/30 transition-all duration-300"></button>
+                <button class="hero-dot w-8 h-[2px] bg-white/30 transition-all duration-300"></button>
+
+            </div>
+
+            <div class="hidden sm:flex items-center gap-3 text-white/70 text-[10px] tracking-[0.2em] uppercase">
+                <span id="heroCurrent">01</span>
+                <span class="w-8 h-px bg-white/30"></span>
+                <span>{{ sliders|length|stringformat:"02d" }}</span>
+            </div>
+
+        </div>
+
+    </div>
+   
+    <div class="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-black/20 to-transparent pointer-events-none"></div>
+
+</section>
+
+<section id="additional-info" class="relative bg-[#f5f6f7] py-12 sm:py-16 lg:py-20">
+
+    <div class="max-w-[1240px] mx-auto px-5">
+
+        <div class="grid lg:grid-cols-2 bg-white shadow-[0_15px_45px_rgba(0,0,0,0.08)]">
+
+            <div class="p-7 sm:p-9 lg:p-10 xl:p-11 h-full flex flex-col">
+
+                <div>
+
+                    <h2 class="text-2xl sm:text-3xl font-semibold text-neutral-900 leading-tight">
+                       {{project_obj.project_name}}
+                    </h2>
+
+                    <div class="inline-flex items-center gap-2 mt-3 px-4 py-2 bg-[#faf4eb]">
+
+                        <i class="fa-solid fa-location-dot text-[#a8874b] text-sm"></i>
+
+                        <span class="text-xs sm:text-sm text-[#a8874b]">
+                            {{project_obj.locality.name}} / {{project_obj.city.name}}
+                        </span>
+
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-y-12 gap-x-8 mt-8">
+
+                        <div>
+
+                            <p class="text-xs text-neutral-400">
+                                Developer
+                            </p>
+
+                            <div class="flex items-center gap-2 mt-2">
+
+                                <i class="fa-solid fa-user-tie text-[#a8874b] text-sm"></i>
+
+                                <span class="text-sm font-medium text-neutral-900">
+                                    {{project_obj.developer}}
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                        <div>
+
+                            <p class="text-xs text-neutral-400">
+                                Land Area
+                            </p>
+
+                            <div class="flex items-center gap-2 mt-2">
+
+                                <i class="fa-solid fa-chart-area text-[#a8874b] text-sm"></i>
+
+                                <span class="text-sm font-medium text-neutral-900">
+                                    {{project_obj.land_parcel}}
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                        <div>
+
+                            <p class="text-xs text-neutral-400">
+                                Possession
+                            </p>
+
+                            <div class="flex items-center gap-2 mt-2">
+
+                                <i class="fa-solid fa-calendar-check text-[#a8874b] text-sm"></i>
+
+                                <span class="text-sm font-medium text-neutral-900">
+                                    As Per Project Schedule
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                        <div>
+
+                            <p class="text-xs text-neutral-400">
+                                Configuration
+                            </p>
+
+                            <div class="flex items-center gap-2 mt-2">
+
+                                <i class="fa-solid fa-bed text-[#a8874b] text-sm"></i>
+
+                                <span class="text-sm font-medium text-neutral-900">
+                                    {{project_obj.bhk_type}}
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="mt-auto pt-8">
+
+                    <div class="px-6 py-5 bg-[#faf4eb] border-b-[3px] border-[#a8874b]">
+
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5">
+
+                            <div>
+
+                                <p class="text-xs text-neutral-400">
+                                    Starting Price
+                                </p>
+
+                                <p class="text-xl sm:text-2xl font-medium text-[#a8874b] mt-1">
+                                    Price On Request
+                                </p>
+
+                            </div>
+
+                            <div class="flex items-center gap-3">
+
+                                <a href="{% url "contact" %}"
+                                class="px-6 py-3 bg-[#a8874b] text-white text-xs font-medium hover:bg-neutral-900 transition-all duration-300">
+                                    Book Visit
+                                </a>
+
+                                <a href="{% url "contact" %}"
+                                class="px-6 py-3 border border-black/10 text-[#a8874b] text-xs font-medium hover:border-[#a8874b] transition-all duration-300">
+                                    Get Price
+                                </a>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="relative min-h-[420px] lg:min-h-[560px]">
+
+                <img src="{{project_obj.image.url}}" alt="{{project_obj.project_name}}" class="absolute inset-0 w-full h-full object-cover">
+
+                <div class="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent"></div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<section id="about" class="relative bg-white py-20 sm:py-24 lg:py-32 overflow-hidden">
+
+    <div class="max-w-[1500px] mx-auto px-5 sm:px-7 lg:px-10">
+
+        <div class="grid lg:grid-cols-[1.05fr_0.95fr] gap-12 lg:gap-20 xl:gap-28 items-center">
+
+            <div class="relative">
+
+                <div class="relative h-[430px] sm:h-[520px] lg:h-[620px] overflow-hidden">
+
+                    <img src="{{about_obj.image.url}}" alt="{{project_obj.project_name}}" class="w-full h-full object-cover">
+
+                </div>
+
+            </div>
+
+            <div class="lg:py-8">
+
+                <div class="flex items-center gap-3 mb-5">
+
+                    <span class="w-9 h-px bg-[#a8874b]"></span>
+
+                    <span class="text-[11px] font-medium tracking-[0.28em] uppercase text-[#a8874b]">
+                        About Us
+                    </span>
+
+                </div>
+
+                <h2 class="luxury-font text-4xl sm:text-5xl lg:text-6xl leading-[1.08] text-neutral-900">
+                    <span class="italic font-normal text-neutral-500">
+                        {{about_obj.title}}
+                    </span>
+                </h2>
+
+                <p class="mt-7 text-[15px] leading-7 text-neutral-600 max-w-xl">
+                  {{about_obj.content|safe}}
+                </p>
+
+                <p class="mt-4 text-[15px] leading-7 text-neutral-600 max-w-xl">
+                    {{about_obj.read_legacy|safe}}
+                </p>
+                <div class="mt-10 flex flex-wrap items-center gap-5">
+
+                    <a href="{% url "about" %}" class="inline-flex items-center gap-4 bg-neutral-900 text-white px-7 py-4 text-[11px] font-medium tracking-[0.16em] uppercase hover:bg-[#a8874b] transition-all duration-300">
+
+                        Discover More
+
+                        <i class="fa-solid fa-arrow-right text-[10px]"></i>
+
+                    </a>
+
+                    <a href="{% url "contact" %}" class="text-[11px] font-medium tracking-[0.16em] uppercase text-neutral-700 hover:text-[#a8874b] transition-colors duration-300">
+                        Schedule A Visit
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+{% if why_choose %}
+<section id="why-choose" class="relative bg-[#f8f7f4] py-20 sm:py-24 lg:py-28 overflow-hidden">
+
+    <div class="max-w-[1500px] mx-auto px-5 sm:px-7 lg:px-10">
+
+        <div class="max-w-3xl mb-12 lg:mb-16">
+
+            <div class="flex items-center gap-3 mb-5">
+
+                <span class="w-9 h-px bg-[#a8874b]"></span>
+
+                <span class="text-[11px] font-medium tracking-[0.28em] uppercase text-[#a8874b]">
+                    Why Choose Us
+                </span>
+
+            </div>
+
+            <h2 class="luxury-font text-4xl sm:text-5xl lg:text-6xl leading-[1.08] text-neutral-900">
+                Everything You Need
+                <br>
+                <span class="italic font-normal text-neutral-500">
+                    For Exceptional Living
+                </span>
+            </h2>
+
+        </div>
+
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-px bg-black/10 border border-black/10">
+
+            {% for rs in why_choose %}
+            <div class="group bg-white p-7 sm:p-9 lg:p-10 hover:bg-neutral-900 transition-all duration-500">
+
+                <div class="flex items-start justify-between">
+
+                    <div class="w-12 h-12 flex items-center justify-center border border-black/10 group-hover:border-white/20 transition-all duration-500">
+                        <i class="{{rs.icons}} text-[#a8874b] text-sm"></i>
+                    </div>
+
+                    <span class="text-[10px] tracking-[0.2em] text-neutral-400 group-hover:text-white/30">
+                        {{ forloop.counter|stringformat:"02d" }}
+                    </span>
+
+                </div>
+
+                <h3 class="luxury-font text-2xl mt-9 text-neutral-900 group-hover:text-white transition-colors duration-500">
+                    {{rs.title}}
+                </h3>
+
+                <p class="mt-4 text-sm leading-6 text-neutral-500 group-hover:text-white/60 transition-colors duration-500">
+                    {{rs.subtitle}}
+                </p>
+
+            </div>
+            {% endfor %}
+
+        </div>
+
+        <div class="mt-10 flex justify-end">
+
+            <a href="#project-details"
+               class="group inline-flex items-center gap-4 text-[11px] font-medium tracking-[0.18em] uppercase text-neutral-700 hover:text-[#a8874b] transition-colors duration-300">
+
+                Discover The Difference
+
+                <span class="w-9 h-9 border border-black/10 flex items-center justify-center group-hover:border-[#a8874b] transition-all duration-300">
+                    <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                </span>
+
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+{% endif %}
+
+<section id="usp" class="relative bg-[#f5f3ef] py-14 sm:py-16 lg:py-20 overflow-hidden">
+
+    <div class="max-w-[1500px] mx-auto px-5 sm:px-7 lg:px-10">
+
+        <div class="grid lg:grid-cols-[0.85fr_1.15fr] gap-10 lg:gap-16 xl:gap-20 items-center">
+
+            <div class="relative">
+
+                <div class="h-[360px] sm:h-[420px] lg:h-[480px] overflow-hidden">
+
+                    <img src="{{settings_obj.offer_img.url}}" alt="{{settings_obj.site_name}}" class="w-full h-full object-cover">
+
+                </div>
+
+                <div class="absolute left-4 sm:left-6 bottom-4 sm:bottom-6 bg-white px-5 sm:px-6 py-4">
+
+                    <p class="text-[9px] uppercase tracking-[0.2em] text-neutral-400">
+                        A Better Way
+                    </p>
+
+                    <p class="luxury-font text-xl mt-1 text-neutral-900">
+                        To Live
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div>
+
+                <div class="flex items-center gap-3 mb-4">
+
+                    <span class="w-7 h-px bg-[#a8874b]"></span>
+
+                    <span class="text-[10px] font-medium tracking-[0.25em] uppercase text-[#a8874b]">
+                        Our Unique Selling Proposition
+                    </span>
+
+                </div>
+
+                <p class="mt-4 max-w-xl text-[13px] sm:text-sm leading-6 text-neutral-600">
+                    Every element has been carefully considered to offer a
+                    sophisticated lifestyle, from the location and architecture
+                    to the smallest details of everyday living.
+                </p>
+
+                <div class="mt-6 border-t border-black/10">
+
+                    {% for rs in unique_selling_proposition %}
+                    <div class="group py-4 border-b border-black/10">
+
+                        <div class="flex gap-4">
+
+                            <span class="text-[10px] tracking-[0.15em] text-[#a8874b] pt-1">
+                                {{ forloop.counter|stringformat:"02d" }}
+                            </span>
+
+                            <div class="flex-1">
+
+                                <div class="flex items-center justify-between gap-4">
+
+                                    <h3 class="luxury-font text-lg sm:text-xl text-neutral-900">
+                                        {{rs.title}}
+                                    </h3>
+
+                                    <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-neutral-400 group-hover:text-[#a8874b]"></i>
+
+                                </div>
+
+                                <p class="mt-1.5 text-xs sm:text-[13px] leading-5 text-neutral-500">
+                                    {{rs.subtitle}}
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    {% endfor %}
+
+                </div>
+
+                <a href="{% url "contact" %}" class="mt-6 inline-flex items-center gap-3 bg-neutral-900 text-white px-6 py-3.5 text-[10px] font-medium tracking-[0.16em] uppercase hover:bg-[#a8874b] transition-all duration-300">
+
+                    Book A Private Visit
+
+                    <i class="fa-solid fa-arrow-right text-[9px]"></i>
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<section id="amenities" class="relative overflow-hidden bg-white py-20 sm:py-24">
+    <div class="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
+
+        <!-- Section Heading -->
+        <div class="mx-auto max-w-2xl text-center">
+            <span class="inline-flex items-center gap-2 text-[11px] font-semibold tracking-[0.25em] uppercase text-[#a27a22]">
+                <span class="h-px w-8 bg-[#c89b2c]"></span>
+                Lifestyle & Comfort
+                <span class="h-px w-8 bg-[#c89b2c]"></span>
+            </span>
+
+            <h2 class="mt-4 text-3xl font-semibold tracking-tight text-neutral-900 sm:text-4xl lg:text-5xl">
+                Premium Amenities
+            </h2>
+
+            <p class="mt-4 text-sm text-neutral-500 sm:text-base">
+                Experience thoughtfully designed spaces crafted for comfort, wellness and everyday living.
+            </p>
+        </div>
+
+        {% with total_amenities=project_obj.amenities.all.count %}
+        
+        <!-- Slider Container -->
+        <div class="relative mt-12 sm:mt-14">
+
+            {% if total_amenities > 1 %}
+            <button type="button" 
+                    id="amenitiesPrev" 
+                    class="absolute -left-3 sm:-left-5 top-1/2 z-20 -translate-y-1/2 items-center justify-center rounded-full border border-neutral-200 bg-white shadow-lg text-neutral-700 transition hover:bg-[#c89b2c] hover:text-white hover:border-[#c89b2c] w-10 h-10 sm:w-11 sm:h-11
+                    {% if total_amenities <= 5 %}lg:hidden{% else %}lg:flex{% endif %}
+                    {% if total_amenities <= 3 %}sm:hidden{% else %}sm:flex{% endif %}
+                    flex">
+                <i class="fa-solid fa-chevron-left text-xs sm:text-sm"></i>
+            </button>
+            {% endif %}
+
+            <!-- Slider Track: Desktop (1/5 ~ 18.2%), Tablet (1/3 ~ 31%), Mobile (100% ~ 85%) -->
+            <div id="amenitiesSlider"
+                 class="scrollbar-hide flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth px-1 py-4 sm:gap-5 lg:gap-6">
+
+                {% for item in project_obj.amenities.all %}
+                    <div class="amenity-card group w-[85%] shrink-0 snap-center sm:w-[31%] lg:w-[18.2%]">
+                        <div class="flex flex-col items-center justify-center rounded-3xl border border-neutral-200/80 bg-white p-6 sm:p-7 text-center shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-[#c89b2c]/40 hover:shadow-xl hover:shadow-[#c89b2c]/10">
+                            
+                            <!-- Icon Container -->
+                            <div class="flex h-16 w-16 items-center justify-center rounded-2xl bg-[#faf8f4] text-[#c89b2c] transition-all duration-300 group-hover:scale-110 group-hover:bg-[#c89b2c] group-hover:text-white">
+                                <i class="{{ item.amenities.icon|default:'fa-solid fa-star' }} text-2xl"></i>
+                            </div>
+
+                            <!-- Title -->
+                            <h3 class="mt-4 text-sm sm:text-base font-semibold text-neutral-900 transition-colors duration-300 group-hover:text-[#a27a22]">
+                                {{ item.amenities.title }}
+                            </h3>
+
+                        </div>
+                    </div>
+                {% empty %}
+                    <p class="w-full py-8 text-center text-neutral-500">
+                        No amenities available.
+                    </p>
+                {% endfor %}
+
+            </div>
+
+            {% if total_amenities > 1 %}
+            <button type="button" 
+                    id="amenitiesNext" 
+                    class="absolute -right-3 sm:-right-5 top-1/2 z-20 -translate-y-1/2 items-center justify-center rounded-full border border-neutral-200 bg-white shadow-lg text-neutral-700 transition hover:bg-[#c89b2c] hover:text-white hover:border-[#c89b2c] w-10 h-10 sm:w-11 sm:h-11
+                    {% if total_amenities <= 5 %}lg:hidden{% else %}lg:flex{% endif %}
+                    {% if total_amenities <= 3 %}sm:hidden{% else %}sm:flex{% endif %}
+                    flex">
+                <i class="fa-solid fa-chevron-right text-xs sm:text-sm"></i>
+            </button>
+            {% endif %}
+
+        </div>
+
+        <!-- Pagination Dots -->
+        {% if total_amenities > 1 %}
+        <div id="amenitiesDots" 
+             class="mt-7 items-center justify-center gap-2
+             {% if total_amenities <= 5 %}lg:hidden{% else %}lg:flex{% endif %}
+             {% if total_amenities <= 3 %}sm:hidden{% else %}sm:flex{% endif %}
+             flex">
+            {% for item in project_obj.amenities.all %}
+                <button type="button"
+                        class="amenity-dot {% if forloop.first %}w-6 bg-[#c89b2c]{% else %}w-2 bg-neutral-300{% endif %} h-1.5 rounded-full transition-all duration-300"
+                        data-index="{{ forloop.counter0 }}">
+                </button>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% endwith %}
+
+    </div>
+</section>
+
+
+<section id="gallery" class="bg-[#faf8f4] py-20 sm:py-24 lg:py-28">
+    <div class="mx-auto max-w-7xl px-5 sm:px-6 lg:px-8">
+
+        <!-- Section Header -->
+        <div class="mx-auto max-w-2xl text-center">
+            <span class="text-xs font-semibold tracking-[0.25em] uppercase text-[#a27a22]">
+                Project Gallery
+            </span>
+            <h2 class="mt-4 text-3xl font-semibold text-neutral-900 sm:text-4xl lg:text-5xl">
+                Explore The Gallery
+            </h2>
+            <p class="mt-4 text-sm leading-7 text-neutral-500 sm:text-base">
+                Take a closer look at the architecture, interiors and lifestyle spaces.
+            </p>
+        </div>
+
+        {% if project_obj.gallery.all %}
+
+            <div class="mt-12 grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4">
+                {% for item in project_obj.gallery.all|slice:":4" %}
+                    {% if item.image %}
+                    <button type="button"
+                            onclick="openGalleryByUrl('{{ item.image.url }}')"
+                            class="group relative aspect-[4/5] overflow-hidden rounded-2xl sm:rounded-3xl focus:outline-none focus:ring-2 focus:ring-[#a27a22]">
+                        <img src="{{ item.image.url }}"
+                             alt="{{ item.title|default:project_obj.project_name }}"
+                             loading="lazy"
+                             class="h-full w-full object-cover transition duration-700 group-hover:scale-105">
+                        <div class="absolute inset-0 bg-black/0 transition group-hover:bg-black/20"></div>
+                    </button>
+                    {% endif %}
+                {% endfor %}
+            </div>
+
+            {% if project_obj.gallery.all|slice:"4:7" %}
+            <div class="mt-4 grid grid-cols-1 gap-3 sm:mt-6 sm:grid-cols-3 sm:gap-5">
+                {% for item in project_obj.gallery.all|slice:"4:7" %}
+                    {% if item.image %}
+                    <button type="button" onclick="openGalleryByUrl('{{ item.image.url }}')" class="group relative aspect-[4/3] overflow-hidden rounded-2xl sm:rounded-3xl focus:outline-none focus:ring-2 focus:ring-[#a27a22]">
+                        <img src="{{ item.image.url }}" alt="{{ item.title|default:project_obj.project_name }}" loading="lazy" class="h-full w-full object-cover transition duration-700 group-hover:scale-105">
+                        <div class="absolute inset-0 bg-black/0 transition group-hover:bg-black/20"></div>
+                    </button>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <!-- "See More" Button (Sirf tabhi aayega agar 7 se zyada photos hain) -->
+           {% if project_obj.gallery.all.count > 7 %}
+            <div class="mt-10 flex justify-center">
+                <a href="{% url 'gallery' %}" class="inline-flex items-center gap-2 rounded-full border border-neutral-900/10 bg-white px-7 py-3 text-xs font-semibold uppercase tracking-wider text-neutral-900 shadow-sm transition hover:bg-neutral-900 hover:text-white">
+                    <span>View Full Gallery ({{ project_obj.gallery.all.count }})</span>
+                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5 7 7-7 7"/>
+                    </svg>
+                </a>
+            </div>
+            {% endif %}
+
+        {% else %}
+
+            <!-- Empty State -->
+            <div class="mt-12 py-16 text-center">
+                <p class="text-sm text-neutral-500">No gallery images available for this project.</p>
+            </div>
+
+        {% endif %}
+
+    </div>
+</section>
+
+
+<section id="location" class="bg-white py-20 sm:py-24 lg:py-28">
+    <div class="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
+
+        <div class="text-center max-w-2xl mx-auto">
+            <span class="text-xs font-semibold tracking-[0.25em] uppercase text-[#a27a22]">
+                Prime Location
+            </span>
+
+            <h2 class="mt-4 text-3xl sm:text-4xl lg:text-5xl font-semibold text-neutral-900">
+                Everything Within Reach
+            </h2>
+
+            <p class="mt-4 text-sm sm:text-base leading-7 text-neutral-500">
+                Strategically located with easy access to key destinations, everyday conveniences and major landmarks.
+            </p>
+        </div>
+
+        <div class="mt-12 lg:mt-16 grid lg:grid-cols-5 gap-6 lg:gap-8">
+
+         
+            <div class="relative lg:col-span-3 overflow-hidden rounded-3xl border border-neutral-200 bg-neutral-100 min-h-[400px] lg:min-h-[520px] [&>iframe]:absolute [&>iframe]:inset-0 [&>iframe]:w-full [&>iframe]:h-full [&>iframe]:border-0">
+                {{ settings_obj.google_map|safe }}
+            </div>
+
+
+            <div class="lg:col-span-2 flex flex-col justify-center">
+
+                <div class="pb-6 border-b border-neutral-200">
+                    <span class="text-xs uppercase tracking-[0.2em] text-[#a27a22]">
+                        Address
+                    </span>
+                </div>
+
+                <div class="mt-7 max-h-[360px] overflow-y-auto pr-3 space-y-5 scrollbar-thin scrollbar-thumb-[#c89b2c] scrollbar-track-neutral-100">
+
+                 {% for conn in project_obj.connectivity.all %}
+
+                    <div class="flex items-center justify-between gap-4 pb-5 border-b border-neutral-100">
+
+                        <div>
+                            <p class="text-sm font-medium text-neutral-900">
+                                {{ conn.title }}
+                            </p>
+                        </div>
+
+                    </div>
+                {% endfor %}
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+
+<section id="pricing" class="bg-[#fafafa] py-12 sm:py-16 lg:py-20">
+    <div class="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+
+        <div class="bg-white border border-neutral-200 shadow-[0_4px_20px_rgba(0,0,0,0.05)] p-5 sm:p-8 lg:p-10 rounded-xl">
+
+            <h2 class="text-2xl sm:text-3xl lg:text-4xl font-semibold text-[#d09a4b]">
+                {{settings_obj.site_name}} Pricing And Carpet Area
+            </h2>
+
+            <div class="mt-8 grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_430px] gap-8 items-stretch">
+
+                <!-- Left Column: flex-col & justify-between matches form height perfectly -->
+                <div class="flex flex-col justify-between gap-6">
+                    
+                    <!-- Table Box -->
+                    <div class="overflow-x-auto rounded-lg border border-neutral-200 bg-white shadow-sm">
+                        <table class="w-full min-w-[680px] border-collapse text-left">
+                            <thead>
+                                <tr class="border-b border-neutral-200 bg-neutral-50/80">
+                                    <th class="px-4 py-3.5 text-xs font-semibold uppercase tracking-wider text-neutral-600 border-r border-neutral-200">
+                                        Type
+                                    </th>
+                                    <th class="px-4 py-3.5 text-xs font-semibold uppercase tracking-wider text-neutral-600 border-r border-neutral-200">
+                                        Carpet Area
+                                    </th>
+                                    <th class="px-4 py-3.5 text-xs font-semibold uppercase tracking-wider text-neutral-600 border-r border-neutral-200">
+                                        Price
+                                    </th>
+                                    <th class="px-4 py-3.5 text-right"></th>
+                                </tr>
+                            </thead>
+
+                            <tbody class="divide-y divide-neutral-200">
+                                {% for rs in project_obj.configurations.all %}
+                                <tr class="transition hover:bg-amber-50/30">
+                                    <td class="px-4 py-3.5 text-sm font-medium text-neutral-900 border-r border-neutral-200">
+                                        {{ rs.bhk_type }}
+                                    </td>
+
+                                    <td class="px-4 py-3.5 text-sm text-neutral-700 border-r border-neutral-200">
+                                        {{ rs.area_sqft }} Sq.Yd
+                                    </td>
+
+                                    <td class="px-4 py-3.5 text-sm font-medium text-neutral-900 border-r border-neutral-200">
+                                        ₹ {{ rs.formatted_price }} <span class="text-xs font-normal text-neutral-500">Onwards</span>
+                                    </td>
+
+                                    <td class="px-4 py-3.5 text-right">
+                                        <button type="button" 
+                                            onclick="openPriceModal(
+                                                '{{ rs.bhk_type|escapejs }}',
+                                                '{{ rs.area_sqft|escapejs }} SqFt',
+                                                '₹ {{ rs.formatted_price|escapejs }} Onwards')" 
+                                            class="whitespace-nowrap rounded-md bg-[#c7964a] px-3.5 py-1.5 text-xs sm:text-sm font-medium text-white shadow-sm transition hover:bg-[#b78336]">
+                                            Price Breakup
+                                        </button>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="4" class="px-4 py-8 text-center text-sm text-neutral-500">
+                                        Configurations updating soon.
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Dynamic Bottom Feature Banner: Fills remaining space gracefully -->
+                    <div class="rounded-lg border border-dashed border-amber-200/90 bg-gradient-to-r from-amber-50/50 via-white to-neutral-50 p-4 sm:p-5">
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 divide-y sm:divide-y-0 sm:divide-x divide-neutral-200">
+                            
+                            <div class="flex items-center gap-3">
+                                <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#c7964a]/10 text-[#c7964a]">
+                                    <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="text-xs font-semibold text-neutral-800">Flexible Payment</p>
+                                    <p class="text-[11px] text-neutral-500">Customized milestone plans</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-3 pt-3 sm:pt-0 sm:pl-4">
+                                <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#c7964a]/10 text-[#c7964a]">
+                                    <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="text-xs font-semibold text-neutral-800">RERA Approved</p>
+                                    <p class="text-[11px] text-neutral-500">100% Transparent pricing</p>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-3 pt-3 sm:pt-0 sm:pl-4">
+                                <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#c7964a]/10 text-[#c7964a]">
+                                    <svg class="h-4 w-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="text-xs font-semibold text-neutral-800">Bank Assistance</p>
+                                    <p class="text-[11px] text-neutral-500">Pre-approved loan options</p>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Right Column: Form -->
+                <div class="rounded-lg border border-neutral-200 bg-white p-5 sm:p-6 shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
+                    <div class="mb-5">
+                        <h3 class="text-xl font-semibold text-neutral-900">
+                            Get Costing Details
+                        </h3>
+                        <p class="mt-1 text-sm text-neutral-500">
+                            Fill in your details and our team will get back to you shortly.
+                        </p>
+                    </div>
+
+                    <form action="" method="POST" class="space-y-3.5">
+
+                        {% csrf_token %}
+
+                        <input type="hidden" name="inquiry_type" value="virtual_tour">
+
+                        <div>
+                            <label for="name" class="mb-1.5 block text-xs font-medium text-neutral-700">Name</label>
+                            <input type="text" id="name" name="name" placeholder="Enter your name" required class="w-full rounded-md border border-neutral-200 bg-white px-3.5 py-2.5 text-sm text-neutral-800 outline-none transition placeholder:text-neutral-400 focus:border-[#c7964a] focus:ring-1 focus:ring-[#c7964a]">
+                        </div>
+
+                        <div>
+                            <label for="email" class="mb-1.5 block text-xs font-medium text-neutral-700">Email</label>
+                            <input type="email" id="email" name="email" placeholder="Enter your email" required class="w-full rounded-md border border-neutral-200 bg-white px-3.5 py-2.5 text-sm text-neutral-800 outline-none transition placeholder:text-neutral-400 focus:border-[#c7964a] focus:ring-1 focus:ring-[#c7964a]">
+                        </div>
+
+                        <div>
+                            <label for="phone" class="mb-1.5 block text-xs font-medium text-neutral-700">Phone</label>
+                            <input type="tel" id="phone" name="phone" placeholder="Enter your phone number" required class="w-full rounded-md border border-neutral-200 bg-white px-3.5 py-2.5 text-sm text-neutral-800 outline-none transition placeholder:text-neutral-400 focus:border-[#c7964a] focus:ring-1 focus:ring-[#c7964a]">
+                        </div>
+
+                        <div>
+                            <label for="message" class="mb-1.5 block text-xs font-medium text-neutral-700">Message</label>
+                            <textarea id="message" name="message" rows="3" placeholder="Enter your message" required class="w-full resize-none rounded-md border border-neutral-200 bg-white px-3.5 py-2.5 text-sm text-neutral-800 outline-none transition placeholder:text-neutral-400 focus:border-[#c7964a] focus:ring-1 focus:ring-[#c7964a]"></textarea>
+                        </div>
+
+                        <button type="submit" class="mt-1 flex h-11 w-full items-center justify-center rounded-md bg-[#c7964a] px-5 text-sm font-medium text-white shadow-sm transition hover:bg-[#b78336]">
+                            Get Costing Details
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+
+<section id="virtual-tour" class="bg-[#faf9f7] py-16 sm:py-20 lg:py-24">
+
+    <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
+
+        <!-- Section Heading -->
+        <div class="max-w-2xl mb-10 sm:mb-12 lg:mb-14">
+
+            <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-neutral-200 text-[11px] sm:text-xs font-semibold tracking-[0.16em] uppercase text-neutral-600">
+                <span class="w-1.5 h-1.5 rounded-full bg-[#b28a5a]"></span>
+                Virtual Tour
+            </span>
+
+            <h2 class="mt-5 text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-neutral-900 leading-[1.08]">
+                Experience Your
+                <span class="text-[#a27a4d]">Future Home</span>
+            </h2>
+
+            <p class="mt-4 text-sm sm:text-base leading-7 text-neutral-500 max-w-xl">
+                Take an immersive virtual tour and explore the spaces,
+                architecture and lifestyle of your future home from anywhere.
+            </p>
+
+        </div>
+
+
+        <!-- Tour Card -->
+        <div class="relative overflow-hidden rounded-[28px] sm:rounded-[34px] bg-white border border-neutral-200 shadow-[0_20px_60px_rgba(0,0,0,0.08)]">
+
+            <!-- Preview -->
+            <div class="relative min-h-[430px] sm:min-h-[520px] lg:min-h-[650px] overflow-hidden bg-neutral-900">
+
+                <!-- Background Image -->
+                <img src="{{settings_obj.Virtual_bg.url}}" alt="Virtual Tour" class="absolute inset-0 w-full h-full object-cover transition-transform duration-1000" id="tourPreviewImage">
+
+                <!-- Overlay -->
+                <div class="absolute inset-0 bg-gradient-to-b from-black/20 via-black/20 to-black/70"></div>
+
+
+                <!-- Top Badge -->
+                <div class="absolute top-5 left-5 sm:top-7 sm:left-7">
+
+                    <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/90 backdrop-blur-md border border-white/50 shadow-lg">
+
+                        <svg class="w-4 h-4 text-[#a27a4d]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" >
+                            <path d="M12 3v18M3 12h18"/>
+                            <circle cx="12" cy="12" r="8"/>
+                        </svg>
+
+                        <span class="text-xs sm:text-sm font-semibold text-neutral-800">
+                           Virtual Tour
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Play Button -->
+                <button type="button" onclick="openVirtualTour()" aria-label="Start Virtual Tour" class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 group">
+
+                    <span class="absolute inset-0 rounded-full bg-white/30 animate-ping"></span>
+
+                    <span class="relative flex items-center justify-center w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-white shadow-2xl transition-all duration-300 group-hover:scale-110">
+
+                        <span class="flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-[#a27a4d] text-white shadow-lg transition-all duration-300 group-hover:bg-[#8f693f]">
+
+                            <svg class="w-6 h-6 sm:w-7 sm:h-7 ml-1" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M8 5.14v13.72c0 .78.85 1.26 1.52.86l10.02-6.86a1 1 0 0 0 0-1.64L9.52 4.28A1 1 0 0 0 8 5.14Z"/>
+                            </svg>
+
+                        </span>
+
+                    </span>
+
+                </button>
+
+
+                <!-- Bottom Content -->
+                <div class="absolute left-0 right-0 bottom-0 p-6 sm:p-8 lg:p-10">
+
+                    <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
+
+                        <div class="max-w-2xl">
+
+                            <p class="text-xs sm:text-sm font-medium tracking-[0.15em] uppercase text-white/70 mb-3">
+                                Explore Every Detail
+                            </p>
+
+                            <h3 class="text-2xl sm:text-3xl lg:text-4xl font-semibold text-white tracking-tight">
+                                Walk Through Your Dream Home
+                            </h3>
+
+                            <p class="mt-3 hidden lg:block text-sm sm:text-base leading-6 text-white/75 max-w-xl">
+                                Discover thoughtfully designed interiors, spacious living areas
+                                and premium amenities through our immersive virtual experience.
+                            </p>
+
+                        </div>
+
+
+                        <button type="button" onclick="openVirtualTour()" class="shrink-0 inline-flex items-center justify-center gap-3 px-6 py-3.5 rounded-full bg-white text-neutral-900 text-sm font-semibold shadow-xl hover:bg-[#a27a4d] hover:text-white transition-all duration-300">
+
+                            Start Virtual Tour
+
+                            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M5 12h14"/>
+                                <path d="m13 6 6 6-6 6"/>
+                            </svg>
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<div id="virtualTourModal" class="fixed inset-0 z-[99999] hidden items-center justify-center bg-black/90 backdrop-blur-md p-3 sm:p-6 overflow-y-auto">
+    <div id="tourModalContent" class="relative w-full max-w-[1100px] min-h-[580px] sm:h-[85vh] max-h-[750px] overflow-hidden rounded-2xl sm:rounded-3xl bg-neutral-950 shadow-2xl flex flex-col justify-center">
+       
+        <button type="button" onclick="closeVirtualTour()" aria-label="Close Virtual Tour" class="absolute top-4 right-4 z-30 flex items-center justify-center w-10 h-10 rounded-full bg-black/40 hover:bg-white/20 backdrop-blur-md text-white border border-white/20 transition-all duration-300">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M6 6l12 12"/>
+                <path d="M18 6 6 18"/>
+            </svg>
+        </button>
+
+        <!-- Background Teaser Image with Dark Overlay -->
+        <div class="absolute inset-0 z-0">
+            <img src="{{settings_obj.Virtual_bg.url}}" alt="Virtual Tour Experience" class="w-full h-full object-cover scale-105 filter blur-[2px]">
+            <div class="absolute inset-0 bg-gradient-to-r from-black/90 via-black/80 to-black/60"></div>
+        </div>
+
+        <!-- Main Split Content -->
+        <div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center p-6 sm:p-10 lg:p-12 w-full h-full overflow-y-auto">
+            <!-- Left Info Column -->
+            <div class="lg:col-span-6 space-y-4 text-left">
+                <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-white/20 backdrop-blur-md text-white text-xs font-medium">
+                    <span class="w-2 h-2 rounded-full bg-[#c7964a] animate-pulse"></span>
+                    Interactive Virtual visit
+                </div>
+                <h3 class="text-2xl sm:text-4xl font-semibold text-white tracking-tight leading-tight">
+                    Experience The Luxury Before You Visit
+                </h3>
+                <p class="text-xs sm:text-sm text-neutral-300 leading-relaxed max-w-md">
+                    Take an immersive walk through the spacious living areas, premium master bedrooms, and world-class project amenities from anywhere.
+                </p>
+            </div>
+
+            <!-- Right Form Column -->
+            <div class="lg:col-span-6">
+                <div class="rounded-2xl border border-white/15 bg-white/[0.08] backdrop-blur-xl p-5 sm:p-7 shadow-2xl">
+                    <div class="mb-4">
+                        <h4 class="text-lg sm:text-xl font-semibold text-white">Unlock Virtual Tour</h4>
+                        <p class="text-xs text-neutral-400 mt-1">Please share your details to launch the 3D walkthrough immediately.</p>
+                    </div>
+
+                    <form action="" method="POST" class="space-y-3.5">
+                        {% csrf_token %}
+
+                        <input type="hidden" name="inquiry_type" value="virtual_tour">
+
+                        <div>
+                            <label for="tour_name" class="block text-xs font-medium text-neutral-300 mb-1">Full Name</label>
+                            <input type="text" id="tour_name" name="name" required placeholder="Write Your Name Here" class="w-full rounded-lg border border-white/15 bg-white/10 px-3.5 py-2.5 text-sm text-white placeholder-neutral-400 outline-none transition focus:border-[#c7964a] focus:bg-white/15 focus:ring-1 focus:ring-[#c7964a]">
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <div>
+                                <label for="tour_phone" class="block text-xs font-medium text-neutral-300 mb-1">Phone Number</label>
+                                <input type="tel" id="tour_phone" name="phone" required placeholder="Your Phone Here" class="w-full rounded-lg border border-white/15 bg-white/10 px-3.5 py-2.5 text-sm text-white placeholder-neutral-400 outline-none transition focus:border-[#c7964a] focus:bg-white/15 focus:ring-1 focus:ring-[#c7964a]">
+                            </div>
+                            <div>
+                                <label for="tour_email" class="block text-xs font-medium text-neutral-300 mb-1">Email Address</label>
+                                <input type="email" id="tour_email" name="email" required placeholder="Your Email Here" class="w-full rounded-lg border border-white/15 bg-white/10 px-3.5 py-2.5 text-sm text-white placeholder-neutral-400 outline-none transition focus:border-[#c7964a] focus:bg-white/15 focus:ring-1 focus:ring-[#c7964a]">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="mt-2 w-full inline-flex items-center justify-center gap-2 rounded-lg bg-[#c7964a] hover:bg-[#b78336] px-5 py-3 text-sm font-semibold text-white shadow-lg transition duration-200">
+                            <span>Start 360° Walkthrough</span>
+                            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M5 12h14"/>
+                                <path d="m13 6 6 6-6 6"/>
+                            </svg>
+                        </button>
+                        <p class="text-[11px] text-center text-neutral-400 pt-1">🔒 We respect your privacy. No spam guaranteed.</p>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+
+
+    </div>
+</div>
+
+
+<script>
+    const virtualTourModal = document.getElementById("virtualTourModal");
+
+    function openVirtualTour() {
+        virtualTourModal.classList.remove("hidden");
+        virtualTourModal.classList.add("flex");
+
+        document.body.classList.add("overflow-hidden");
+    }
+
+    function closeVirtualTour() {
+        virtualTourModal.classList.add("hidden");
+        virtualTourModal.classList.remove("flex");
+
+        document.body.classList.remove("overflow-hidden");
+    }
+
+    virtualTourModal.addEventListener("click", function (event) {
+        if (event.target === virtualTourModal) {
+            closeVirtualTour();
+        }
+    });
+
+    document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape") {
+            closeVirtualTour();
+        }
+    });
+    document.addEventListener("DOMContentLoaded", function () {
+        const slider = document.getElementById("amenitiesSlider");
+        const prevBtn = document.getElementById("amenitiesPrev");
+        const nextBtn = document.getElementById("amenitiesNext");
+        const dotsContainer = document.getElementById("amenitiesDots");
+
+        if (!slider) return;
+
+        const cards = slider.querySelectorAll(".amenity-card");
+        const dots = dotsContainer ? dotsContainer.querySelectorAll(".amenity-dot") : [];
+
+        function getScrollStep() {
+            const firstCard = cards[0];
+            return firstCard ? firstCard.offsetWidth + 20 : 260; // card width + gap
+        }
+
+        if (nextBtn) {
+            nextBtn.addEventListener("click", () => {
+                slider.scrollBy({ left: getScrollStep(), behavior: "smooth" });
+            });
+        }
+
+        if (prevBtn) {
+            prevBtn.addEventListener("click", () => {
+                slider.scrollBy({ left: -getScrollStep(), behavior: "smooth" });
+            });
+        }
+
+        // Dot click triggers scroll
+        dots.forEach((dot, index) => {
+            dot.addEventListener("click", () => {
+                if (cards[index]) {
+                    cards[index].scrollIntoView({ behavior: "smooth", block: "nearest", inline: "start" });
+                }
+            });
+        });
+
+        // Update active dot on scroll
+        slider.addEventListener("scroll", () => {
+            const step = getScrollStep();
+            const activeIndex = Math.round(slider.scrollLeft / step);
+            dots.forEach((dot, idx) => {
+                if (idx === activeIndex) {
+                    dot.className = "amenity-dot w-6 bg-[#c89b2c] h-1.5 rounded-full transition-all duration-300";
+                } else {
+                    dot.className = "amenity-dot w-2 bg-neutral-300 h-1.5 rounded-full transition-all duration-300";
+                }
+            });
+        }, { passive: true });
+    });
+</script>
+
+
+<section id="about-developer" class="bg-white py-16 sm:py-20 lg:py-24">
+
+    <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
+
+        <div class="grid lg:grid-cols-[0.85fr_1.15fr] gap-10 lg:gap-20 items-center">
+
+            <!-- Developer Logo -->
+            <div class="relative">
+
+                <div class="relative min-h-[340px] sm:min-h-[400px] lg:min-h-[500px] rounded-[28px] sm:rounded-[34px] bg-[#faf9f7] border border-neutral-200 flex items-center justify-center overflow-hidden">
+
+                    <!-- Decorative Elements -->
+                    <div class="absolute -top-24 -right-24 w-64 h-64 rounded-full border border-[#a27a4d]/10"></div>
+                    <div class="absolute -bottom-28 -left-28 w-72 h-72 rounded-full border border-[#a27a4d]/10"></div>
+
+                    <div class="absolute top-6 left-6 sm:top-8 sm:left-8">
+                        <span class="text-[10px] sm:text-xs font-semibold tracking-[0.2em] uppercase text-neutral-400">
+                            About The Developer
+                        </span>
+                    </div>
+
+                    <!-- Logo -->
+                    <div class="relative z-10 flex items-center justify-center w-[190px] h-[190px] sm:w-[230px] sm:h-[230px] lg:w-[260px] lg:h-[260px] rounded-full bg-white border border-neutral-200 shadow-[0_20px_60px_rgba(0,0,0,0.08)] p-10 sm:p-12">
+
+                        <img src="{{project_obj.developer.logo.url}}" alt="Developer Logo" class="max-w-full max-h-full rounded-full object-contain">
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Content -->
+            <div>
+
+                <!-- Label -->
+                <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#faf4eb] border border-[#eadbc8]">
+
+                    <span class="w-1.5 h-1.5 rounded-full bg-[#a27a4d]"></span>
+
+                    <span class="text-[11px] sm:text-xs font-semibold tracking-[0.16em] uppercase text-[#8f693f]">
+                        Our Developer
+                    </span>
+
+                </div>
+
+
+                <!-- Title -->
+                <h2 class="mt-5 text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-neutral-900 leading-[1.08] max-w-2xl">
+                    Building Spaces That
+                    <span class="text-[#a27a4d]">Inspire Living</span>
+                </h2>
+
+
+                <!-- Developer Name -->
+                <h3 class="mt-6 text-xl sm:text-2xl font-semibold text-neutral-900">
+                    {{project_obj.developer}}
+                </h3>
+
+
+                <!-- Description -->
+                <div class="mt-5 space-y-4 text-sm sm:text-base leading-7 text-neutral-500 max-w-2xl">
+
+                    <p>
+                        {{project_obj.developer.about_developer|safe}}
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<section id="rera" class="bg-[#faf9f7] py-12 sm:py-14 lg:py-16">
+
+    <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
+
+        <div class="relative overflow-hidden rounded-[24px] sm:rounded-[28px] bg-white border border-neutral-200 shadow-[0_15px_45px_rgba(0,0,0,0.05)]">
+
+            <div class="grid lg:grid-cols-[0.8fr_1.2fr]">
+
+                <!-- Left -->
+                <div class="relative bg-neutral-900 p-6 sm:p-8 lg:p-10 overflow-hidden">
+
+                    <div class="absolute -top-24 -right-24 w-60 h-60 rounded-full border border-white/10"></div>
+                    <div class="absolute -bottom-28 -left-28 w-64 h-64 rounded-full border border-white/10"></div>
+
+                    <div class="relative z-10">
+
+                        <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 border border-white/10 text-white/70 text-[10px] font-semibold tracking-[0.15em] uppercase">
+                            <span class="w-1.5 h-1.5 rounded-full bg-[#c29a69]"></span>
+                            RERA Registered
+                        </span>
+
+                        <h2 class="mt-5 text-2xl sm:text-3xl lg:text-4xl font-semibold tracking-tight text-white leading-[1.1]">
+                            Your Investment.
+                            <span class="text-[#c29a69]">
+                                Our Commitment.
+                            </span>
+                        </h2>
+
+                        <p class="mt-4 text-xs sm:text-sm leading-6 text-white/60 max-w-md">
+                            This project is registered under the Real Estate Regulatory
+                            Authority, providing transparency and greater confidence
+                            throughout your property journey.
+                        </p>
+
+                        <!-- Trust Points -->
+                        <div class="mt-6 space-y-3">
+
+                            <div class="flex items-center gap-2.5">
+                                <span class="flex items-center justify-center w-7 h-7 rounded-full bg-white/10">
+                                    <svg class="w-3.5 h-3.5 text-[#c29a69]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="m5 12 4 4L19 6"/>
+                                    </svg>
+                                </span>
+
+                                <span class="text-xs text-white/65">
+                                    Government Registered Project
+                                </span>
+                            </div>
+
+                            <div class="flex items-center gap-2.5">
+                                <span class="flex items-center justify-center w-7 h-7 rounded-full bg-white/10">
+                                    <svg class="w-3.5 h-3.5 text-[#c29a69]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="m5 12 4 4L19 6"/>
+                                    </svg>
+                                </span>
+
+                                <span class="text-xs text-white/65">
+                                    Transparent Project Information
+                                </span>
+                            </div>
+
+                            <div class="flex items-center gap-2.5">
+                                <span class="flex items-center justify-center w-7 h-7 rounded-full bg-white/10">
+                                    <svg class="w-3.5 h-3.5 text-[#c29a69]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="m5 12 4 4L19 6"/>
+                                    </svg>
+                                </span>
+
+                                <span class="text-xs text-white/65">
+                                    Verified Developer Details
+                                </span>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Right -->
+                <div class="p-6 sm:p-8 lg:p-10">
+
+                    <div class="flex items-start justify-between gap-4">
+
+                        <div>
+                            <p class="text-[10px] font-semibold tracking-[0.16em] uppercase text-neutral-400">
+                                Project Registration
+                            </p>
+
+                            <h3 class="mt-1.5 text-xl sm:text-2xl font-semibold text-neutral-900">
+                                RERA Details
+                            </h3>
+                        </div>
+
+                        <div class="shrink-0 flex items-center justify-center w-10 h-10 rounded-full bg-[#faf4eb] border border-[#eadbc8]">
+                            <svg class="w-5 h-5 text-[#a27a4d]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                                <path d="M12 3 20 6v5c0 5.25-3.42 8.72-8 10-4.58-1.28-8-4.75-8-10V6l8-3Z"/>
+                                <path d="m8.5 12 2.2 2.2 4.8-5"/>
+                            </svg>
+                        </div>
+
+                    </div>
+
+
+                    <!-- RERA Number -->
+                    <div class="mt-5 p-4 sm:p-5 rounded-xl bg-[#faf9f7] border border-neutral-200">
+
+                        <p class="text-[10px] font-medium text-neutral-400 uppercase tracking-wider">
+                            RERA Registration Number
+                        </p>
+
+                        <div class="mt-2.5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+
+                            <p class="text-sm sm:text-base font-semibold text-neutral-900 break-all">
+                                {{project_obj.rera.first.registration_no}}
+                            </p>
+
+                            <span class="shrink-0 inline-flex items-center gap-1.5 text-[10px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-100 px-2.5 py-1.5 rounded-full">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                                Registered
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Details -->
+                    <div class="grid sm:grid-cols-2 gap-x-6">
+
+                        <div class="py-3.5 border-b border-neutral-200">
+                            <p class="text-[10px] text-neutral-400">
+                                Project Status
+                            </p>
+                            <p class="mt-1 text-xs font-semibold text-neutral-900">
+                                {{project_obj.construction_status}}
+                                
+                            </p>
+                        </div>
+
+                        <div class="py-3.5 border-b border-neutral-200">
+                            <p class="text-[10px] text-neutral-400">
+                                Registration Authority
+                            </p>
+                            <p class="mt-1 text-xs font-semibold text-neutral-900">
+                                Gujarat RERA
+                            </p>
+                        </div>
+
+                        <div class="py-3.5">
+                            <p class="text-[10px] text-neutral-400">
+                                Project
+                            </p>
+                            <p class="mt-1 text-xs font-semibold text-neutral-900">
+                               {{project_obj.project_name}}
+                            </p>
+                        </div>
+
+                        <div class="py-3.5">
+                            <p class="text-[10px] text-neutral-400">
+                                Developer
+                            </p>
+                            <p class="mt-1 text-xs font-semibold text-neutral-900">
+
+                               {{project_obj.developer}}
+
+                            </p>
+                        </div>
+
+                    </div>
+
+
+                    <!-- QR + CTA -->
+                    <div class="mt-4 pt-4 border-t border-neutral-200">
+
+                        <div class="flex items-center justify-between gap-5">
+
+                            <div class="shrink-0 text-center">
+
+                                <div class="p-2 bg-white rounded-xl border border-neutral-200 shadow-sm">
+                                {% if project_obj.rera.first.qr_image.url %}
+                                    <img src="{{ project_obj.rera.first.qr_image.url }}" alt="RERA QR Code" class="w-24 h-24 sm:w-28 sm:h-28 object-contain">
+                                {% else %}
+                                    <div class="w-24 h-24 sm:w-28 sm:h-28 flex items-center justify-center text-[10px] text-neutral-400">
+                                        No QR Available
+                                    </div>
+                                {% endif %}
+
+                                </div>
+
+                                <p class="mt-1.5 text-[8px] font-semibold text-neutral-400 uppercase tracking-[0.15em]">
+                                    Scan To Verify
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>  
+
+
+<section id="disclaimer" class="relative bg-[#faf9f7] border-t border-neutral-200 overflow-hidden">
+
+    <div class="absolute top-0 right-0 w-[320px] h-[320px] rounded-full border border-[#a27a4d]/[0.07] translate-x-1/2 -translate-y-1/2"></div>
+    <div class="absolute bottom-0 left-0 w-[220px] h-[220px] rounded-full border border-[#a27a4d]/[0.06] -translate-x-1/2 translate-y-1/2"></div>
+
+
+    <div class="relative max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
+
+        <div class="py-10 sm:py-12">
+
+            <div class="flex flex-col lg:flex-row gap-7 lg:gap-12">
+
+
+                <div class="shrink-0 lg:w-[230px]">
+
+                    <div class="lg:sticky lg:top-24">
+
+                        <!-- Small Label -->
+                        <p class="text-[10px] font-semibold tracking-[0.2em] uppercase text-[#a27a4d]">
+                            Important Information
+                        </p>
+
+
+                        <!-- Title -->
+                        <div class="flex items-center gap-3 mt-3">
+
+                            <div class="flex items-center justify-center w-10 h-10 rounded-xl bg-white border border-[#eadbc8] shadow-sm">
+
+                                <svg class="w-[18px] h-[18px] text-[#a27a4d]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+                                    <circle cx="12" cy="12" r="9"/>
+                                    <path d="M12 10v6"/>
+                                    <path d="M12 7h.01"/>
+                                </svg>
+
+                            </div>
+
+                            <h2 class="text-xl sm:text-2xl font-semibold tracking-tight text-neutral-900">
+                                Disclaimer
+                            </h2>
+
+                        </div>
+
+
+                        <div class="mt-4 w-12 h-px bg-[#a27a4d]"></div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Divider -->
+                <div class="hidden lg:block w-px bg-neutral-200"></div>
+
+
+                <!-- Content -->
+                <div class="flex-1 max-w-5xl">
+
+                    <!-- Intro -->
+                    <div class="relative pl-5 sm:pl-6 border-l-2 border-[#c5a47b]">
+
+                        <p class="text-sm sm:text-[15px] leading-7 text-neutral-600">
+                           {{project_obj.rera.first.disclaimer}}
+                        </p>
+
+                    </div>
+                    <!-- Bottom Strip -->
+                    <div class="mt-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 px-4 py-3.5 rounded-xl bg-neutral-900">
+
+                        <div class="flex items-center gap-2.5">
+
+                            <span class="flex items-center justify-center w-6 h-6 rounded-full bg-white/10">
+
+                                <svg class="w-3 h-3 text-[#c5a47b]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="m5 12 4 4L19 6"/>
+                                </svg>
+
+                            </span>
+
+                            <p class="text-[10px] sm:text-xs text-white/60">
+                                RERA Registered Project
+                            </p>
+
+                        </div>
+
+
+                        <p class="text-[10px] sm:text-xs text-white/40">
+                            © {{settings_obj.copy_right}} All Rights Reserved
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<div id="priceModal" class="fixed inset-0 z-[99999] hidden items-center justify-center bg-black/60 p-4" onclick="closePriceModal(event)">
+
+    <div class="relative w-full max-w-lg max-h-[90vh] overflow-y-auto rounded-2xl bg-white p-5 shadow-2xl sm:p-6" onclick="event.stopPropagation()" >
+
+        <!-- Header -->
+        <div class="flex items-start justify-between gap-4">
+
+            <div>
+                <p class="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#c7964a]">
+                    Price Details
+                </p>
+
+                <h3 id="modalType" class="mt-1 text-xl font-semibold text-neutral-900 sm:text-2xl"></h3>
+            </div>
+
+            <!-- Close -->
+            <button type="button" onclick="closePriceModal()" class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-neutral-100 text-neutral-600 transition hover:bg-neutral-200">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+        </div>
+
+
+        <!-- Selected Property Details -->
+        <div class="mt-4 grid grid-cols-2 gap-3">
+
+            <!-- Carpet Area -->
+            <div class="rounded-lg border border-neutral-200 bg-neutral-50 p-3">
+                <p class="text-xs text-neutral-500">
+                    Carpet Area
+                </p>
+
+                <p id="modalArea" class="mt-1 text-sm font-semibold text-neutral-900" ></p>
+            </div>
+
+
+            <!-- Price -->
+            <div class="rounded-lg border border-neutral-200 bg-neutral-50 p-3">
+                <p class="text-xs text-neutral-500">
+                    Starting Price
+                </p>
+
+                <p id="modalPrice" class="mt-1 text-sm font-semibold text-[#bd8429]"></p>
+            </div>
+
+        </div>
+
+
+        <!-- Form Heading -->
+        <div class="mt-5 mb-4">
+
+            <h4 class="text-lg font-semibold text-neutral-900">
+                Get Detailed Price
+            </h4>
+
+            <p class="mt-1 text-sm text-neutral-500">
+                Share your details and our property expert will contact you.
+            </p>
+
+        </div>
+
+
+        <!-- Enquiry Form -->
+        <form action="" method="POST" class="space-y-3.5">
+            {% csrf_token %}
+
+            <input type="hidden" name="inquiry_type" value="price_breakup">
+
+            <!-- Name -->
+            <div>
+
+                <label for="modalName" class="mb-1.5 block text-xs font-medium text-neutral-700" >
+                    Name
+                </label>
+
+                <input type="text" id="modalName" name="name" placeholder="Enter your name" required class="w-full rounded-md border border-neutral-200 bg-white px-3.5 py-2.5 text-sm text-neutral-800 outline-none transition placeholder:text-neutral-400 focus:border-[#c7964a] focus:ring-1 focus:ring-[#c7964a]">
+
+            </div>
+
+
+            <!-- Email -->
+            <div>
+
+                <label for="modalEmail" class="mb-1.5 block text-xs font-medium text-neutral-700">
+                    Email
+                </label>
+
+                <input type="email" id="modalEmail" name="email" placeholder="Enter your email" required class="w-full rounded-md border border-neutral-200 bg-white px-3.5 py-2.5 text-sm text-neutral-800 outline-none transition placeholder:text-neutral-400 focus:border-[#c7964a] focus:ring-1 focus:ring-[#c7964a]">
+
+            </div>
+
+
+            <!-- Phone -->
+            <div>
+
+                <label for="modalPhone" class="mb-1.5 block text-xs font-medium text-neutral-700" >
+                    Phone
+                </label>
+
+                <input type="tel" id="modalPhone" name="phone" placeholder="Enter your phone number" required class="w-full rounded-md border border-neutral-200 bg-white px-3.5 py-2.5 text-sm text-neutral-800 outline-none transition placeholder:text-neutral-400 focus:border-[#c7964a] focus:ring-1 focus:ring-[#c7964a]" >
+
+            </div>
+
+
+            <!-- Message -->
+            <div>
+
+                <label for="modalMessage" class="mb-1.5 block text-xs font-medium text-neutral-700">
+                    Message
+                </label>
+
+                <textarea id="modalMessage" name="message" rows="3" placeholder="I'm interested in this property..." class="w-full resize-none rounded-md border border-neutral-200 bg-white px-3.5 py-2.5 text-sm text-neutral-800 outline-none transition placeholder:text-neutral-400 focus:border-[#c7964a] focus:ring-1 focus:ring-[#c7964a]"></textarea>
+
+            </div>
+
+
+            <!-- Hidden Property Details -->
+            <input type="hidden" id="modalPropertyType" name="property_type">
+
+            <input  type="hidden"  id="modalPropertyArea"  name="property_area">
+
+            <input  type="hidden"  id="modalPropertyPrice"  name="property_price">
+
+
+            <!-- Submit -->
+            <button type="submit" class="flex h-11 w-full items-center justify-center rounded-md bg-[#c7964a] px-5 text-sm font-semibold text-white transition hover:bg-[#b78336]">
+                Get Price Breakup
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+<script>
+    function openPriceModal(type, area, price) {
+
+        // Display property details
+        document.getElementById("modalType").textContent = type;
+        document.getElementById("modalArea").textContent = area;
+        document.getElementById("modalPrice").textContent = price;
+
+        // Store property details in hidden fields
+        document.getElementById("modalPropertyType").value = type;
+        document.getElementById("modalPropertyArea").value = area;
+        document.getElementById("modalPropertyPrice").value = price;
+
+        // Open modal
+        const modal = document.getElementById("priceModal");
+
+        modal.classList.remove("hidden");
+        modal.classList.add("flex");
+
+        // Prevent background scrolling
+        document.body.classList.add("overflow-hidden");
+    }
+
+
+    function closePriceModal(e) {
+
+        const modal = document.getElementById("priceModal");
+
+        // If clicked on background
+        if (e && e.target !== modal) {
+            return;
+        }
+
+        modal.classList.add("hidden");
+        modal.classList.remove("flex");
+
+        // Enable scrolling
+        document.body.classList.remove("overflow-hidden");
+    }
+</script>
+
+
+<div id="planModal" class="fixed inset-0 z-[99999] hidden items-center justify-center bg-black/80 p-4" onclick="closePlan(event)">
+    <button type="button" onclick="closePlan()" class="absolute top-5 right-5 w-11 h-11 rounded-full bg-white text-neutral-900 shadow-lg">
+        <i class="fa-solid fa-xmark"></i>
+    </button>
+
+    <img id="planModalImage" src="" alt="Floor Plan" class="max-w-full max-h-[90vh] object-contain rounded-xl" onclick="event.stopPropagation()">
+</div>
+
+<script>
+    function openPlan(src) {
+        planModalImage.src = src;
+        planModal.classList.remove("hidden");
+        planModal.classList.add("flex");
+        document.body.classList.add("overflow-hidden");
+    }
+
+    function closePlan(e) {
+        if (e && e.target !== planModal) return;
+        planModal.classList.add("hidden");
+        planModal.classList.remove("flex");
+        document.body.classList.remove("overflow-hidden");
+    }
+    window.openGalleryByUrl = function(imageUrl) {
+        const targetIdx = galleryImages.findIndex(img => img.image === imageUrl);
+        openGallery(targetIdx !== -1 ? targetIdx : 0);
+    };
+</script>
+
+
+
+<div id="galleryModal" class="fixed inset-0 z-[99999] hidden bg-black/90 items-center justify-center p-4">
+    <button onclick="closeGallery()" class="absolute top-5 right-5 w-11 h-11 rounded-full bg-white/10 text-white text-xl hover:bg-white/20">
+        <i class="fa-solid fa-xmark"></i>
+    </button>
+
+    <button onclick="galleryPrev()" class="absolute left-4 sm:left-8 w-11 h-11 rounded-full bg-white/10 text-white hover:bg-white/20">
+        <i class="fa-solid fa-chevron-left"></i>
+    </button>
+
+    <img id="galleryImage" src="" alt="" class="max-w-full max-h-[85vh] object-contain rounded-xl">
+
+    <button onclick="galleryNext()" class="absolute right-4 sm:right-8 w-11 h-11 rounded-full bg-white/10 text-white hover:bg-white/20">
+        <i class="fa-solid fa-chevron-right"></i>
+    </button>
+</div>
+
+<script>
+    const galleryImages = [
+        {% for item in project_obj.gallery.all %}
+            "{{ item.image.url }}"{% if not forloop.last %},{% endif %}
+        {% endfor %}
+    ];
+
+    let galleryIndex = 0;
+
+    const galleryModal = document.getElementById("galleryModal");
+    const galleryImage = document.getElementById("galleryImage");
+
+    function openGallery(index) {
+
+        if (!galleryImages.length) return;
+
+        galleryIndex = index;
+
+        galleryImage.src = galleryImages[galleryIndex];
+
+        galleryModal.classList.remove("hidden");
+        galleryModal.classList.add("flex");
+
+        document.body.classList.add("overflow-hidden");
+    }
+
+    function closeGallery() {
+
+        galleryModal.classList.add("hidden");
+        galleryModal.classList.remove("flex");
+
+        document.body.classList.remove("overflow-hidden");
+    }
+
+    function galleryNext() {
+
+        if (!galleryImages.length) return;
+
+        galleryIndex =
+            (galleryIndex + 1) % galleryImages.length;
+
+        galleryImage.src = galleryImages[galleryIndex];
+    }
+
+    function galleryPrev() {
+
+        if (!galleryImages.length) return;
+
+        galleryIndex =
+            (galleryIndex - 1 + galleryImages.length)
+            % galleryImages.length;
+
+        galleryImage.src = galleryImages[galleryIndex];
+    }
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const slider = document.getElementById("amenitiesSlider");
+        const nextBtn = document.getElementById("amenitiesNext");
+        const prevBtn = document.getElementById("amenitiesPrev");
+        const dots = document.querySelectorAll(".amenity-dot");
+
+        if (!slider) return;
+
+        const cards = slider.children;
+
+        let currentPage = 0;
+
+        function getPages() {
+
+            const maxScroll = slider.scrollWidth - slider.clientWidth;
+
+            if (maxScroll <= 0) {
+                return 1;
+            }
+
+            const firstCard = cards[0];
+
+            if (!firstCard) {
+                return 1;
+            }
+
+            const cardWidth = firstCard.offsetWidth;
+
+            const gap = parseFloat(
+                getComputedStyle(slider).columnGap ||
+                getComputedStyle(slider).gap ||
+                0
+            );
+
+            const step = cardWidth + gap;
+
+            return Math.ceil(maxScroll / step) + 1;
+        }
+
+
+        function updateDots() {
+
+            const pages = getPages();
+
+            dots.forEach((dot, index) => {
+
+                if (index === currentPage) {
+
+                    dot.classList.remove(
+                        "w-2",
+                        "bg-neutral-300"
+                    );
+
+                    dot.classList.add(
+                        "w-7",
+                        "bg-[#c89b2c]"
+                    );
+
+                } else {
+
+                    dot.classList.remove(
+                        "w-7",
+                        "bg-[#c89b2c]"
+                    );
+
+                    dot.classList.add(
+                        "w-2",
+                        "bg-neutral-300"
+                    );
+                }
+
+            });
+        }
+
+
+        function goToPage(page) {
+
+            const pages = getPages();
+
+            currentPage = Math.max(
+                0,
+                Math.min(page, pages - 1)
+            );
+
+            const firstCard = cards[0];
+
+            if (!firstCard) return;
+
+            const cardWidth = firstCard.offsetWidth;
+
+            const gap = parseFloat(
+                getComputedStyle(slider).columnGap ||
+                getComputedStyle(slider).gap ||
+                0
+            );
+
+            const step = cardWidth + gap;
+
+            slider.scrollTo({
+                left: currentPage * step,
+                behavior: "smooth"
+            });
+
+            updateDots();
+        }
+
+
+        nextBtn?.addEventListener("click", function () {
+
+            const pages = getPages();
+
+            if (currentPage < pages - 1) {
+
+                goToPage(currentPage + 1);
+
+            } else {
+
+                goToPage(0);
+
+            }
+
+        });
+
+
+        prevBtn?.addEventListener("click", function () {
+
+            const pages = getPages();
+
+            if (currentPage > 0) {
+
+                goToPage(currentPage - 1);
+
+            } else {
+
+                // Loop to last
+                goToPage(pages - 1);
+
+            }
+
+        });
+
+
+        dots.forEach((dot, index) => {
+
+            dot.addEventListener("click", function () {
+
+                goToPage(index);
+
+            });
+
+        });
+
+
+        let scrollTimeout;
+
+        slider.addEventListener("scroll", function () {
+
+            clearTimeout(scrollTimeout);
+
+            scrollTimeout = setTimeout(function () {
+
+                const firstCard = cards[0];
+
+                if (!firstCard) return;
+
+                const cardWidth = firstCard.offsetWidth;
+
+                const gap = parseFloat(
+                    getComputedStyle(slider).columnGap ||
+                    getComputedStyle(slider).gap ||
+                    0
+                );
+
+                const step = cardWidth + gap;
+
+                if (step <= 0) return;
+
+                const newPage = Math.round(
+                    slider.scrollLeft / step
+                );
+
+                currentPage = newPage;
+
+                updateDots();
+
+            }, 80);
+
+        });
+
+
+        window.addEventListener("resize", function () {
+
+            const pages = getPages();
+
+            if (currentPage >= pages) {
+                currentPage = pages - 1;
+            }
+
+            updateDots();
+
+        });
+
+
+        updateDots();
+
+    });
+</script>
+
+<style>
+
+    .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+    }
+
+    .scrollbar-hide {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+    .scrollbar-thin::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    .scrollbar-thin::-webkit-scrollbar-track {
+        background: #f5f5f5;
+    }
+
+    .scrollbar-thin::-webkit-scrollbar-thumb {
+        background: #c89b2c;
+        border-radius: 999px;
+    }
+</style>
+
+<script>
+    const heroSlides = document.querySelectorAll(".hero-slide");
+    const heroDots = document.querySelectorAll(".hero-dot");
+    const heroPrev = document.getElementById("heroPrev");
+    const heroNext = document.getElementById("heroNext");
+    const heroCurrent = document.getElementById("heroCurrent");
+
+    let heroIndex = 0;
+    let heroTimer;
+
+    function showHeroSlide(index) {
+
+        heroSlides.forEach((slide, i) => {
+            slide.classList.toggle("opacity-100", i === index);
+            slide.classList.toggle("opacity-0", i !== index);
+        });
+
+        heroDots.forEach((dot, i) => {
+            dot.classList.toggle("bg-white", i === index);
+            dot.classList.toggle("bg-white/30", i !== index);
+        });
+
+        heroCurrent.textContent = String(index + 1).padStart(2, "0");
+    }
+
+    function nextHeroSlide() {
+        heroIndex = (heroIndex + 1) % heroSlides.length;
+        showHeroSlide(heroIndex);
+    }
+
+    function prevHeroSlide() {
+        heroIndex = (heroIndex - 1 + heroSlides.length) % heroSlides.length;
+        showHeroSlide(heroIndex);
+    }
+
+    function startHeroSlider() {
+        clearInterval(heroTimer);
+        heroTimer = setInterval(nextHeroSlide, 6000);
+    }
+
+    heroNext.addEventListener("click", () => {
+        nextHeroSlide();
+        startHeroSlider();
+    });
+
+    heroPrev.addEventListener("click", () => {
+        prevHeroSlide();
+        startHeroSlider();
+    });
+
+    heroDots.forEach((dot, index) => {
+        dot.addEventListener("click", () => {
+            heroIndex = index;
+            showHeroSlide(heroIndex);
+            startHeroSlider();
+        });
+    });
+
+    showHeroSlide(0);
+    startHeroSlider();
+</script>
+
 {% endblock %}

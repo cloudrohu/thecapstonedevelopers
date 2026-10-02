@@ -15,37 +15,26 @@
     <meta name="author" content="{% block meta_author %}{{settings_obj.site_name}}{% endblock %}">
     <title>{% block title %}{{settings_obj.site_name}} By {{project_obj.developer}}{% endblock title %}</title>
     <link rel="icon" type="image/png" href="{{settings_obj.favicon.url}}">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=AW-{{settings_obj.googletagmanager}}"></script>
     <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
 
-        gtag('config', 'AW-{{settings_obj.googletagmanager}}');
+    gtag('config', 'AW-{{settings_obj.googletagmanager}}');
     </script>
     {% block extra_css %}
     {% endblock %}
 
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- Google Fonts for Luxury Typography -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
-
-    <script>
-    tailwind.config = {
-        theme: {
-        extend: {
-            fontFamily: {
-            sans: ['Montserrat', 'sans-serif'],
-            heading: ['Outfit', 'sans-serif']
-            }
-        }
-        }
-    }
-    </script>
 
 
 </head>

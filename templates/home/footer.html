@@ -1,1 +1,74 @@
 
+<!-- Floating Right-Center Interactive Badge -->
+<div class="fixed right-0 top-1/2 mt-12 -translate-y-1/2 z-50 flex items-center group">
+  
+  <!-- Outer Glow Pulse Animation -->
+  <div class="absolute -inset-1 bg-gradient-to-r from-amber-500 via-rose-500 to-indigo-600 rounded-l-2xl blur-md opacity-70 group-hover:opacity-100 animate-pulse transition duration-500"></div>
+
+  <!-- Main Floating Card / Button -->
+  <a href="{{settings_obj.linkexplore}}"  target="_blank"  rel="noopener noreferrer"  class="relative flex items-center gap-3 bg-slate-900/90 backdrop-blur-md border-l-2 border-y border-amber-400/50 text-white pl-4 pr-5 py-3 rounded-l-2xl shadow-[0_10px_25px_-5px_rgba(0,0,0,0.5)] transition-all duration-300 transform group-hover:-translate-x-2 group-hover:bg-slate-900 group-hover:border-amber-400">
+    
+    <!-- Animated Glowing Icon Container -->
+    <div class="relative flex items-center justify-center w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 to-rose-500 text-white shadow-md shadow-amber-500/30 group-hover:scale-110 transition-transform duration-300">
+      <!-- Location / Building Pin Icon -->
+      <svg class="w-5 h-5 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+      </svg>
+    </div>
+
+    <!-- Text & Badge Info -->
+    <div class="flex flex-col">
+      <div class="flex items-center gap-1.5">
+        <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+        <span class="text-[10px] font-bold uppercase tracking-wider text-amber-300">3D Tour / Explore</span>
+      </div>
+      <span class="text-sm font-extrabold text-white group-hover:text-amber-300 transition-colors">
+        {{project_obj.project_name}}
+      </span>
+    </div>
+
+    <!-- Arrow Indicator -->
+    <div class="ml-1 text-slate-400 group-hover:text-white group-hover:translate-x-1 transition-all duration-300">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+      </svg>
+    </div>
+
+  </a>
+</div>
+<!-- Footer -->
+<footer class="bg-neutral-950 text-white bottom-0">
+
+    <div class="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
+
+        <div class="py-5 sm:py-6 flex flex-col sm:flex-row items-center justify-between gap-3">
+
+            <!-- Copyright -->
+            <p class="text-[11px] sm:text-xs text-white/45 text-center sm:text-left">
+                © {{settings_obj.copy_right}} All Rights Reserved.
+            </p>
+
+
+            <!-- Links -->
+            <div class="flex items-center gap-4 sm:gap-6">
+
+                <a href="{% url "privacy_policy" %}" class="text-[11px] sm:text-xs text-white/45 hover:text-white transition-colors">
+                    Privacy Policy
+                </a>
+
+                <span class="w-px h-3 bg-white/10"></span>
+
+                <a href="{% url "disclaimer" %}" class="text-[11px] sm:text-xs text-white/45 hover:text-white transition-colors">
+                    Disclaimer
+                </a>
+
+            </div>
+
+
+
+        </div>
+
+    </div>
+
+</footer>
