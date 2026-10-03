@@ -1,6 +1,5 @@
 {% load static %}
 
-
 <style>
     * {
         box-sizing: border-box;
@@ -17,11 +16,6 @@
 
     .luxury-font {
         font-family: 'Playfair Display', serif;
-    }
-
-    .header-scrolled {
-        box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08);
-        background: rgba(255, 255, 255, 0.97) !important;
     }
 
     .mobile-menu {
@@ -70,6 +64,19 @@
     .nav-link:hover::after {
         width: 100%;
     }
+
+    /* About Section par text & buttons black karne ke CSS Rules */
+    .header-dark-text .nav-text-color {
+        color: #171717 !important; /* Neutral Black */
+    }
+
+    .header-dark-text .nav-border-color {
+        border-color: rgba(0, 0, 0, 0.2) !important;
+    }
+
+    .header-dark-text .menu-line {
+        background-color: #171717 !important;
+    }
 </style>
 
 <header id="siteHeader" class="fixed top-0 left-0 w-full z-[9999] bg-transparent border-b border-black/[0.06] transition-all duration-300">
@@ -81,30 +88,30 @@
             <!-- Logo -->
             <a href="/" class="relative w-[120px] h-[95px] lg:w-[120px] lg:h-[95px] shrink-0 flex items-center justify-center overflow-visible">
                 {% if settings_obj.logo %}
-                    <img src="{{settings_obj.logo.url}}" alt="{{settings_obj.site_name}}" class="w-full h-full object-contain">
+                    <img src="{{ settings_obj.logo.url }}" alt="{{ settings_obj.site_name }}" class="w-full h-full object-contain">
                 {% else %}
-                    <img src="" alt="{{settings_obj.site_name}}" class="w-full h-full object-contain">
+                    <img src="" alt="{{ settings_obj.site_name }}" class="w-full h-full object-contain">
                 {% endif %}
             </a>
 
             <!-- Desktop Navigation -->
             <nav class="hidden xl:flex items-center justify-center gap-8 2xl:gap-10 flex-1 text-[20px]">
 
-                <a href="/" class="nav-link  font-medium tracking-wide text-white hover:text-[#a8874b] transition-colors">
+                <a href="/" class="nav-link nav-text-color font-medium tracking-wide text-white hover:text-[#a8874b] transition-colors">
                     Home
                 </a>
 
-                <a href="{% url "about" %}" class="nav-link  font-medium tracking-wide text-white hover:text-[#a8874b] transition-colors">
+                <a href="{% url 'about' %}" class="nav-link nav-text-color font-medium tracking-wide text-white hover:text-[#a8874b] transition-colors">
                     About
                 </a>
 
-                <a href="{% url "faqs" %}" class="nav-link  font-medium tracking-wide text-white hover:text-[#a8874b] transition-colors">
+                <a href="{% url 'faqs' %}" class="nav-link nav-text-color font-medium tracking-wide text-white hover:text-[#a8874b] transition-colors">
                     FAQs
                 </a>
 
                 <!-- Dynamic Projects Dropdown (Desktop) -->
                 <div class="relative group py-6">
-                    <button type="button" class="nav-link  font-medium tracking-wide text-white flex items-center gap-1.5 hover:text-[#a8874b] transition-colors">
+                    <button type="button" class="nav-link nav-text-color font-medium tracking-wide text-white flex items-center gap-1.5 hover:text-[#a8874b] transition-colors">
                         <span>Project Details</span>
                         <i class="fa-solid fa-chevron-down text-[10px] text-neutral-400 group-hover:text-[#a8874b] group-hover:rotate-180 transition-transform duration-300"></i>
                     </button>
@@ -115,7 +122,7 @@
                         {% for proj in all_projects %}
                             <a href="{% if proj.get_absolute_url %}{{ proj.get_absolute_url }}{% else %}#{% endif %}" class="flex items-center justify-between px-5 py-3 hover:bg-neutral-50 transition-colors group/item {% if not forloop.last %}border-b border-black/[0.04]{% endif %}">
                                 
-                                <span class=" font-medium text-white group-hover/item:text-[#a8874b] transition-colors">
+                                <span class="font-medium text-neutral-800 group-hover/item:text-[#a8874b] transition-colors">
                                     {{ proj.project_name }}
                                 </span>
 
@@ -144,12 +151,11 @@
                     </div>
                 </div>
 
-
-                <a href="{% url "gallery" %}" class="nav-link  font-medium tracking-wide text-white hover:text-[#a8874b] transition-colors">
+                <a href="{% url 'gallery' %}" class="nav-link nav-text-color font-medium tracking-wide text-white hover:text-[#a8874b] transition-colors">
                     Gallery
                 </a>
 
-                <a href="{% url "contact" %}" class="nav-link  font-medium tracking-wide text-white hover:text-[#a8874b] transition-colors">
+                <a href="{% url 'contact' %}" class="nav-link nav-text-color font-medium tracking-wide text-white hover:text-[#a8874b] transition-colors">
                     Contact
                 </a>
 
@@ -158,12 +164,12 @@
             <!-- Call & Enquiry CTA Buttons -->
             <div class="hidden md:flex items-center gap-3 shrink-0">
 
-                <a href="tel:+91{{settings_obj.phone}}" class="hidden lg:flex items-center gap-2 px-5 py-3 text-[12px] font-medium tracking-wider uppercase text-white border border-black/10 hover:border-[#a8874b] hover:text-[#9b793f] transition-all duration-300">
+                <a href="tel:+91{{ settings_obj.phone }}" class="nav-text-color nav-border-color hidden lg:flex items-center gap-2 px-5 py-3 text-[12px] font-medium tracking-wider uppercase text-white border border-white/20 hover:border-[#a8874b] hover:text-[#a8874b] transition-all duration-300">
                     <i class="fa-solid fa-phone text-[10px]"></i>
                     <span>Call Us</span>
                 </a>
 
-                <a href="{% url "contact" %}" class="px-5 lg:px-6 py-3 bg-neutral-900 text-white text-[11px] font-medium tracking-[0.15em] uppercase hover:bg-[#a8874b] transition-all duration-300">
+                <a href="{% url 'contact' %}" class="px-5 lg:px-6 py-3 bg-neutral-900 text-white text-[11px] font-medium tracking-[0.15em] uppercase hover:bg-[#a8874b] transition-all duration-300">
                     Enquire Now
                 </a>
 
@@ -171,22 +177,22 @@
 
             <!-- Mobile Menu Toggle Button -->
             <button id="menuButton" type="button" aria-label="Open Menu" class="xl:hidden w-11 h-11 flex flex-col items-center justify-center gap-[5px] border border-black/10">
-                <span class="menu-line line-1 block w-5 h-[1px] bg-neutral-900"></span>
-                <span class="menu-line line-2 block w-5 h-[1px] bg-neutral-900"></span>
-                <span class="menu-line line-3 block w-5 h-[1px] bg-neutral-900"></span>
+                <span class="menu-line line-1 block w-5 h-[1px] bg-white"></span>
+                <span class="menu-line line-2 block w-5 h-[1px] bg-white"></span>
+                <span class="menu-line line-3 block w-5 h-[1px] bg-white"></span>
             </button>
 
         </div>
 
         <!-- Mobile Drawer Navigation -->
-        <div id="mobileMenu" class="mobile-menu xl:hidden border-t border-black/[0.06]">
+        <div id="mobileMenu" class="mobile-menu xl:hidden border-t border-black/[0.06] bg-white text-neutral-900">
             <nav class="py-5">
 
                 <a href="/" class="mobile-link flex items-center justify-between py-3.5 text-sm font-medium border-b border-black/[0.06]">
                     <span>Home</span>
                 </a>
 
-                <a href="{% url "about" %}" class="mobile-link flex items-center justify-between py-3.5 text-sm font-medium border-b border-black/[0.06]">
+                <a href="{% url 'about' %}" class="mobile-link flex items-center justify-between py-3.5 text-sm font-medium border-b border-black/[0.06]">
                     <span>About</span>
                 </a>
 
@@ -216,22 +222,22 @@
                     </div>
                 </div>
 
-                <a href="{% url "gallery" %}" class="mobile-link flex items-center justify-between py-3.5 text-sm font-medium border-b border-black/[0.06]">
+                <a href="{% url 'gallery' %}" class="mobile-link flex items-center justify-between py-3.5 text-sm font-medium border-b border-black/[0.06]">
                     <span>Gallery</span>
                 </a>
 
-                <a href="{% url "contact" %}" class="mobile-link flex items-center justify-between py-3.5 text-sm font-medium">
+                <a href="{% url 'contact' %}" class="mobile-link flex items-center justify-between py-3.5 text-sm font-medium">
                     <span>Contact</span>
                 </a>
 
                 <div class="pt-5 grid grid-cols-2 gap-3">
 
-                    <a href="tel:+91{{settings_obj.phone}}" class="flex items-center justify-center gap-2 border border-black/10 py-3.5 text-[11px] uppercase tracking-wider">
+                    <a href="tel:+91{{ settings_obj.phone }}" class="flex items-center justify-center gap-2 border border-black/10 py-3.5 text-[11px] uppercase tracking-wider">
                         <i class="fa-solid fa-phone text-[10px]"></i>
                         Call Us
                     </a>
 
-                    <a href="{% url "contact" %}" class="flex items-center justify-center bg-neutral-900 text-white py-3.5 text-[11px] uppercase tracking-wider">
+                    <a href="{% url 'contact' %}" class="flex items-center justify-center bg-neutral-900 text-white py-3.5 text-[11px] uppercase tracking-wider">
                         Enquire Now
                     </a>
 
@@ -253,12 +259,19 @@
     const mobileMenu = document.getElementById("mobileMenu");
     const mobileLinks = document.querySelectorAll(".mobile-link");
 
-    // Header scroll background toggle
+    // About Section ke paas scrolling Detect karna
     window.addEventListener("scroll", () => {
-        if (window.scrollY > 20) {
-            header.classList.add("header-scrolled");
-        } else {
-            header.classList.remove("header-scrolled");
+        // Aapke About section ki ID ya CSS selector yahan set karein
+        const aboutSection = document.getElementById("about") || document.querySelector(".about-section");
+
+        if (aboutSection) {
+            const rect = aboutSection.getBoundingClientRect();
+            // Jab About Section viewport par aaye (Header height threshold ke saath)
+            if (rect.top <= 80 && rect.bottom >= 80) {
+                header.classList.add("header-dark-text");
+            } else {
+                header.classList.remove("header-dark-text");
+            }
         }
     });
 
@@ -268,10 +281,9 @@
         menuButton.classList.toggle("menu-open");
     });
 
-    // Close menu when clicking links (excluding accordion triggers)
+    // Close menu when clicking links
     mobileLinks.forEach(link => {
         link.addEventListener("click", (e) => {
-            // Prevent auto-closing if clicking the accordion toggle button
             if (link.getAttribute("type") === "button") return;
 
             mobileMenu.classList.remove("active");
