@@ -95,23 +95,23 @@
             </a>
 
             <!-- Desktop Navigation -->
-            <nav class="hidden xl:flex items-center justify-center gap-8 2xl:gap-10 flex-1 text-[20px]">
+            <nav class="hidden xl:flex text-[#96733f] items-center justify-center gap-8 2xl:gap-10 flex-1 text-[20px]">
 
-                <a href="/" class="nav-link nav-text-color font-medium tracking-wide text-white hover:text-[#a8874b] transition-colors">
+                <a href="/" class="nav-link nav-text-color font-medium tracking-wide hover:text-[#a8874b] transition-colors">
                     Home
                 </a>
 
-                <a href="{% url 'about' %}" class="nav-link nav-text-color font-medium tracking-wide text-white hover:text-[#a8874b] transition-colors">
+                <a href="{% url 'about' %}" class="nav-link nav-text-color font-medium tracking-wide hover:text-[#a8874b] transition-colors">
                     About
                 </a>
 
-                <a href="{% url 'faqs' %}" class="nav-link nav-text-color font-medium tracking-wide text-white hover:text-[#a8874b] transition-colors">
+                <a href="{% url 'faqs' %}" class="nav-link nav-text-color font-medium tracking-wide hover:text-[#a8874b] transition-colors">
                     FAQs
                 </a>
 
                 <!-- Dynamic Projects Dropdown (Desktop) -->
                 <div class="relative group py-6">
-                    <button type="button" class="nav-link nav-text-color font-medium tracking-wide text-white flex items-center gap-1.5 hover:text-[#a8874b] transition-colors">
+                    <button type="button" class="nav-link nav-text-color font-medium tracking-wide flex items-center gap-1.5 hover:text-[#a8874b] transition-colors">
                         <span>Project Details</span>
                         <i class="fa-solid fa-chevron-down text-[10px] text-neutral-400 group-hover:text-[#a8874b] group-hover:rotate-180 transition-transform duration-300"></i>
                     </button>
@@ -151,11 +151,11 @@
                     </div>
                 </div>
 
-                <a href="{% url 'gallery' %}" class="nav-link nav-text-color font-medium tracking-wide text-white hover:text-[#a8874b] transition-colors">
+                <a href="{% url 'gallery' %}" class="nav-link nav-text-color font-medium tracking-wide text-[#96733f] hover:text-[#a8874b] transition-colors">
                     Gallery
                 </a>
 
-                <a href="{% url 'contact' %}" class="nav-link nav-text-color font-medium tracking-wide text-white hover:text-[#a8874b] transition-colors">
+                <a href="{% url 'contact' %}" class="nav-link nav-text-color font-medium tracking-wide text-[#96733f] hover:text-[#a8874b] transition-colors">
                     Contact
                 </a>
 
@@ -262,15 +262,15 @@
     // About Section ke paas scrolling Detect karna
     window.addEventListener("scroll", () => {
         // Aapke About section ki ID ya CSS selector yahan set karein
-        const aboutSection = document.getElementById("about") || document.querySelector(".about-section");
+        const aboutSection = document.getElementById("content") || document.querySelector(".content-section");
 
         if (aboutSection) {
             const rect = aboutSection.getBoundingClientRect();
             // Jab About Section viewport par aaye (Header height threshold ke saath)
             if (rect.top <= 80 && rect.bottom >= 80) {
-                header.classList.add("header-dark-text");
+                header.classList.add("header-[#96733f]");
             } else {
-                header.classList.remove("header-dark-text");
+                header.classList.remove("header-[#96733f]");
             }
         }
     });
